@@ -4,7 +4,6 @@
   <style>
     :root { 
       --color-scheme: @php echo $colour_scheme['colour']; @endphp;
-      /* --color-scheme: red !important; */
     }
   </style>
   <body @php body_class() @endphp>

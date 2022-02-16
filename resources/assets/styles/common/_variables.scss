@@ -11,8 +11,8 @@ $spacer:                2rem;
 @font-face {
   font-family: "Deckhouse-Regular";
   src:
-    url("../fonts/deckhouse-regular-webfont.woff2") format("woff2"),
-    url("fonts/deckhouse-regular-webfont.woff") format("woff");
+    url("/fonts/deckhouse-regular-webfont.woff2") format("woff2"),
+    url("/fonts/deckhouse-regular-webfont.woff") format("woff");
   font-style: normal;
   font-display: swap;
 }

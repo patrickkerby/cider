@@ -76,13 +76,4 @@ meter {
 :where([draggable="true"]) {
   -webkit-user-drag: element;
 }
-
-
-@font-face {
-  font-family: "Deckhouse-Regular";
-  font-display: block;
-  src:
-    url("../fonts/deckhouse-regular-webfont.woff") format("woff"),
-    url("../fonts/deckhouse-regular-webfont.woff2") format("woff2");
-}
 /* stylelint-enable */
