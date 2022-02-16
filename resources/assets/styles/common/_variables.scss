@@ -1,0 +1,20 @@
+/** Colors */
+$brand-primary:         #525ddc;
+$pbc-charcoal:          #262523;
+
+/** Box Model  */
+$spacer:                2rem;
+
+// $colour-scheme:         var(--color-scheme);
+// $colour-scheme-light:   lighten(var(--colour-scheme), 20%);
+
+@font-face {
+  font-family: "Deckhouse-Regular";
+  src:
+    url("../fonts/deckhouse-regular-webfont.woff2") format("woff2"),
+    url("fonts/deckhouse-regular-webfont.woff") format("woff");
+  font-style: normal;
+  font-display: swap;
+}
+
+$deckhouse: "Deckhouse-Regular";

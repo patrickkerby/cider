@@ -1,0 +1,84 @@
+nav {
+  width: 64px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 90vh;
+  z-index: 2;
+  transition: width 0.5s ease-out;
+
+  ul {
+    margin-top: 4rem;
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+}
+
+/* Menu Icon */
+.hamb {
+  cursor: pointer;
+  float: right;
+  padding: 40px 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.hamb-line {
+  background: #fff;
+  display: block;
+  height: 4px;
+  position: relative;
+  width: 24px;
+}
+
+.hamb-line::before,
+.hamb-line::after {
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all 0.2s ease-out;
+  width: 100%;
+  background: #fff;
+}
+
+.hamb-line::before {
+  top: 8px;
+}
+
+.hamb-line::after {
+  top: -8px;
+}
+
+.side-menu {
+  display: none;
+}
+
+/* Toggle menu icon */
+.side-menu:checked ~ nav {
+  width: 280px;
+
+  ul {
+    opacity: 1;
+  }
+
+  #slideshow {
+    width: calc(100% - 280px);
+  }
+}
+
+.side-menu:checked ~ .hamb .hamb-line {
+  background: transparent;
+}
+
+.side-menu:checked ~ .hamb .hamb-line::before {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+.side-menu:checked ~ .hamb .hamb-line::after {
+  transform: rotate(45deg);
+  top: 0;
+}

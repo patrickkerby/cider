@@ -1,0 +1,46 @@
+body {
+  background: $pbc-charcoal;
+  color: #fff;
+}
+
+.home .wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  position: absolute;
+  z-index: 1;
+  margin: auto auto auto -32px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: $deckhouse;
+  font-weight: normal;
+}
+
+// Slidersss
+#slideshow {
+  position: relative;
+  width: calc(100% - 64px);
+  height: 90vh;
+  margin: 0 auto 0 0;
+  overflow: hidden;
+}
+
+#slideshow > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#slideshow img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
