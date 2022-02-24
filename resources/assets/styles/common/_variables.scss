@@ -5,11 +5,15 @@ $pbc-charcoal:          #262523;
 /** Box Model  */
 $spacer:                2rem;
 
+/** Slick Carousel items **/
+$slick-loader-path: "~slick-carousel/slick/";
+$slick-font-path: "#{$slick-loader-path}fonts/";
+
 // $colour-scheme:         var(--color-scheme);
 // $colour-scheme-light:   lighten(var(--colour-scheme), 20%);
 
 @font-face {
-  font-family: "Deckhouse-Regular";
+  font-family: Deckhouse-Regular;
   src:
     url("/fonts/deckhouse-regular-webfont.woff2") format("woff2"),
     url("/fonts/deckhouse-regular-webfont.woff") format("woff");
@@ -17,4 +21,45 @@ $spacer:                2rem;
   font-display: swap;
 }
 
+@font-face {
+  font-family: Pitch-Medium;
+  font-display: block;
+  src: url("/fonts/PitchWeb-Medium.eot");
+  src:
+    url("/fonts/PitchWeb-Medium.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/PitchWeb-Medium.woff2") format("woff2"),
+    url("/fonts/PitchWeb-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: Pitch-Medium-Italic;
+  font-display: block;
+  src: url("/fonts/PitchWeb-MediumItalic.eot");
+  src:
+    url("/fonts/PitchWeb-MediumItalic.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/PitchWeb-MediumItalic.woff2") format("woff2"),
+    url("/fonts/PitchWeb-MediumItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: Pitch-Bold-Italic;
+  font-display: block;
+  src: url("/fonts/PitchWeb-BoldItalic.eot");
+  src:
+    url("/fonts/PitchWeb-BoldItalic.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/PitchWeb-BoldItalic.woff2") format("woff2"),
+    url("/fonts/PitchWeb-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: Pitch-Bold;
+  font-display: block;
+  src: url("/fonts/PitchWeb-Bold.eot");
+  src:
+    url("/fonts/PitchWeb-Bold.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/PitchWeb-Bold.woff2") format("woff2"),
+    url("/fonts/PitchWeb-Bold.woff") format("woff");
+}
+
 $deckhouse: "Deckhouse-Regular";
+$pitch-regular: "Pitch-Medium";

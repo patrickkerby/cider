@@ -5,12 +5,20 @@ nav {
   top: 0;
   height: 90vh;
   z-index: 2;
-  transition: width 0.5s ease-out;
+  box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0);
+  // transition: width 0.5s ease-out;
+  transition: all 0.5s ease-out;
 
   ul {
-    margin-top: 4rem;
+    margin: 4rem auto;
+    padding: 0 3rem;
     opacity: 0;
-    transition: opacity 1s ease-out;
+    transition: opacity 0.5s ease-out;
+
+    li {
+      padding: 0.5rem 0;
+      min-width: 12rem;
+    }
   }
 }
 
@@ -18,11 +26,16 @@ nav {
 .hamb {
   cursor: pointer;
   float: right;
-  padding: 40px 20px;
+  padding: 30px 20px 40px 20px;
   position: absolute;
   top: 0;
   right: 0;
   z-index: 3;
+}
+
+.logged-in .hamb,
+.logged-in nav {
+  top: 32px;
 }
 
 .hamb-line {
@@ -52,6 +65,17 @@ nav {
   top: -8px;
 }
 
+.nav-title {
+  font-family: $deckhouse;
+  position: absolute;
+  bottom: 7px;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  opacity: 1;
+  transition: all 0.4s ease-out;
+}
+
 .side-menu {
   display: none;
 }
@@ -59,6 +83,7 @@ nav {
 /* Toggle menu icon */
 .side-menu:checked ~ nav {
   width: 280px;
+  box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0.3);
 
   ul {
     opacity: 1;
@@ -67,6 +92,11 @@ nav {
   #slideshow {
     width: calc(100% - 280px);
   }
+}
+
+.side-menu:checked ~ .hamb .nav-title {
+  opacity: 0;
+  bottom: 20px;
 }
 
 .side-menu:checked ~ .hamb .hamb-line {

@@ -10,9 +10,15 @@ body {
 }
 
 .logo {
-  position: absolute;
   z-index: 1;
-  margin: auto auto auto -32px;
+  margin: 6.5rem 0 0 0;
+  width: 33%;
+  max-width: 350px;
+  min-width: 245px;
+
+  @media (max-width: 900px) {
+    margin: 4.5rem 0 0 0;
+  }
 }
 
 h1,
@@ -22,13 +28,28 @@ h3 {
   font-weight: normal;
 }
 
+p,
+ul,
+li,
+div,
+a {
+  font-family: $pitch-regular;
+  font-weight: normal;
+}
+
 // Slidersss
 #slideshow {
   position: relative;
+  top: 0;
+  left: 0;
   width: calc(100% - 64px);
   height: 90vh;
   margin: 0 auto 0 0;
   overflow: hidden;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
 }
 
 #slideshow > div {
@@ -39,8 +60,31 @@ h3 {
   bottom: 0;
 }
 
-#slideshow img {
+img.full-bg {
   object-fit: cover;
   width: 100%;
   height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#slideshow h3 {
+  color: #fff;
+  font-family: $pitch-regular;
+  line-height: 2;
+  width: 60%;
+  max-width: 560px;
+  text-align: center;
+  z-index: 2;
+  margin: 0 0 4rem 0;
+
+  @media (max-width: 900px) {
+    margin: 0 0 2rem 0;
+  }
+
+  span {
+    padding: 0.5rem;
+    white-space: pre-wrap;
+  }
 }

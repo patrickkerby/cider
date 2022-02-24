@@ -4,7 +4,6 @@
   <style>
     :root { 
       --color-scheme: @php echo $colour_scheme['colour']; @endphp;
-      /* --color-scheme: red !important; */
     }
   </style>
   <body @php body_class() @endphp>
@@ -16,7 +15,10 @@
     </div>
     {{-- Hamburger Icon --}}
     <input class="side-menu" type="checkbox" id="side-menu"/>
-    <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+    <label class="hamb" for="side-menu">
+      <span class="hamb-line"></span>
+      <span class="nav-title">Menu</span>
+    </label>
     <nav class="side-nav" role="navigation" style="background-color: var(--color-scheme);">
       <ul>
         <li>About</li>
