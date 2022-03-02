@@ -148,17 +148,22 @@ footer {
   .field {
     background: #302f2d;
     padding: 1rem 1.5rem;
-    margin-right: 1rem;
-    width: 46%;
+    margin-right: 2%;
+    width: 48%;
 
     input {
       width: 100%;
     }
   }
 
+  .email-field {
+    margin-right: 0;
+  }
+
   .submit {
     text-indent: -999999px;
     width: 8%;
+    margin: 0;
     background-image: url(/images/check.png);
     background-position: center center;
     background-repeat: no-repeat;
@@ -169,8 +174,12 @@ footer {
     display: flex;
   }
 
-  .form-container {
-    @media (max-width: 670px) {
+  @media (max-width: 670px) {
+    form {
+      flex-direction: column;
+    }
+
+    .form-container {
       flex-direction: column;
 
       .name-field,
@@ -188,6 +197,14 @@ footer {
       }
     }
   }
+}
+
+#mce-responses {
+  position: absolute;
+  left: 0;
+  bottom: 3rem;
+  width: 100%;
+  justify-content: center;
 }
 
 .colophon {
