@@ -18,6 +18,10 @@ footer {
     right: 50%;
     background: $pbc-charcoal;
     transform: rotate(45deg);
+
+    @media (max-width: 580px) {
+      right: unset;
+    }
   }
 
   &::after {
@@ -33,6 +37,10 @@ footer {
     margin: 0 auto;
     right: calc(50% + 1.35rem);
     transform: rotate(135deg);
+
+    @media (max-width: 580px) {
+      right: unset;
+    }
   }
 }
 

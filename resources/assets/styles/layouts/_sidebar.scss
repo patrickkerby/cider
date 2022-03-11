@@ -9,15 +9,31 @@ nav {
   // transition: width 0.5s ease-out;
   transition: all 0.5s ease-out;
 
+  @media (max-width: 580px) {
+    transition: all 0.2s ease;
+  }
+
   ul {
     margin: 4rem auto;
     padding: 0 3rem;
     opacity: 0;
     transition: opacity 0.5s ease-out;
 
+    @media (max-width: 580px) {
+      height: 100vh;
+      align-items: center;
+      margin: 10rem 0 0 0;
+    }
+
     li {
       padding: 0.5rem 0;
       min-width: 12rem;
+
+      @media (max-width: 580px) {
+        font-size: 2rem;
+        text-align: center;
+        line-height: 4rem;
+      }
     }
   }
 
