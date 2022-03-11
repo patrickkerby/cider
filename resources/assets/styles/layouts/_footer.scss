@@ -15,6 +15,7 @@ footer {
     position: absolute;
     top: -25px;
     margin: 0 auto;
+    right: 50%;
     background: $pbc-charcoal;
     transform: rotate(45deg);
   }
@@ -30,6 +31,7 @@ footer {
     position: absolute;
     top: -14px;
     margin: 0 auto;
+    right: calc(50% + 1.35rem);
     transform: rotate(135deg);
   }
 }
