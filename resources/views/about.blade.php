@@ -66,7 +66,7 @@
       </div>
       <div class="col-half col2">
         <h4>Where you can find us</h4>
-        <p>For now, we're available online, and at select farmers' markets only. Follow us on facebook or instagram for more info!</p>
+        <p>For now, you can find us at Bountiful Farmers' Market in Edmonton, Fri-Sun every weekend. Follow us on facebook or instagram for more info!</p>
         @php gravity_form( 1, false, false, false, '', true, 12 );@endphp
         {{-- <form class="dark">
           <input type="text" placeholder="Full Name" />
