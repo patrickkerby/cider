@@ -22,6 +22,8 @@ export default {
         adaptiveHeight: false,
         infinite: true,
         autoplay: true,
+        fade: true,
+        cssEase: 'linear',
       });
     });
   },

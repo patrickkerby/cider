@@ -179,6 +179,8 @@ section {
       }
 
       .slick-slide img {
+        height: 600px;
+
         @media screen and (max-width: 587px) {
           height: 500px;
         }
