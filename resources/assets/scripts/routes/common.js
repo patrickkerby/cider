@@ -16,14 +16,12 @@ export default {
       });
 
       $('.slideshow').slick({
-        centerMode: true,      
-        slidesToShow: 1,
-        variableWidth: true,
-        adaptiveHeight: false,
+        dots: false,
         infinite: true,
-        autoplay: true,
+        speed: 1200,
         fade: true,
         cssEase: 'linear',
+        autoplay: true,
       });
     });
   },

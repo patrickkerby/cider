@@ -176,10 +176,13 @@ section {
       .slick-list,
       .slick-track {
         height: 100%;
+        background: #333;
       }
 
       .slick-slide img {
         height: 600px;
+        width: 100%;
+        object-fit: cover;
 
         @media screen and (max-width: 587px) {
           height: 500px;
