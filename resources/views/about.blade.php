@@ -9,7 +9,7 @@
     {{-- @include('partials.page-header') --}}
     @include('partials.content-page')
     <div id="hero">
-      <img class="logo" src="@asset('images/logo-thick.svg')" />
+      <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a>
       <h2>
         {{ $header_title }}
       </h2>

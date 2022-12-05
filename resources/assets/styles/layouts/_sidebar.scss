@@ -40,21 +40,13 @@ nav {
   }
 
   @media (max-width: 580px) {
-    width: 70px;
     position: fixed;
-    right: -4px;
-    top: -4px;
-    height: 89px;
-    border-radius: 4px;
+    height: 8.4rem;
   }
 
   @media (max-height: 580px) {
-    width: 70px;
     position: fixed;
-    right: -4px;
-    top: -4px;
-    height: 89px;
-    border-radius: 4px;
+    height: 8.4rem;
   }
 }
 

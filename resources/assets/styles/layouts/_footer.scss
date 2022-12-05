@@ -134,15 +134,11 @@ footer {
       width: 88%;
       margin: auto;
       text-align: center;
-      font-family: $wanderlust;
-      font-size: 27px;
-
-      @media (max-width: 1100) {
-        font-size: 24px;
-      }
+      font-family: $pitch-regular;
+      font-size: 21px;
 
       @media (max-width: 768px) {
-        font-size: 20px;
+        font-size: 17px;
       }
 
       @media (max-width: 660px) {
