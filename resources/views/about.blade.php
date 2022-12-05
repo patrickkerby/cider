@@ -67,12 +67,13 @@
       <div class="col-half col2">
         <h4>Where you can find us</h4>
         <p>For now, we're available online, and at select farmers' markets only. Follow us on facebook or instagram for more info!</p>
-        <form class="dark">
+        @php gravity_form( 1, false, false, false, '', true, 12 );@endphp
+        {{-- <form class="dark">
           <input type="text" placeholder="Full Name" />
           <input type="email" placeholder="Email Adress" />
           <textarea placeholder="Your Message"></textarea>
           <button type="button" value="submit">Send</button>
-        </form>
+        </form> --}}
       </div>
     </section>
   @endwhile

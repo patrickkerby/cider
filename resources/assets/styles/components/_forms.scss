@@ -50,9 +50,12 @@ section form {
       }
     }
 
-    button {
+    button,
+    input[type=submit] {
       background-color: #87791e;
       transition: all 0.4s ease;
+      width: auto;
+      color: #fff;
 
       &:hover {
         background-color: darken($color: #87791e, $amount: 10%);
@@ -60,4 +63,10 @@ section form {
       }
     }
   }
+}
+
+.gform_confirmation_message {
+  background: $pbc-green;
+  padding: 4rem;
+  margin: 2rem;
 }
