@@ -1,2 +1,18 @@
 // TODO: .banner .nav li {}
 // TODO: .banner .nav a {}
+.page-template:not(.home) {
+  .logo {
+    display: flex;
+    width: 12.5rem;
+    min-width: unset;
+    height: auto;
+    padding: 2.25rem 1.5rem;
+    margin: -0.5rem auto 0 auto;
+    background: url(../../images/logo-bg.svg) center center;
+
+    @media screen and (max-width: 500px) {
+      width: 9.5rem;
+      background-size: cover;
+    }
+  }
+}

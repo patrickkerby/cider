@@ -8,7 +8,7 @@
       "./scripts/customizer.js"
     ]
   },
-  "publicPath": "/app/themes/cider2",
+  "publicPath": "/app/themes/cider",
   "devUrl": "https://pbcco.test",
   "proxyUrl": "http://localhost:3000",
   "cacheBusting": "[name]_[contenthash]",

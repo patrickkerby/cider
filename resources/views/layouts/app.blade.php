@@ -20,11 +20,9 @@
       <span class="nav-title">Menu</span>
     </label>
     <nav class="side-nav" role="navigation" style="background-color: var(--color-scheme);">
-      <ul>
-        <li>Check back soon for more info about our products and the cidery!</li>
-        {{-- <li>Journal</li>
-        <li>Shop</li> --}}
-      </ul>
+      @if (has_nav_menu('primary_navigation'))
+        {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav']) !!}
+      @endif
     </nav>
     @php do_action('get_footer') @endphp
     @include('partials.footer')

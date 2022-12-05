@@ -1,7 +1,7 @@
 <footer class="content-info">
   {{-- @php dynamic_sidebar('sidebar-footer') @endphp --}}
   <div class="news-slider">
-    <h2>Stuff that's <span>goin' on</span></h2>
+    <h2>Stuff that's goin' on</h2>
     <div class="slider">
       <div class="fade">
         @if($acf_options->news_feed)

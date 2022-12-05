@@ -7,6 +7,7 @@ footer {
   flex-direction: column;
   align-items: center;
   margin-top: -3px;
+  color: #fff;
 
   &::before {
     content: "";
@@ -16,7 +17,7 @@ footer {
     position: absolute;
     top: -25px;
     margin: 0 auto;
-    right: 50%;
+    right: calc(50% - 25px);
     background: $pbc-charcoal;
     transform: rotate(45deg);
 
@@ -36,7 +37,6 @@ footer {
     position: absolute;
     top: -14px;
     margin: 0 auto;
-    right: calc(50% + 1.35rem);
     transform: rotate(135deg);
 
     @media (max-width: 580px) {
@@ -70,13 +70,13 @@ footer {
     line-height: 1;
     background: #302f2d;
     margin: 0;
-    padding: 2rem 1.5rem;
+    padding: 2rem;
     height: 100%;
-    text-align: center;
+    text-transform: uppercase;
 
     @media (max-width: 1100px) {
       font-size: 34px;
-      padding: 2.75rem 0.25rem;
+      padding: 3.25rem 1.25rem;
     }
 
     @media (max-width: 768px) {
@@ -88,21 +88,8 @@ footer {
       width: 100%;
     }
 
-    span {
-      font-size: 68px;
-      display: inline-block;
-
-      @media (max-width: 1100px) {
-        font-size: 56px;
-      }
-
-      @media (max-width: 768px) {
-        font-size: 52px;
-      }
-
-      @media (max-width: 660px) {
-        font-size: unset;
-      }
+    @media (max-width: 500px) {
+      text-align: center;
     }
   }
 
@@ -264,5 +251,9 @@ footer {
     max-width: 345px;
     width: 35%;
     margin: auto;
+
+    @media (max-width: 500px) {
+      width: 75%;
+    }
   }
 }

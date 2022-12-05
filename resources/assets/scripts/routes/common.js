@@ -14,6 +14,15 @@ export default {
         autoplay: true,
         autoplaySpeed: 6000,
       });
+
+      $('.slideshow').slick({
+        centerMode: true,      
+        slidesToShow: 1,
+        variableWidth: true,
+        adaptiveHeight: false,
+        infinite: true,
+        autoplay: true,
+      });
     });
   },
 };

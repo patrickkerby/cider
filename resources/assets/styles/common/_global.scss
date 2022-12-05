@@ -33,7 +33,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: $deckhouse;
+  font-family: $wanderlust;
   font-weight: normal;
 }
 
@@ -44,6 +44,11 @@ div,
 a {
   font-family: $pitch-regular;
   font-weight: normal;
+}
+
+p {
+  letter-spacing: -0.03rem;
+  word-spacing: -0.08rem;
 }
 
 // Slidersss
@@ -111,5 +116,22 @@ img.full-bg {
   span {
     padding: 0.5rem;
     white-space: pre-wrap;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+
+  @media screen and (max-width: 587px) {
+    flex-direction: column;
+  }
+
+  .col-half {
+    width: 50%;
+
+    @media screen and (max-width: 587px) {
+      width: 100%;
+    }
   }
 }

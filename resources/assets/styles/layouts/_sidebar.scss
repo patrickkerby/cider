@@ -1,9 +1,11 @@
+/* stylelint-disable no-descending-specificity */
+
 nav {
-  width: 64px;
+  width: 92px;
   position: fixed;
   right: 0;
   top: 0;
-  height: 90vh;
+  height: 100vh;
   z-index: 1;
   box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0);
   // transition: width 0.5s ease-out;
@@ -60,11 +62,20 @@ nav {
 .hamb {
   cursor: pointer;
   float: right;
-  padding: 30px 20px 40px 20px;
   position: fixed;
   top: 0;
   right: 0;
   z-index: 2;
+  padding: 0 1.875rem;
+  height: 8.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .page-template:not(.home) & {
+    background-color: $pbc-green;
+  }
 }
 
 .logged-in .hamb,
@@ -100,14 +111,18 @@ nav {
 }
 
 .nav-title {
-  font-family: $deckhouse;
-  position: absolute;
-  bottom: 7px;
+  font-family: $pitch-regular;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  top: 1rem;
   width: 100%;
   text-align: center;
   left: 0;
   opacity: 1;
   transition: all 0.4s ease-out;
+  text-transform: uppercase;
 }
 
 .side-menu {
@@ -118,6 +133,10 @@ nav {
 .side-menu:checked ~ nav {
   width: 280px;
   box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0.3);
+
+  .page-template:not(.home) & {
+    background-color: $pbc-green !important;
+  }
 
   ul {
     opacity: 1;
@@ -178,3 +197,5 @@ nav {
   transform: rotate(45deg);
   top: 0;
 }
+
+/* stylelint-enable no-descending-specificity */

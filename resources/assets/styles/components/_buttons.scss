@@ -1,0 +1,20 @@
+ul.social-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto 4.25rem auto;
+
+  li a {
+    width: 2.375rem;
+    height: 2.375rem;
+    padding: 0.5rem;
+    background-color: $pbc-green;
+    display: flex;
+    margin: 0 0.5rem;
+    transition: all 0.4s ease;
+
+    &:hover {
+      background-color: darken($color: $pbc-green, $amount: 10%);
+      transition: all 0.4s ease;
+    }
+  }
+}
