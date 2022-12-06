@@ -60,8 +60,8 @@
     </section>
     <section class="contact row">
       <div class="col-half col1">
+        <h2>Look around.</h2>
         <h2>Try our cider.</h2>
-        {{-- <h2>Come visit.</h2> --}}
         <h2>Send us a message!</h2>
       </div>
       <div class="col-half col2">
