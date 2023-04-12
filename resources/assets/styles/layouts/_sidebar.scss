@@ -7,6 +7,7 @@ nav {
   top: 0;
   height: 100vh;
   z-index: 1;
+  background: none !important;
   box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0);
   // transition: width 0.5s ease-out;
   transition: all 0.5s ease-out;
@@ -35,6 +36,10 @@ nav {
         font-size: 2rem;
         text-align: center;
         line-height: 4rem;
+      }
+
+      a {
+        color: #fff;
       }
     }
   }
@@ -125,6 +130,10 @@ nav {
 .side-menu:checked ~ nav {
   width: 280px;
   box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0.3);
+
+  .home & {
+    background-color: var(--color-scheme) !important;
+  }
 
   .page-template:not(.home) & {
     background-color: $pbc-green !important;

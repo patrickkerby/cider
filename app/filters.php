@@ -106,3 +106,57 @@ function my_acf_op_init() {
         ));
     }
 }
+
+remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
+
+
+remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
+remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );    // Strip out the default linking so we can control the quickview
+remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );     // Strip out the default linking so we can control the quickview
+remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );           // No prices in thumbnail view plz
+// remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );           // We need to add our own button in for the quick view
+
+// Setup for Product Modal Quickview
+// remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );              // Get rid of sku and categories on product modal
+/**
+ * Remove related products output
+ */
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+
+add_filter( 'woocommerce_product_add_to_cart_text', 'App\woocommerce_add_to_cart_button_text_archives' );  
+function woocommerce_add_to_cart_button_text_archives() {
+    return __( 'View Product', 'woocommerce' );
+}
+
+add_action( 'woocommerce_after_shop_loop_item_title', 'App\pbc_shop_product_short_description', 35, 2 );
+ 
+function pbc_shop_product_short_description() {
+     the_excerpt();
+}
+
+// remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+
+function add_custom_text_after_product_title(){
+    $get_alc = get_field('alcohol_content');
+    $get_vol = get_field('container_size');
+    $get_size = get_field('container_count');
+    $alc = "";
+    $vol = "";
+    $size = "";
+
+    if ($get_alc) {
+        $alc = ' / '.$get_alc;
+    }
+
+    if ($get_size) {
+        $size = $get_size.' / ';
+    }
+
+    if ($get_vol) {
+        $vol = $get_vol;
+    }
+
+    echo '<div class="cider_meta">'.$size.$vol.$alc.'</div>';
+}
+add_action( 'woocommerce_single_product_summary', 'App\add_custom_text_after_product_title', 5);
