@@ -53,8 +53,8 @@
       <h3>Follow along</h3>
       <p>Our journey has just begun and we still have a lot to do! Follow us for product and orchard updates on Instagram and Facebook.</p>
       <ul class="social-buttons">
-        <li><a href="https://instagram.com/prairiebearsciderco" target="_blank"><img src="@asset('images/facebook.svg')" /></a></li>
-        <li><a href="https://www.facebook.com/profile.php?id=100060722582049" target="_blank"><img src="@asset('images/instagram.svg')" /></a></li>
+        <li><a href=""><img src="@asset('images/facebook.svg')" /></a></li>
+        <li><a href=""><img src="@asset('images/instagram.svg')" /></a></li>
       </ul>
       @php dynamic_sidebar('sidebar-footer') @endphp
     </section>
@@ -68,6 +68,12 @@
         <h4>Where you can find us</h4>
         <p>For now, you can find us at Bountiful Farmers' Market in Edmonton, Fri-Sun every weekend. Follow us on facebook or instagram for more info!</p>
         @php gravity_form( 1, false, false, false, '', true, 12 );@endphp
+        {{-- <form class="dark">
+          <input type="text" placeholder="Full Name" />
+          <input type="email" placeholder="Email Adress" />
+          <textarea placeholder="Your Message"></textarea>
+          <button type="button" value="submit">Send</button>
+        </form> --}}
       </div>
     </section>
   @endwhile

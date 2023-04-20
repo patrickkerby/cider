@@ -14,7 +14,7 @@
     left: 0;
     background-image: url(../../images/white-section-break.svg);
     background-size: cover;
-    z-index: 0;
+    z-index: 1;
   }
 
   img.full-bg {
@@ -504,7 +504,6 @@ section {
     text-align: center;
     text-transform: uppercase;
     padding: 0 10%;
-    color: #fff;
 
     @media screen and (max-width: 976px) {
       padding: 0 10% 0 0;
@@ -543,19 +542,6 @@ section {
       background: none;
       padding-top: 0;
     }
-  }
-}
-
-.content-wrap,
-.wrap {
-  display: flex;
-  flex-flow: column;
-}
-
-.content-wrap {
-  h2 {
-    max-width: 90%;
-    margin: 0 auto 4rem auto;
   }
 }
 

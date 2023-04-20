@@ -1,12 +1,7 @@
 /** Colors */
 $brand-primary:         #525ddc;
 $pbc-charcoal:          #262523;
-$pbc-green:             #a89934;
-$pbc-darkgreen:         #768a50;
-$pbc-darkgreen-copy:    #64704c;
-$highlight:             #768a50;
-$cream:                 #f8f7f2;
-$cream-dark:            #eceade;
+$pbc-green:               #a89934;
 
 /** Box Model  */
 $spacer:                2rem;
@@ -59,12 +54,3 @@ $slick-font-path: "#{$slick-loader-path}fonts/";
 $wanderlust: "Wanderlust";
 $deckhouse: "Deckhouse-Regular";
 $pitch-regular: "Pitch";
-
-$font-family-sans-serif: "Pitch";
-$font-family-serif: "Wanderlust";
-
-@mixin slowfade($time: 0.4) {
-  -webkit-transition: all #{$time}s ease-in-out;
-  -moz-transition: all #{$time}s ease-in-out;
-  transition: all #{$time}s ease-in-out;
-}
