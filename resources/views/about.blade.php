@@ -2,6 +2,17 @@
   Template Name: About Page
 --}}
 
+@php
+
+  $heading_image = get_field("header_image", 'option');
+  $title = get_field("title", 'option');
+
+  if (is_null($title)) {
+      $title = get_the_title();
+  }
+
+@endphp
+
 @extends('layouts.app')
 
 @section('content')
@@ -11,7 +22,7 @@
     <div id="hero">
       <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a>
       <h2>
-        {{ $header_title }}
+          {{ $title }}
       </h2>
       <img class="full-bg" src="{{ $image }}" />
     </div>
