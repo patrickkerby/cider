@@ -450,7 +450,11 @@ div.pp_woocommerce_quick_view {
   }
 
   div.product form.cart .variations select {
-    width: 100%;
+    width: auto;
+    padding: 0.25rem 0.5rem;
+    border: solid 2px $pbc-darkgreen;
+    border-radius: 3px;
+    background: url(../../images/select-arrow.svg) no-repeat 97% center;
   }
 }
 
@@ -763,6 +767,11 @@ form.cart .qib-container + button[type="submit"]:not(#qib_id):not(#qib_id) {
       font-family: $font-family-sans-serif;
     }
   }
+}
+
+.shop_table .product-price,
+.shop_table .product-subtotal {
+  display: none;
 }
 
 .woocommerce-notices-wrapper {

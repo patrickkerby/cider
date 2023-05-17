@@ -140,23 +140,23 @@ function pbc_shop_product_short_description() {
 function add_custom_text_after_product_title(){
     $get_alc = get_field('alcohol_content');
     $get_vol = get_field('container_size');
-    $get_size = get_field('container_count');
+    // $get_size = get_field('container_count');
     $alc = "";
     $vol = "";
-    $size = "";
+    // $size = "";
 
     if ($get_alc) {
         $alc = ' / '.$get_alc;
     }
 
-    if ($get_size) {
-        $size = $get_size.' / ';
-    }
+    // if ($get_size) {
+    //     $size = $get_size.' / ';
+    // }
 
     if ($get_vol) {
         $vol = $get_vol;
     }
 
-    echo '<div class="cider_meta">'.$size.$vol.$alc.'</div>';
+    echo '<div class="cider_meta">'.$vol.$alc.'</div>';
 }
 add_action( 'woocommerce_single_product_summary', 'App\add_custom_text_after_product_title', 5);

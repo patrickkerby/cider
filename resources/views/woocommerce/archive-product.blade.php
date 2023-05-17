@@ -24,7 +24,6 @@ the readme will list any important changes.
 
   @if(woocommerce_product_loop())
     <section class="row no-gutters justify-content-center">
-      <h1>TEST</h1>
         @php
           woocommerce_product_loop_start();
         @endphp

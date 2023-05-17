@@ -559,4 +559,14 @@ section {
   }
 }
 
+// Events
+
+.tribe-events-calendar-list__event-header h3 a {
+  font-family: $wanderlust;
+  color: $pbc-darkgreen;
+}
+
+.tribe-events-event-meta.primary {
+  width: 100% !important;
+}
 /* stylelint-enable no-descending-specificity */
