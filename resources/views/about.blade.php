@@ -5,7 +5,7 @@
 @php
 
   $heading_image = get_field("header_image", 'option');
-  $title = get_field("title", 'option');
+  $title = get_field("header_title", 'option');
 
   if (is_null($title)) {
       $title = get_the_title();
