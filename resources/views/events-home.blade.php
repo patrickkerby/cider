@@ -6,16 +6,14 @@
 
 @php
 
-  $heading_image = get_field("landing_page_heading_header_image", 'option');
-  $title = get_field("landing_page_heading_title", 'option');
+  $heading_image = get_field("landing_page_heading_image", 'option');
+  $title = get_field("landing_page_heading_header_title", 'option');
 
   if (is_null($title)) {
     $title = get_the_title();
   }
 
 @endphp
-
-@dump()
 
 @section('content')
   @while(have_posts()) @php the_post() @endphp

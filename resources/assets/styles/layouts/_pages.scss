@@ -14,7 +14,7 @@
     left: 0;
     background-image: url(../../images/white-section-break.svg);
     background-size: cover;
-    z-index: 1;
+    z-index: 0;
   }
 
   img.full-bg {
@@ -504,6 +504,7 @@ section {
     text-align: center;
     text-transform: uppercase;
     padding: 0 10%;
+    color: #fff;
 
     @media screen and (max-width: 976px) {
       padding: 0 10% 0 0;
@@ -545,4 +546,27 @@ section {
   }
 }
 
+.content-wrap,
+.wrap {
+  display: flex;
+  flex-flow: column;
+}
+
+.content-wrap {
+  h2 {
+    max-width: 90%;
+    margin: 0 auto 4rem auto;
+  }
+}
+
+// Events
+
+.tribe-events-calendar-list__event-header h3 a {
+  font-family: $wanderlust;
+  // color: $pbc-darkgreen;
+}
+
+.tribe-events-event-meta.primary {
+  width: 100% !important;
+}
 /* stylelint-enable no-descending-specificity */
