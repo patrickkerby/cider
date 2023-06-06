@@ -780,4 +780,18 @@ form.cart .qib-container + button[type="submit"]:not(#qib_id):not(#qib_id) {
   bottom: -1rem;
   min-width: 70%;
 }
+
+.woocommerce-order-received {
+  .content {
+    padding-top: 4rem;
+  }
+
+  .woocommerce ul.order_details {
+    margin: 2rem 0 0 0;
+  }
+
+  .woocommerce .woocommerce-order-details {
+    padding: 4rem 0;
+  }
+}
 /* stylelint-enable no-descending-specificity */
