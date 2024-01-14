@@ -16,7 +16,7 @@
         
         <section class="shop row justify-content-center">
           <div class="col-12">
-            <h2>Order online, pickup Friday-Sunday at Bountiful Farmers’ Market!</h2>
+            <h2>Online ordering + delivery available in the Edmonton area!</h2>
             @include('partials.content-page')
           </div>
         </section>

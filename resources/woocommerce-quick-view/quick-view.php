@@ -53,11 +53,12 @@ do_action( 'wc_quick_view_before_single_product' );
 			do_action( 'woocommerce_single_product_summary' );
 			?>
 
-		<p class="order_notes">All orders are for pickup at Bountiful Farmers' Market. Friday-Sunday, every weekend.</p>
-
+			<p class="order_notes">
+				Order online and get cider delivered to your door!<br>
+				Cider deliveries in the Edmonton area happen every Saturday from 12-7pm. The purchaser must be home to accept the delivery and show proof of age.<br>
+				If you live outside the Edmonton area or that timeframe doesn't work for you, just give us a shout and we'll see if we can arrange something that works.
+			</p>
 		</div>
-
-
 	</div>
 </div>
 
