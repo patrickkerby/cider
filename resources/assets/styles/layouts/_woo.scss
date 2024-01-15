@@ -792,4 +792,12 @@ form.cart .qib-container + button[type="submit"]:not(#qib_id):not(#qib_id) {
     padding: 4rem 0;
   }
 }
+
+.woocommerce-store-notice,
+p.demo_store {
+  top: unset;
+  bottom: 0;
+  position: sticky;
+  background: #768a50;
+}
 /* stylelint-enable no-descending-specificity */
