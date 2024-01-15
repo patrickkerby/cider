@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 // TODO: .banner .nav li {}
 // TODO: .banner .nav a {}
 .cart,
@@ -19,3 +20,58 @@
     }
   }
 }
+
+.page-template-general {
+  .logo {
+    background: none !important;
+    border: solid 2.4px #fff;
+    width: 8.5rem !important;
+    height: 7.5rem !important;
+    padding: 1rem !important;
+    margin: 1.75rem 0 1.75rem 1.75rem !important;
+    position: absolute;
+
+    @media screen and (max-width: 790px) {
+      width: 6.5rem !important;
+      height: 5.5rem !important;
+      padding: 0.75rem !important;
+    }
+
+    @media screen and (max-width: 620px) {
+      position: static;
+      margin: 2rem auto !important;
+    }
+  }
+
+  #hero {
+    display: flex;
+
+    @media screen and (max-width: 620px) {
+      flex-direction: column;
+    }
+
+    h2 {
+      font-size: 3.5rem;
+      line-height: 4rem;
+      text-align: center;
+      max-width: calc(100% - 20rem);
+      margin: 4rem auto 4rem auto;
+      display: flex;
+      justify-content: center;
+
+      @media screen and (min-width: 1200px) {
+        max-width: 34rem;
+      }
+
+      @media screen and (max-width: 790px) {
+        font-size: 3rem;
+        line-height: 3rem;
+      }
+
+      @media screen and (max-width: 620px) {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}
+/* stylelint-enable no-descending-specificity */

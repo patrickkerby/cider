@@ -33,6 +33,37 @@ section form {
     }
   }
 
+  .mc4wp-form-fields {
+    display: flex;
+    flex-direction: column;
+
+    input {
+      border: solid 3px $pbc-green;
+      color: $pbc-green;
+      font-weight: bolder;
+      margin: 0 0 1.5rem 0;
+
+      &[type=submit] {
+        width: auto;
+        height: 2.5rem;
+        padding: 0 1rem;
+        background: $pbc-green;
+        color: #fff;
+        margin: auto;
+      }
+    }
+  }
+
+  .mc4wp-response {
+    color: $pbc-darkgreen;
+    margin: 2rem auto;
+    padding: 2rem;
+    width: 100%;
+    border: dotted 3px $pbc-darkgreen;
+    text-align: center;
+    font-size: 1rem;
+  }
+
   button {
     width: auto;
     margin: 0;
