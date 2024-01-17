@@ -160,4 +160,3 @@ function add_custom_text_after_product_title(){
     echo '<div class="cider_meta">'.$vol.$alc.'</div>';
 }
 add_action( 'woocommerce_single_product_summary', 'App\add_custom_text_after_product_title', 5);
-
