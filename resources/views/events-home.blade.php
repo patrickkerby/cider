@@ -18,13 +18,21 @@
 @section('content')
   @while(have_posts()) @php the_post() @endphp
     {{-- @include('partials.page-header') --}}
-    <div id="hero">
+    {{-- <div id="hero">
       <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a>
       <h2>
         {{ $title }}
       </h2>
       <img class="full-bg" src="{{ $heading_image }}" />
-    </div>
+    </div> --}}
+{{-- Desktop Navigation --}}
+  <nav class="nav-desktop" role="navigation">
+    <img class="farmcidery" src="@asset('images/logo-square-small.svg')" />    
+    @if (has_nav_menu('primary_navigation'))
+      {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav-top']) !!}
+    @endif
+    <a class="cart" href="/cart"><img src="@asset('images/cart.svg')" /></a>
+  </nav>
 
     <main id="tribe-events-pg-template" class="tribe-events-pg-template">
 

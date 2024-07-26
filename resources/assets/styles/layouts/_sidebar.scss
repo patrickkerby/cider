@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity */
 
-nav {
+nav.nav-mobile nav {
   width: 92px;
   position: fixed;
   right: 0;
@@ -199,4 +199,23 @@ nav {
   top: 0;
 }
 
+.nav-mobile {
+  @media screen and (max-width: 580px) {
+    display: block;
+  }
+
+  @media screen and (min-width: 581px) {
+    display: none;
+  }
+}
+
+.nav-desktop {
+  @media screen and (min-width: 580px) {
+    display: flex;
+  }
+
+  @media screen and (max-width: 581px) {
+    display: none;
+  }
+}
 /* stylelint-enable no-descending-specificity */

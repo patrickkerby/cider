@@ -4,6 +4,7 @@
 #hero {
   overflow: hidden;
   position: relative;
+  padding-top: 100px;
 
   &::after {
     content: "";
