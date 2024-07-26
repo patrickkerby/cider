@@ -41,8 +41,6 @@
     <div class="wrap container" role="document">
       @yield('content')
 
-      <a href="#stockists">Open Modal</a>
-
       <div id="stockists" class="modalDialog">
         <div>
           <a href="#close" title="Close" class="close">Close</a>
