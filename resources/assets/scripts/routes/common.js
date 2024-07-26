@@ -28,8 +28,15 @@ export default {
         $(document).on('click', 'li .product_type_simple', function() {
           $('body').addClass('quickview-open');
         });
+        $(document).on('click', '.openModal', function() {
+          $('body').addClass('quickview-open');
+        });
         // remove class from body when close button is clicked  
         $(document).on('click', '.close-product', function(e) {
+          if (!$(e.target).is('.quickview'))
+            $('.quickview-open').removeClass('quickview-open');
+        });
+        $(document).on('click', '.close', function(e) {
           if (!$(e.target).is('.quickview'))
             $('.quickview-open').removeClass('quickview-open');
         });
@@ -37,7 +44,7 @@ export default {
         $(document).on('click', '.pp_overlay', function(e) {
           if (!$(e.target).is('.quickview-open'))
             $('.quickview-open').removeClass('quickview-open');
-        });
+        });        
         // remove class from body when you hit escape
         $(document).bind('keyup', function(e){ 
           if(e.which == 27){
@@ -61,11 +68,19 @@ export default {
             $('.quickview-open').removeClass('quickview-open'); 
           }
         });
+        $(document).on('click', '.close', function(e) {
+          if (!$(e.target).is('.quickview')) {
+            $('.quickview-open').removeClass('quickview-open'); 
+          }
+        });
 
         setTimeout(function() {
           $('.woocommerce-message').fadeOut('fast');
         }, 5000);
 
+        if(window.location.hash == '#stockists'){
+          $('body').addClass('quickview-open');
+        }
       });
     });
   },

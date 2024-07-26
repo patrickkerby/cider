@@ -40,6 +40,20 @@
     {{-- @include('partials.header') --}}
     <div class="wrap container" role="document">
       @yield('content')
+
+      <a href="#stockists">Open Modal</a>
+
+      <div id="stockists" class="modalDialog">
+        <div>
+          <a href="#close" title="Close" class="close">Close</a>
+          <h2>Stockists</h2>
+          <p>We're slowly but surely getting our cider into the best bottle shops around! If you'd like your local to carry us, let them know and ask them to get in touch!</p>
+          <div class="stockist-content">
+            <p>{!! $acf_options->stockists !!}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     @php do_action('get_footer') @endphp

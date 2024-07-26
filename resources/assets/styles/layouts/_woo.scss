@@ -98,7 +98,8 @@
   background: rgba(255, 255, 255, 0.6) !important;
 }
 
-div.pp_woocommerce_quick_view {
+div.pp_woocommerce_quick_view,
+.modalDialog > div {
   top: 0 !important;
   left: unset !important;
   right: 0 !important;
@@ -569,7 +570,8 @@ div.pp_woocommerce .pp_close {
   }
 }
 
-.close-product {
+.close-product,
+.close {
   position: fixed;
   display: none;
   z-index: 999999999999999999;
