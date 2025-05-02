@@ -1,0 +1,83 @@
+body.cidercart {
+  .nav-desktop {
+    justify-content: center;
+
+    * {
+      color: #2e6a6d;
+    }
+
+    li {
+      border-bottom: solid 2px #2e6a6d;
+
+      a {
+        font-weight: 600;
+      }
+    }
+  }
+
+  .wrap {
+    min-height: 70vh;
+    background-image: linear-gradient(0deg, rgba(225, 241, 236, 0) 0%, #c2ded5 100%);
+  }
+
+  .landing-page {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10rem 0;
+    max-width: 32rem;
+
+    h3 {
+      font-family: $font-family-sans-serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: #2e6a6d;
+      letter-spacing: -0.39px;
+      line-height: 2.35rem;
+      margin: 2rem 0 1rem 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #453e0d;
+      letter-spacing: -0.17px;
+      line-height: 1.625rem;
+    }
+  }
+
+  .button {
+    background: #2e6a6d;
+    border-radius: 2.25rem;
+    font-size: 1.125rem;
+    text-align: center;
+    padding: 1rem 2.5rem;
+    color: #fff;
+    text-decoration: none;
+    margin-top: 1.25rem;
+    display: inline-flex;
+
+    @include slowfade(0.4);
+
+    &:hover {
+      background: #40878b;
+      color: #fff;
+
+      @include slowfade(0.4);
+    }
+  }
+}
+
+#cidercart-contact {
+  h2 {
+    color: #2e6a6d;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  form {
+    input,
+    textarea {
+      border: solid 2px #2e6a6d;
+    }
+  }
+}
