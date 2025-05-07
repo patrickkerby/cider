@@ -33,8 +33,8 @@
       <div id="cidercart-contact" class="modalDialog">
         <div class="stockist-container">
           <a href="#close" title="Close" class="close">Close</a>
-          <h2>Book The Cider Cart!</h2>
-          <p>Send us a message with all of your details, we'll get back to you as soon as possible!</p>
+          <h2>Get a quote for the Cider Cart!</h2>
+          <p>Tell us more about your event and we'll get back to you as soon as possible!</p>
           <div class="stockist-content">
             @php gravity_form( 1, false, false, false, '', true, 12 );@endphp
           </div>
