@@ -486,42 +486,47 @@ div.pp_woocommerce_quick_view,
   margin-right: 0.75rem;
 }
 
-.qib-container {
-  border: solid 3px #f8f7f2 !important;
-  width: auto !important;
+.woocommerce .quantity input.qty {
+  width: 2.75rem !important;
+  order: 2;
 }
 
-.qib-button:not(#qib_id):not(#qib_id) {
+.quantity-button {
   background: #f8f7f2 !important;
   color: #707070 !important;
   font-size: 22px !important;
   font-weight: 600 !important;
-  padding: 0 0 4px 0 !important;
+  padding: 0 0 3px 0;
   border: none !important;
   height: 45px !important;
-  text-align: center;
+  width: 2.25rem;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0 !important;
 
-  @media (max-width: 767px) {
+  @media (max-width: 575px) {
     width: 28px !important;
   }
 }
 
-.qib-button:hover:not(#qib_id):not(#qib_id) {
+.quantity-button:hover {
   background: #f0ede1 !important;
 }
 
-.qib-container .quantity input.qty:not(#qib_id):not(#qib_id) {
-  border: none !important;
-  font-weight: 600 !important;
-  height: 45px !important;
-
-  @media (max-width: 767px) {
-    width: 32px !important;
-  }
+.quantity-up {
+  order: 3;
 }
 
-.woocommerce table.cart td.product-quantity .qib-container:not(#qib_id):not(#qib_id) {
-  display: inline-flex !important;
+.quantity-down {
+  order: 1;
 }
 
 form.cart button.single_add_to_cart_button,
@@ -845,4 +850,46 @@ p.demo_store {
   position: sticky;
   background: #768a50;
 }
+
+// quanity input
+.quantity,
+div.product.wcpa_has_options form.cart > div.quantity {
+  position: relative;
+  border: solid 3px #f8f7f2 !important;
+  width: 7.25rem !important;
+  display: flex;
+  margin-right: 1rem !important;
+  flex-wrap: nowrap !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.quantity input {
+  width: 7.25rem;
+  line-height: 1.65;
+  display: flex;
+  padding: 0;
+  margin: 0 auto !important;
+  border: 1px solid #eee;
+  border: none !important;
+  font-weight: 600 !important;
+  height: 45px !important;
+
+  @media (max-width: 575px) {
+    width: 32px !important;
+  }
+}
+
+.quantity input:focus {
+  outline: 0;
+}
+
 /* stylelint-enable no-descending-specificity */

@@ -1,0 +1,180 @@
+body.cidercart,
+body.cocktail-book {
+  .nav-desktop {
+    justify-content: center;
+
+    * {
+      color: #2e6a6d;
+    }
+
+    li {
+      border-bottom: solid 2px #2e6a6d;
+
+      a {
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+body.cidercart {
+  .wrap {
+    min-height: 70vh;
+    background-image: linear-gradient(0deg, rgba(225, 241, 236, 0) 0%, #c2ded5 100%);
+
+    .button {
+      background: #2e6a6d;
+      border-radius: 2.25rem;
+      font-size: 1.125rem;
+      text-align: center;
+      padding: 1rem 2.5rem;
+      color: #fff;
+      text-decoration: none;
+      margin-top: 1.25rem;
+      display: inline-flex;
+
+      @include slowfade(0.4);
+
+      &:hover {
+        background: #40878b;
+        color: #fff;
+
+        @include slowfade(0.4);
+      }
+    }
+  }
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 2rem;
+  padding: 4rem 6rem 4rem 6rem;
+
+  :nth-child(4n) {
+    grid-column: span 3;
+    width: 100%;
+  }
+
+  .gallery-item {
+    img {
+      aspect-ratio: 1.25 / 1;
+      object-fit: cover;
+    }
+  }
+}
+
+.landing-page {
+  width: 80%;
+  margin: 0 auto;
+  padding: 10rem 0;
+
+  h3 {
+    font-family: $font-family-sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #2e6a6d;
+    letter-spacing: -0.39px;
+    line-height: 2.35rem;
+    margin: 2rem 0 1rem 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #453e0d;
+    letter-spacing: -0.17px;
+    line-height: 1.625rem;
+  }
+
+  .cidercart & {
+    max-width: 32rem;
+  }
+}
+
+#cidercart-contact {
+  h2 {
+    color: #2e6a6d;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  form {
+    input,
+    textarea {
+      border: solid 2px #2e6a6d;
+    }
+  }
+}
+
+.cocktail-book {
+  .woocommerce-product-block {
+    background: #f8f6f4;
+
+    .single-product {
+      background: #fff;
+      padding: 2rem;
+      display: flex;
+    }
+
+    .single-product div.product {
+      div.summary {
+        width: 48% !important;
+
+        h1 {
+          font-family: $pitch-regular;
+          color: $cocktail-teal;
+          font-size: 26px;
+          line-height: 24px;
+        }
+      }
+    }
+  }
+
+  .woocommerce div.product div.images {
+    margin-bottom: 0;
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column-reverse;
+    padding-left: 0;
+    padding-right: 0;
+
+    h4 {
+      color: #475150;
+      font-family: $qugira;
+      text-transform: uppercase;
+      font-size: 46px;
+      line-height: 50px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 26px;
+      color: #453e0d;
+    }
+
+    .feature-card {
+      &::before,
+      &::after {
+        display: none;
+      }
+
+      img {
+        width: 47%;
+        aspect-ratio: 3.25 / 2;
+      }
+
+      .content {
+        width: 30%;
+      }
+    }
+
+    .feature-card:first-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      background: none;
+    }
+  }
+}

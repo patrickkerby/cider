@@ -76,6 +76,15 @@ add_action('after_setup_theme', function () {
     add_editor_style(asset_path('styles/main.css'));
 }, 20);
 
+    /**
+     * Add WooCommerce Support
+     */
+    add_theme_support('woocommerce');
+    add_theme_support( 'wc-product-gallery-zoom' );
+    remove_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
+    add_theme_support( 'post-thumbnails', array( 'product' ) );
+
 /**
  * Register sidebars
  */

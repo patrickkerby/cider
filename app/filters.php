@@ -136,6 +136,8 @@ function pbc_shop_product_short_description() {
 }
 
 // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+
 
 function add_custom_text_after_product_title(){
     $get_alc = get_field('alcohol_content');
@@ -160,3 +162,10 @@ function add_custom_text_after_product_title(){
     echo '<div class="cider_meta">'.$vol.$alc.'</div>';
 }
 add_action( 'woocommerce_single_product_summary', 'App\add_custom_text_after_product_title', 5);
+
+// settings for product modal photo gallery. show bullets rather than thumbs. show prev and next arrows
+add_filter( 'woocommerce_single_product_carousel_options', function( $options ) {
+    $options['directionNav'] = true;
+    $options['controlNav'] = true;
+	return $options;
+} );

@@ -24,7 +24,6 @@ export default {
         autoplay: true,
       });
 
-      $(document).ready(function() {
         $(document).on('click', 'li .product_type_simple', function() {
           $('body').addClass('quickview-open');
         });
@@ -80,6 +79,112 @@ export default {
 
         if(window.location.hash == '#stockists'){
           $('body').addClass('quickview-open');
+        }
+
+        // Custom controls for Quantity buttons
+      function initQuantityButtons() {
+        // Only add buttons to quantity inputs that don't already have them
+        $('.quantity input').each(function() {
+          const $input = $(this);
+          const $quantityContainer = $input.closest('.quantity');
+          
+          console.log('Found quantity input:', $input.length, 'Existing buttons:', $quantityContainer.find('.quantity-button').length);
+          
+          // Check if buttons already exist
+          if ($quantityContainer.find('.quantity-button').length === 0) {
+            // Add the quantity buttons directly after the input
+            $('<div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div>').insertAfter($input);
+            console.log('Added quantity buttons to input');
+          }
+        });
+      }
+
+      // Set up auto-update cart functionality - MOVED INSIDE document.ready
+      if ($('body').hasClass('woocommerce-cart')) {
+        $(document).off('change.autoUpdate', 'input.qty').on('change.autoUpdate', 'input.qty', function() {
+          $('[name="update_cart"]').trigger('click');
+        });
+      }
+
+      // Bind quantity button events
+      $(document).off('click.quantityButtons').on('click.quantityButtons', '.quantity-up', function() {
+        var $spinner = $(this).closest('.quantity');
+        var $input = $spinner.find('input[type="number"]');
+        var oldValue = parseFloat($input.val()) || 0;
+        var max = parseFloat($input.attr('max')) || Infinity;
+        var newVal = oldValue >= max ? oldValue : oldValue + 1;
+        
+        $input.val(newVal);
+        
+        // Only trigger change event on cart page for auto-update
+        if ($('body').hasClass('woocommerce-cart')) {
+          $input.trigger('change');
+        }
+      });
+
+      $(document).off('click.quantityButtonsDown').on('click.quantityButtonsDown', '.quantity-down', function() {
+        var $spinner = $(this).closest('.quantity');
+        var $input = $spinner.find('input[type="number"]');
+        var oldValue = parseFloat($input.val()) || 0;
+        var min = parseFloat($input.attr('min')) || 0;
+        var newVal = oldValue <= min ? oldValue : oldValue - 1;
+        
+        $input.val(newVal);
+        
+        // Only trigger change event on cart page for auto-update
+        if ($('body').hasClass('woocommerce-cart')) {
+          $input.trigger('change');
+        }
+      });
+
+      // Initialize on page load
+      initQuantityButtons();
+
+      // Re-initialize after AJAX updates
+      $(document.body).on('updated_cart_totals updated_checkout updated_wc_div', function() {
+        initQuantityButtons();
+      });
+
+      // Initialize after quickview modal opens
+      $(document).on('click', '.inside-thumb', function() {
+        $('body').addClass('quickview-open');
+        // Add multiple checks to ensure the modal content is loaded
+        setTimeout(function() {
+          initQuantityButtons();
+        }, 200);
+        
+        // Also try after a longer delay in case content takes time to load
+        setTimeout(function() {
+          initQuantityButtons();
+        }, 500);
+      });
+
+      // Listen for prettyPhoto events if available
+      if (typeof $.prettyPhoto !== 'undefined') {
+        $.prettyPhoto.open = (function(original) {
+          return function() {
+            var result = original.apply(this, arguments);
+            // Multiple timeouts to catch different loading scenarios
+            setTimeout(function() {
+              initQuantityButtons();
+            }, 100);
+            setTimeout(function() {
+              initQuantityButtons();
+            }, 300);
+            setTimeout(function() {
+              initQuantityButtons();
+            }, 600);
+            return result;
+          };
+        })($.prettyPhoto.open);
+      }
+
+      // Also listen for any AJAX complete events that might indicate modal content loaded
+      $(document).ajaxComplete(function() {
+        if ($('body').hasClass('quickview-open')) {
+          setTimeout(function() {
+            initQuantityButtons();
+          }, 50);
         }
       });
     });

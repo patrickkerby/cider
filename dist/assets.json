@@ -1,5 +1,7 @@
 {
   "../../node_modules/slick-carousel/slick/ajax-loader.gif": "vendor/_/_/node_modules/slick-carousel/slick/ajax-loader_fb6f3c230cb846e25247dfaa1da94d8f.gif",
+  "fonts/QugiraRegular.woff": "fonts/QugiraRegular_0f474d98319df78c9a3c1c60cbb25bbb.woff",
+  "fonts/QugiraRegular.woff2": "fonts/QugiraRegular_ac9533b76328949142da628bec355112.woff2",
   "fonts/Wanderlust.otf": "fonts/Wanderlust_7105ab9fba67852e6bc855313a981c03.otf",
   "fonts/WanderlustRegular.svg": "fonts/WanderlustRegular_9b05c293704620560ee591758a6afa19.svg",
   "fonts/WanderlustRegular.woff": "fonts/WanderlustRegular_fd1d3a55d7930b8d268e87cb5417e93b.woff",
@@ -24,7 +26,8 @@
   "images/select-arrow.svg": "images/select-arrow_7ff89516ce742f2f9615.svg",
   "images/sketch.svg": "images/sketch_256496ccc3156482449e.svg",
   "images/white-section-break.svg": "images/white-section-break_f274b8ab443ce5cdddd4.svg",
+  "images/wordmark.svg": "images/wordmark_132c26a2f40c0282c2ea.svg",
   "scripts/customizer.js": "scripts/customizer_e7f51966661fe718f68a.js",
-  "styles/main.css": "styles/main_c028579af39a5e573ccb.css",
-  "scripts/main.js": "scripts/main_f4818dcb6f5314395993.js"
+  "styles/main.css": "styles/main_2f14b07470b596b523ee.css",
+  "scripts/main.js": "scripts/main_de47b3f1b5f73ed0b399.js"
 }
