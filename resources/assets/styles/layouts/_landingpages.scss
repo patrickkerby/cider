@@ -108,6 +108,32 @@ body.cidercart {
 }
 
 .cocktail-book {
+  #hero {
+    display: flex;
+    height: 60vh;
+    max-height: 730px;
+
+    h2 {
+      position: relative;
+      font-family: $qugira;
+      color: #313233;
+      z-index: 2;
+      line-height: 56px;
+      margin: auto;
+
+      span {
+        font-size: 42px;
+        display: flex;
+        justify-content: center;
+        text-transform: initial;
+      }
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
   .woocommerce-product-block {
     background: #f8f6f4;
 

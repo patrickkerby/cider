@@ -21,7 +21,7 @@
   <div id="hero">
         {{-- <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a> --}}
         <h2>
-          {{ $header_title }}
+          {!! $header_title !!}
         </h2>
         <img class="full-bg" src="{{ $image }}" />
       </div>
