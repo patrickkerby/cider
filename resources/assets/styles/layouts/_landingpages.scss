@@ -148,6 +148,12 @@ body.cidercart {
 
   .woocommerce-product-block {
     background: #f8f6f4;
+    padding: 8rem 12rem 8rem 12rem;
+
+    ol.carousel-indicators,
+    ol.flex-control-nav {
+      display: none;
+    }
 
     .single-product {
       background: #fff;
@@ -218,7 +224,7 @@ body.cidercart {
 
     img {
       height: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1.25 / 1;
       object-fit: cover;
     }
   }
