@@ -26,8 +26,9 @@
 
     {{-- Desktop Navigation --}}
     <nav class="nav-desktop" role="navigation">
-      @if(is_front_page())
+      @if(is_front_page() || is_page('cocktail-book') )
         <img class="farmcidery" src="@asset('images/farmandcidery.svg')" />
+
       @else
         <a href="/"><img class="farmcidery" src="@asset('images/logo-square-small.svg')" /></a>
       @endif
