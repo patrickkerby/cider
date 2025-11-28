@@ -183,6 +183,15 @@ body.cidercart {
     .single-product div.product {
       width: 100%;
 
+      .woocommerce-product-details__short-description {
+        margin-bottom: 0;
+
+        p {
+          font-size: 14px;
+          line-height: 22px;
+        }
+      }
+
       div.summary {
         width: 48% !important;
 
@@ -190,13 +199,40 @@ body.cidercart {
           font-family: $pitch-regular;
           color: $cocktail-teal;
           font-size: 26px;
-          line-height: 24px;
+          line-height: 23px;
+
+          span {
+            font-size: 20px;
+          }
         }
 
         @media (max-width: 767px) {
           width: 100% !important;
           margin-top: 2rem;
         }
+      }
+
+      .flex-viewport,
+      .woocommerce-product-gallery__image,
+      .woocommerce-product-gallery__wrapper {
+        height: 100% !important;
+      }
+
+      form {
+        order: 4;
+      }
+
+      .price {
+        order: 3;
+        font-size: 26px;
+        color: $cocktail-teal;
+        margin-bottom: 1.5rem;
+      }
+
+      button {
+        border-color: $cocktail-teal;
+        color: $cocktail-teal;
+        height: 50px !important;
       }
     }
 
