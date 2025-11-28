@@ -301,6 +301,7 @@ body.cidercart {
       img {
         width: 47%;
         aspect-ratio: 3.25 / 2;
+        object-position: left;
 
         @media (max-width: 500px) {
           width: 100%;
