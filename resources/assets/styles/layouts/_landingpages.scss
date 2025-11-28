@@ -138,6 +138,7 @@ body.cidercart {
       font-size: 96px;
       line-height: 65px;
       margin: auto;
+      text-shadow: rgba(255, 255, 255, 0.9) 0 0 30px;
 
       span {
         font-size: 45px;
@@ -182,6 +183,12 @@ body.cidercart {
 
     .single-product div.product {
       width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
 
       .woocommerce-product-details__short-description {
         margin-bottom: 0;
