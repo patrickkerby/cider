@@ -318,6 +318,22 @@ body.cidercart {
           width: 90%;
         }
       }
+
+      @media (max-width: 1024px) {
+        flex-direction: column;
+        padding: 2rem;
+
+        .content {
+          background-color: #fff;
+          padding: 2rem;
+          margin-top: -2rem;
+          width: 80%;
+        }
+
+        img {
+          width: 100%;
+        }
+      }
     }
 
     .feature-card:first-child {
