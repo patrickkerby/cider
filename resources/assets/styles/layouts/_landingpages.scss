@@ -167,7 +167,7 @@ body.cidercart {
 
   .woocommerce-product-block {
     background: #f8f6f4;
-    padding: 8rem 14%;
+    padding: 8rem 10%;
 
     ol.carousel-indicators,
     ol.flex-control-nav {
@@ -202,7 +202,10 @@ body.cidercart {
           line-height: 23px;
 
           span {
-            font-size: 20px;
+            font-size: 18px;
+            line-height: 18px;
+            display: flex;
+            padding-top: 0.25rem;
           }
         }
 
@@ -216,6 +219,10 @@ body.cidercart {
       .woocommerce-product-gallery__image,
       .woocommerce-product-gallery__wrapper {
         height: 100% !important;
+      }
+
+      .cider_meta {
+        display: none;
       }
 
       form {
