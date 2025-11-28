@@ -316,8 +316,8 @@ div.pp_woocommerce_quick_view,
     }
   }
 
-  div.product p.price,
-  div.product span.price {
+  body:not(.cocktail-book) div.product p.price,
+  body:not(.cocktail-book)div.product span.price {
     @media (max-width: 767px) {
       font-size: 1.5rem;
       position: fixed;
@@ -388,7 +388,7 @@ div.pp_woocommerce_quick_view,
     }
   }
 
-  div.product form.cart {
+  body:not(.cocktail-book) div.product form.cart {
     @media (max-width: 767px) {
       display: flex !important;
       justify-content: flex-end;
@@ -405,7 +405,7 @@ div.pp_woocommerce_quick_view,
     }
   }
 
-  div.product .variations_form {
+  body:not(.cocktail-book)div.product .variations_form {
     @media (max-width: 767px) {
       flex-direction: column;
 
@@ -416,9 +416,9 @@ div.pp_woocommerce_quick_view,
     }
   }
 
-  .woocommerce-variation-description p,
-  .collapse,
-  .collapsing {
+  body:not(.cocktail-book) .woocommerce-variation-description p,
+  body:not(.cocktail-book) .collapse,
+  body:not(.cocktail-book) .collapsing {
     @media (max-width: 767px) {
       position: absolute;
       bottom: 100%;
@@ -456,7 +456,7 @@ div.pp_woocommerce_quick_view,
     }
   }
 
-  .woocommerce-variation-description.hide {
+  body:not(.cocktail-book) .woocommerce-variation-description.hide {
     @media (max-width: 767px) {
       display: none !important;
     }
