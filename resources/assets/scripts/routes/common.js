@@ -81,6 +81,26 @@ export default {
           $('body').addClass('quickview-open');
         }
 
+        // Modal functionality
+        $('.modal-trigger').on('click', function(e) {
+          e.preventDefault();
+          const targetModal = $(this).data('modal') || $(this).attr('href').substring(1);
+          $(`#${targetModal}`).addClass('active');
+        });
+
+        $('.modal-close, .modal-overlay').on('click', function(e) {
+          if (e.target === this) {
+            $('.modal-overlay').removeClass('active');
+          }
+        });
+
+        // Close modal with Escape key
+        $(document).keyup(function(e) {
+          if (e.keyCode === 27) { // ESC key
+            $('.modal-overlay').removeClass('active');
+          }
+        });
+
         // Custom controls for Quantity buttons
       function initQuantityButtons() {
         // Only add buttons to quantity inputs that don't already have them

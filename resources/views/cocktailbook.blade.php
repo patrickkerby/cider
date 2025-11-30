@@ -29,6 +29,18 @@
     <section class="woocommerce-product-block">
         @include('partials.content-page')
     </section>
+
+    <!-- Excerpt Modal -->
+    <div id="excerpt-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Book Excerpt</h3>
+            <div class="modal-body">
+                <p>Add your excerpt content here...</p>
+                <p>This is where you can include a preview or excerpt from your cocktail book. You can customize this content by editing the template.</p>
+            </div>
+        </div>
+    </div>
     <section class="features">
         @foreach ($feature_textimage as $item)
             <div class="feature-card">
