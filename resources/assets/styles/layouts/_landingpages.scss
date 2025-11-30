@@ -184,7 +184,7 @@ body.cidercart {
     .single-product div.product {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: start;
 
       @media (max-width: 768px) {
         flex-direction: column;
@@ -201,6 +201,9 @@ body.cidercart {
 
       div.summary {
         width: 48% !important;
+        max-width: 400px;
+        position: relative;
+        margin-left: 2rem;
 
         h1 {
           font-family: $pitch-regular;
@@ -234,6 +237,7 @@ body.cidercart {
 
       form {
         order: 4;
+        margin-bottom: 1rem;
       }
 
       .price {
@@ -355,15 +359,33 @@ body.cidercart {
   .woocommerce div.product div.images {
     margin-bottom: 0;
     height: 100%;
+    max-width: 56%;
+    width: auto;
 
     @media (max-width: 767px) {
       height: auto;
+      max-width: 100%;
     }
 
     img {
       height: 100%;
       aspect-ratio: 1.25 / 1;
       object-fit: cover;
+    }
+  }
+
+  .modal-trigger-container {
+    margin-bottom: 0 !important;
+
+    a.modal-trigger {
+      border: 3px solid #f8f7f3;
+      border-radius: 24px;
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      background: url(../../images/eye-icon.svg) no-repeat 16px center;
+      color: $cocktail-teal;
+      text-decoration: none;
+      margin: 1rem 0 0 0 !important;
+      display: inline-flex;
     }
   }
 }

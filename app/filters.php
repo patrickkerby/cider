@@ -169,3 +169,12 @@ add_filter( 'woocommerce_single_product_carousel_options', function( $options ) 
     $options['controlNav'] = true;
 	return $options;
 } );
+
+// Modal button for Cocktail Book Product
+add_action('woocommerce_after_add_to_cart_button', function () {
+    global $product;
+    $product_id = method_exists($product, 'get_id') ? $product->get_id() : $product->id;
+    if ($product_id == 598 || $product_id == 679) {
+        echo '<div class="modal-trigger-container"><a class="modal-trigger" href="#excerpt-modal" data-modal="excerpt-modal">Read an excerpt</a></div>';
+    }
+} );
