@@ -344,4 +344,8 @@ ul.flex-direction-nav {
   }
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 /* stylelint-enable no-descending-specificity */

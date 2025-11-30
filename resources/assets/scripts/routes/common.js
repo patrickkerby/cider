@@ -86,11 +86,13 @@ export default {
           e.preventDefault();
           const targetModal = $(this).data('modal') || $(this).attr('href').substring(1);
           $(`#${targetModal}`).addClass('active');
+          $('body').addClass('modal-open');
         });
 
         $('.modal-close, .modal-overlay').on('click', function(e) {
           if (e.target === this) {
             $('.modal-overlay').removeClass('active');
+            $('body').removeClass('modal-open');
           }
         });
 
@@ -98,6 +100,7 @@ export default {
         $(document).keyup(function(e) {
           if (e.keyCode === 27) { // ESC key
             $('.modal-overlay').removeClass('active');
+            $('body').removeClass('modal-open');
           }
         });
 
