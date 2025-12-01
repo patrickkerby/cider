@@ -259,4 +259,12 @@ footer {
       width: 75%;
     }
   }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+
+    * {
+      margin: 0.5rem 0;
+    }
+  }
 }
