@@ -185,3 +185,42 @@ add_action('woocommerce_after_add_to_cart_button', function () {
 add_action( 'woocommerce_cart_totals_before_order_total', function () {
     echo '<div class="shipping-notice">Shipping via Canada Post is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for free local delivery in the Edmonton Region.</div>';
 } );
+
+/**
+ * Multiply flat rate shipping cost by quantity of books in cart
+ */
+add_filter('woocommerce_package_rates', 'App\adjust_shipping_cost_for_book_quantity', 10, 2);
+function adjust_shipping_cost_for_book_quantity($rates, $package) {
+    // Book product IDs (598 local, 679 production)
+    $book_product_ids = array(598, 679);
+    $book_quantity = 0;
+    
+    // Count total quantity of books in cart
+    foreach ($package['contents'] as $item) {
+        if (in_array($item['product_id'], $book_product_ids)) {
+            $book_quantity += $item['quantity'];
+        }
+    }
+    
+    // If we have books in the cart, multiply the shipping cost
+    if ($book_quantity > 0) {
+        foreach ($rates as $rate_key => $rate) {
+            // Apply to flat rate shipping only (you can adjust this condition if needed)
+            if ('flat_rate' === $rate->method_id) {
+                // Get the original cost and multiply by book quantity
+                $original_cost = $rate->cost;
+                $new_cost = $original_cost * $book_quantity;
+                $rates[$rate_key]->cost = $new_cost;
+                
+                // Also update taxes if any
+                if (!empty($rate->taxes)) {
+                    foreach ($rate->taxes as $key => $tax) {
+                        $rates[$rate_key]->taxes[$key] = $tax * $book_quantity;
+                    }
+                }
+            }
+        }
+    }
+    
+    return $rates;
+}
