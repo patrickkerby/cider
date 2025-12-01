@@ -183,5 +183,5 @@ add_action('woocommerce_after_add_to_cart_button', function () {
 } );
 
 add_action( 'woocommerce_cart_totals_before_order_total', function () {
-    echo 'Shipping via Canada Post is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for free local delivery in the Edmonton Region.';
+    echo '<div class="shipping-notice">Shipping via Canada Post is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for free local delivery in the Edmonton Region.</div>';
 } );
