@@ -262,10 +262,6 @@ body.cidercart {
         border-color: $cocktail-teal;
         color: $cocktail-teal;
         height: 50px !important;
-
-        @media (max-width: 500px) {
-          padding: 0.25rem 0.35rem !important;
-        }
       }
     }
 
