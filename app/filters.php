@@ -274,12 +274,12 @@ add_action( 'woocommerce_check_cart_items', function () {
         // Check if shipping location is provided
         if ( ! empty( $postcode ) || ! empty( $city ) ) {
             // Get matching shipping zone for customer's location
-            $zones = WC_Shipping_Zones::get_zones();
+            $zones = \WC_Shipping_Zones::get_zones();
             $zone_found = false;
             $edmonton_zone_found = false;
             
             foreach ( $zones as $zone ) {
-                $zone_obj = new WC_Shipping_Zone( $zone['zone_id'] );
+                $zone_obj = new \WC_Shipping_Zone( $zone['zone_id'] );
                 
                 // Check if this zone matches the customer's location
                 if ( $zone_obj->is_valid_location_for_zone( $postcode, $state, $country ) ) {
