@@ -314,14 +314,6 @@ body.cidercart {
 
       .content {
         width: 30%;
-
-        @media (max-width: 767px) {
-          width: 42%;
-        }
-
-        @media (max-width: 500px) {
-          width: 90%;
-        }
       }
 
       @media (max-width: 1024px) {
@@ -337,6 +329,14 @@ body.cidercart {
 
         img {
           width: 100%;
+        }
+      }
+
+      @media (max-width: 500px) {
+        padding: 0;
+
+        .content {
+          width: 90%;
         }
       }
     }
