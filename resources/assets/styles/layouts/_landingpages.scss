@@ -171,7 +171,6 @@ body.cidercart {
       }
 
       @media (max-width: 500px) {
-        padding-top: 50px;
         line-height: 55px;
       }
     }
@@ -182,6 +181,10 @@ body.cidercart {
 
     &::after {
       display: none;
+    }
+
+    @media (max-width: 500px) {
+      padding-top: 50px;
     }
   }
 
