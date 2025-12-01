@@ -388,7 +388,8 @@ defined( 'ABSPATH' ) || exit;
 					?>
 				</div>
 		<?php do_action( 'woocommerce_after_cart' ); ?>
-		
+					<h1>TEST</h1>
+
 		</div>
 		@unless($giftcertificate_only_item_in_cart == true)
 
