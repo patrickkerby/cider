@@ -187,6 +187,29 @@ add_action( 'woocommerce_cart_totals_before_order_total', function () {
 } );
 
 /**
+ * Display notice on cart page if cider is in cart
+ */
+add_action( 'woocommerce_before_cart', function () {
+    // Check if cart contains cider
+    $has_cider = false;
+    foreach ( WC()->cart->get_cart() as $cart_item ) {
+        if ( has_term( 'cider', 'product_cat', $cart_item['product_id'] ) ) {
+            $has_cider = true;
+            break;
+        }
+    }
+    
+    if ( $has_cider ) {
+        $postcode = WC()->customer->get_shipping_postcode();
+        
+        // If no shipping postcode provided yet, show info notice
+        if ( empty( $postcode ) ) {
+            wc_print_notice( __( 'Please calculate shipping below to verify that cider delivery is available to your location. Cider is only available for delivery within the Edmonton Region.' ), 'notice' );
+        }
+    }
+} );
+
+/**
  * Multiply flat rate shipping cost by quantity of books in cart
  */
 add_filter('woocommerce_package_rates', 'App\adjust_shipping_cost_for_book_quantity', 10, 2);
@@ -240,15 +263,48 @@ add_action( 'woocommerce_check_cart_items', function () {
         }
     }
 
-    // Only enforce minimum if cart contains cider products
+    // If cart contains cider, check delivery location and minimum
     if ( $has_cider ) {
-        // Total (before taxes and shipping charges)
+        // Get customer's shipping location
+        $postcode = WC()->customer->get_shipping_postcode();
+        $city = WC()->customer->get_shipping_city();
+        $state = WC()->customer->get_shipping_state();
+        $country = WC()->customer->get_shipping_country();
+        
+        // Check if shipping location is provided
+        if ( ! empty( $postcode ) || ! empty( $city ) ) {
+            // Get matching shipping zone for customer's location
+            $zones = WC_Shipping_Zones::get_zones();
+            $zone_found = false;
+            $edmonton_zone_found = false;
+            
+            foreach ( $zones as $zone ) {
+                $zone_obj = new WC_Shipping_Zone( $zone['zone_id'] );
+                
+                // Check if this zone matches the customer's location
+                if ( $zone_obj->is_valid_location_for_zone( $postcode, $state, $country ) ) {
+                    $zone_found = true;
+                    
+                    // Check if this is the Edmonton Region zone (case-insensitive)
+                    if ( stripos( $zone['zone_name'], 'Edmonton' ) !== false ) {
+                        $edmonton_zone_found = true;
+                        break;
+                    }
+                }
+            }
+            
+            // If location provided but not in Edmonton Region zone, show error
+            if ( $zone_found && ! $edmonton_zone_found ) {
+                wc_add_notice( __( "Cider products are only available for delivery within the Edmonton Region. Please remove cider from your cart or update your shipping address." ), 'error' );
+            } elseif ( ! $zone_found ) {
+                wc_add_notice( __( "Cider products are only available for delivery within the Edmonton Region. Your shipping location does not have delivery available. Please remove cider from your cart or update your shipping address." ), 'error' );
+            }
+        }
+        
+        // Check minimum cart total
         $cart_subtotal = WC()->cart->subtotal;
-
-        // Add an error notice if cart total is less than the minimum required
         if ( $cart_subtotal < $minimum_amount ) {
-            // Display an error message
-            wc_add_notice( '' . sprintf( __( "A minimum total purchase amount of %s is required to checkout."), wc_price( $minimum_amount ) ) . '', 'error' );
+            wc_add_notice( '' . sprintf( __( "A minimum total purchase amount of %s is required to checkout." ), wc_price( $minimum_amount ) ) . '', 'error' );
         }
     }
 } );
