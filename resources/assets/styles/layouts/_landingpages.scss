@@ -169,6 +169,11 @@ body.cidercart {
           font-size: 32px;
         }
       }
+
+      @media (max-width: 500px) {
+        padding-top: 50px;
+        line-height: 55px;
+      }
     }
 
     img {
