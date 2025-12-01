@@ -274,30 +274,23 @@ add_action( 'woocommerce_check_cart_items', function () {
         // Check if shipping location is provided
         if ( ! empty( $postcode ) || ! empty( $city ) ) {
             // Get matching shipping zone for customer's location
-            $zones = \WC_Shipping_Zones::get_zones();
-            $zone_found = false;
-            $edmonton_zone_found = false;
+            $package = array(
+                'destination' => array(
+                    'country'   => $country,
+                    'state'     => $state,
+                    'postcode'  => $postcode,
+                    'city'      => $city,
+                )
+            );
             
-            foreach ( $zones as $zone ) {
-                $zone_obj = new \WC_Shipping_Zone( $zone['zone_id'] );
-                
-                // Check if this zone matches the customer's location
-                if ( $zone_obj->is_valid_location_for_zone( $postcode, $state, $country ) ) {
-                    $zone_found = true;
-                    
-                    // Check if this is the Edmonton Region zone (case-insensitive)
-                    if ( stripos( $zone['zone_name'], 'Edmonton' ) !== false ) {
-                        $edmonton_zone_found = true;
-                        break;
-                    }
-                }
-            }
+            // Find the matching zone for this location
+            $zone = \WC_Shipping_Zones::get_zone_matching_package( $package );
+            $zone_name = $zone->get_zone_name();
             
-            // If location provided but not in Edmonton Region zone, show error
-            if ( $zone_found && ! $edmonton_zone_found ) {
+            // Check if the matched zone is the Edmonton Region
+            // If zone name is empty, it means it matched the default zone (not Edmonton)
+            if ( empty( $zone_name ) || stripos( $zone_name, 'Edmonton' ) === false ) {
                 wc_add_notice( __( "Cider products are only available for delivery within the Edmonton Region. Please remove cider from your cart or update your shipping address." ), 'error' );
-            } elseif ( ! $zone_found ) {
-                wc_add_notice( __( "Cider products are only available for delivery within the Edmonton Region. Your shipping location does not have delivery available. Please remove cider from your cart or update your shipping address." ), 'error' );
             }
         }
         
