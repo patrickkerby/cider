@@ -436,14 +436,10 @@ body.cidercart {
       background: url(../../images/insta.svg) no-repeat 16px center;
       padding-left: 2.5rem;
       display: flex;
-      margin: 1rem 0 0 1rem;
-
-      @media (max-width: 767px) {
-        margin: 1rem 0 0 0 !important;
-      }
+      margin: 1rem 0 0 0 !important;
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 1200px) {
       flex-direction: column;
     }
   }
