@@ -183,7 +183,7 @@ add_action('woocommerce_after_add_to_cart_button', function () {
 } );
 
 add_action( 'woocommerce_cart_totals_before_order_total', function () {
-    echo '<div class="shipping-notice">Canada-wide shipping is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for free local delivery in the Edmonton Region.</div>';
+    echo '<div class="shipping-notice">Canada-wide shipping is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for local Edmonton-region delivery.</div>';
 } );
 
 /**
