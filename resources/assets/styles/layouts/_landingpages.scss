@@ -294,6 +294,8 @@ body.cidercart {
         color: $cocktail-teal;
         background: url(../../images/insta.svg) no-repeat 16px center;
         padding-left: 2.5rem;
+        display: flex;
+        margin: 1rem 0 0 1rem;
       }
     }
 
@@ -421,6 +423,10 @@ body.cidercart {
 
   .modal-trigger-container {
     margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
 
     a.modal-trigger {
       border: 3px solid #f8f7f3;
@@ -431,6 +437,10 @@ body.cidercart {
       text-decoration: none;
       margin: 1rem 0 0 0 !important;
       display: inline-flex;
+    }
+
+    @media (max-width: 767px) {
+      flex-direction: column;
     }
   }
 }
