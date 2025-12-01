@@ -283,6 +283,8 @@ body.cidercart {
 
       @media (max-width: 500px) {
         margin-bottom: 0.5rem;
+        font-size: 30px;
+        line-height: 32px;
       }
     }
 
@@ -352,7 +354,7 @@ body.cidercart {
     }
 
     @media (max-width: 500px) {
-      padding: 1.5rem 1.5rem 0 1.5rem;
+      padding: 0;
     }
   }
 
