@@ -224,3 +224,31 @@ function adjust_shipping_cost_for_book_quantity($rates, $package) {
     
     return $rates;
 }
+
+add_action( 'woocommerce_check_cart_items', function () {
+    // Set minimum cart total amount
+    $minimum_amount = 50;
+    
+    // Check if cart contains any cider products
+    $has_cider = false;
+    foreach ( WC()->cart->get_cart() as $cart_item ) {
+        $product_id = $cart_item['product_id'];
+        // Check if product has the "cider" category
+        if ( has_term( 'cider', 'product_cat', $product_id ) ) {
+            $has_cider = true;
+            break;
+        }
+    }
+
+    // Only enforce minimum if cart contains cider products
+    if ( $has_cider ) {
+        // Total (before taxes and shipping charges)
+        $cart_subtotal = WC()->cart->subtotal;
+
+        // Add an error notice if cart total is less than the minimum required
+        if ( $cart_subtotal < $minimum_amount ) {
+            // Display an error message
+            wc_add_notice( '' . sprintf( __( "A minimum total purchase amount of %s is required to checkout."), wc_price( $minimum_amount ) ) . '', 'error' );
+        }
+    }
+} );
