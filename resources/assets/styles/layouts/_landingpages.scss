@@ -223,6 +223,11 @@ body.cidercart {
           width: 100% !important;
           margin-top: 2rem;
         }
+
+        @media (max-width: 500px) {
+          margin: 2rem 0 0 0;
+          padding: 0;
+        }
       }
 
       .flex-viewport,
@@ -238,6 +243,12 @@ body.cidercart {
       form {
         order: 4;
         margin-bottom: 1rem;
+
+        @media (max-width: 500px) {
+          .quantity {
+            margin: 0 0.5rem 0 0 !important;
+          }
+        }
       }
 
       .price {
@@ -251,6 +262,10 @@ body.cidercart {
         border-color: $cocktail-teal;
         color: $cocktail-teal;
         height: 50px !important;
+
+        @media (max-width: 500px) {
+          padding: 0.25rem 0.35rem !important;
+        }
       }
     }
 
