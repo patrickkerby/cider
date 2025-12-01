@@ -22,11 +22,17 @@ body.cocktail-book {
   }
 
   .hamb {
-    background-color: none;
+    background-color: none !important;
   }
 
-  .hamb-line {
+  .hamb-line,
+  .hamb-line::after,
+  .hamb-line::before {
     background-color: $cocktail-teal;
+  }
+
+  .nav-title {
+    color: $cocktail-teal;
   }
 }
 
