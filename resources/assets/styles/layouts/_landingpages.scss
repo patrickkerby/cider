@@ -289,6 +289,12 @@ body.cidercart {
         color: $cocktail-teal;
         height: 50px !important;
       }
+
+      .insta {
+        color: $cocktail-teal;
+        background: url(../../images/insta.svg) no-repeat 16px center;
+        padding-left: 2.5rem;
+      }
     }
 
     @media (max-width: 767px) {
