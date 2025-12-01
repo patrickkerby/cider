@@ -289,14 +289,6 @@ body.cidercart {
         color: $cocktail-teal;
         height: 50px !important;
       }
-
-      .insta {
-        color: $cocktail-teal;
-        background: url(../../images/insta.svg) no-repeat 16px center;
-        padding-left: 2.5rem;
-        display: flex;
-        margin: 1rem 0 0 1rem;
-      }
     }
 
     @media (max-width: 767px) {
@@ -437,6 +429,18 @@ body.cidercart {
       text-decoration: none;
       margin: 1rem 0 0 0 !important;
       display: inline-flex;
+    }
+
+    .insta {
+      color: $cocktail-teal;
+      background: url(../../images/insta.svg) no-repeat 16px center;
+      padding-left: 2.5rem;
+      display: flex;
+      margin: 1rem 0 0 1rem;
+
+      @media (max-width: 767px) {
+        margin: 1rem 0 0 0 !important;
+      }
     }
 
     @media (max-width: 767px) {
