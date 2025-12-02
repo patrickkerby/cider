@@ -39,6 +39,15 @@
             </div>
         </div>
     </div>
+    <div id="form-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+              <!-- @php gravity_form( 1, false, false, false, '', true, 12 );@endphp -->
+               test
+            </div>
+        </div>
+    </div>
     <section class="features">
         @foreach ($feature_textimage as $item)
             <div class="feature-card">
