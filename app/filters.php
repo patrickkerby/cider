@@ -209,6 +209,35 @@ add_action( 'woocommerce_before_cart', function () {
     }
 } );
 
+/**
+ * Remove paid shipping in Edmonton Region when cart total is $50+
+ * Switch to free local delivery at that threshold
+ */
+add_filter('woocommerce_package_rates', 'App\adjust_edmonton_shipping_by_cart_total', 10, 2);
+function adjust_edmonton_shipping_by_cart_total($rates, $package) {
+    // Get cart subtotal
+    $cart_subtotal = WC()->cart->subtotal;
+    
+    // Check if cart is $50 or more
+    if ($cart_subtotal >= 50) {
+        // Get the shipping zone for this package
+        $zone = \WC_Shipping_Zones::get_zone_matching_package($package);
+        $zone_name = $zone->get_zone_name();
+        
+        // If this is the Edmonton Region zone, remove paid shipping options
+        if (!empty($zone_name) && stripos($zone_name, 'Edmonton') !== false) {
+            foreach ($rates as $rate_key => $rate) {
+                // Remove flat_rate (paid shipping) to leave only free delivery
+                if ('flat_rate' === $rate->method_id) {
+                    unset($rates[$rate_key]);
+                }
+            }
+        }
+    }
+    
+    return $rates;
+}
+
 add_action( 'woocommerce_check_cart_items', function () {
     // Set minimum cart total amount
     $minimum_amount = 50;
