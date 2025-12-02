@@ -210,8 +210,8 @@ add_action( 'woocommerce_before_cart', function () {
 } );
 
 /**
- * Remove paid shipping in Edmonton Region when cart total is $50+
- * Switch to free local delivery at that threshold
+ * Switch to free local delivery in Edmonton Region when cart total is $50+
+ * Changes flat rate shipping cost from $9 to $0
  */
 add_filter('woocommerce_package_rates', 'App\adjust_edmonton_shipping_by_cart_total', 10, 2);
 function adjust_edmonton_shipping_by_cart_total($rates, $package) {
@@ -224,12 +224,20 @@ function adjust_edmonton_shipping_by_cart_total($rates, $package) {
         $zone = \WC_Shipping_Zones::get_zone_matching_package($package);
         $zone_name = $zone->get_zone_name();
         
-        // If this is the Edmonton Region zone, remove paid shipping options
+        // If this is the Edmonton Region zone, make shipping free
         if (!empty($zone_name) && stripos($zone_name, 'Edmonton') !== false) {
             foreach ($rates as $rate_key => $rate) {
-                // Remove flat_rate (paid shipping) to leave only free delivery
+                // Set flat_rate cost to 0 for free local delivery
                 if ('flat_rate' === $rate->method_id) {
-                    unset($rates[$rate_key]);
+                    $rates[$rate_key]->cost = 0;
+                    $rates[$rate_key]->label = 'Free Local Delivery';
+                    
+                    // Also zero out any taxes
+                    if (!empty($rates[$rate_key]->taxes)) {
+                        foreach ($rates[$rate_key]->taxes as $key => $tax) {
+                            $rates[$rate_key]->taxes[$key] = 0;
+                        }
+                    }
                 }
             }
         }
