@@ -73,6 +73,10 @@
     line-height: 1.6;
     margin-bottom: 1rem;
   }
+
+  .form-modal & {
+    height: auto;
+  }
 }
 
 // Modal trigger styling (optional)
