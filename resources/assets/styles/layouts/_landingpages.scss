@@ -458,8 +458,10 @@ body.cidercart {
   }
 
   .gform_body {
-    input {
+    input,
+    select {
       border: solid 2px #2e6a6d;
+      appearance: auto;
     }
 
     .button {
