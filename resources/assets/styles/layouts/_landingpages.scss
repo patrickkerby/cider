@@ -456,6 +456,17 @@ body.cidercart {
       align-items: flex-start;
     }
   }
+
+  .gform {
+    input {
+      border: solid 2px #2e6a6d;
+    }
+
+    .button {
+      background-color: $cocktail-teal;
+      color: #fff;
+    }
+  }
 }
 
 /* stylelint-enable no-descending-specificity */
