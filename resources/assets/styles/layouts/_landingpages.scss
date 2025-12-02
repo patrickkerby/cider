@@ -199,7 +199,7 @@ body.cidercart {
     }
 
     .woocommerce-notices-wrapper {
-      position: absolute;
+      position: fixed;
       top: 2rem;
       width: 60%;
       z-index: 999999;
