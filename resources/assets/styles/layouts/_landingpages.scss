@@ -191,10 +191,19 @@ body.cidercart {
   .woocommerce-product-block {
     background: #f8f6f4;
     padding: 8rem 10%;
+    position: relative;
 
     ol.carousel-indicators,
     ol.flex-control-nav {
       display: none;
+    }
+
+    .woocommerce-notices-wrapper {
+      position: absolute;
+      top: -4rem;
+      left: 0;
+      width: 100%;
+      z-index: 999999;
     }
 
     .single-product {
