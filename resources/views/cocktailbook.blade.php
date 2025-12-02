@@ -43,8 +43,10 @@
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <div class="modal-body">
-              <!-- @php gravity_form( 1, false, false, false, '', true, 12 );@endphp -->
-               test
+              <h3>Get on the list!</h3>
+              <p>As soon as we get international shipping sorted out, we'll let you know!</p>
+              @php gravity_form( 2, false, false, false, '', true, 12 );@endphp
+              
             </div>
         </div>
     </div>
