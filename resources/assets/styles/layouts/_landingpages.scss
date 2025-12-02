@@ -200,10 +200,13 @@ body.cidercart {
 
     .woocommerce-notices-wrapper {
       position: absolute;
-      top: -4rem;
-      left: 0;
-      width: 100%;
+      top: 2rem;
+      width: 60%;
       z-index: 999999;
+
+      .woocommerce-message {
+        background-color: #fff;
+      }
     }
 
     .single-product {
