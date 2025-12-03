@@ -70,7 +70,8 @@ nav.nav-mobile nav {
   justify-content: center;
   align-items: center;
 
-  .page-template:not(.home) & {
+  .page-template:not(.home) &,
+  .tribe-events-page-template & {
     background-color: $pbc-green;
   }
 }
