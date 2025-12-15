@@ -299,3 +299,5 @@ add_action( 'woocommerce_check_cart_items', function () {
         }
     }
 } );
+
+remove_filter('woocommerce_short_description', 'wpautop');
