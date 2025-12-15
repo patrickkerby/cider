@@ -907,9 +907,21 @@ input[type=number] {
   width: 120px;
 }
 
-.home li.post-679 p {
-  span.hide {
-    display: none;
+.home li.post-679 {
+  img.attachment-woocommerce_thumbnail {
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+
+    span.hide {
+      display: none;
+    }
+  }
+
+  &::before {
+    width: 100%;
   }
 }
 /* stylelint-enable no-descending-specificity */
