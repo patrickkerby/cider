@@ -908,10 +908,8 @@ input[type=number] {
 }
 
 .home li.post-679 p {
-  display: none;
-
-  span.show & {
-    display: inline;
+  span.hide {
+    display: none;
   }
 }
 /* stylelint-enable no-descending-specificity */
