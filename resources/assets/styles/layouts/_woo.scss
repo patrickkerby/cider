@@ -906,4 +906,12 @@ input[type=number] {
 .woocommerce-checkout table.cart img {
   width: 120px;
 }
+
+.home li.product p {
+  display: none;
+
+  span.show {
+    display: inline;
+  }
+}
 /* stylelint-enable no-descending-specificity */
