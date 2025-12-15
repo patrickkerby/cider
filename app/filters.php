@@ -300,4 +300,10 @@ add_action( 'woocommerce_check_cart_items', function () {
     }
 } );
 
-remove_filter('woocommerce_short_description', 'wpautop');
+// Remove wpautop from the product short description on the shop page
+function remove_wpautop_from_shop_short_description() {
+    if ( is_shop() || is_product_category() || is_product_tag() ) {
+        remove_filter( 'woocommerce_short_description', 'wpautop' );
+    }
+}
+add_action( 'init', 'remove_wpautop_from_shop_short_description' );   
