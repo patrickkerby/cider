@@ -1,11 +1,6 @@
 <!doctype html>
 <html {!! get_language_attributes() !!}>
   @include('partials.head')
-  <style>
-    :root { 
-      --color-scheme: @php echo $colour_scheme['colour']; @endphp;
-    }
-  </style>
   <body @php body_class() @endphp>
 
     @php do_action('get_header') @endphp
@@ -48,7 +43,7 @@
           <h2>Stockists</h2>
           <p>We're slowly but surely getting our cider into the best bottle shops around! If you'd like your local to carry us, let them know and ask them to get in touch!</p>
           <div class="stockist-content">
-            <p>{!! $acf_options->stockists !!}</p>
+            <p>{!! isset($acf_options->stockists) ? $acf_options->stockists : '' !!}</p>
           </div>
         </div>
       </div>

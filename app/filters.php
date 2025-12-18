@@ -38,13 +38,15 @@ add_filter('excerpt_more', function () {
  */
 collect([
     'index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date', 'home',
-    'frontpage', 'page', 'paged', 'search', 'single', 'singular', 'attachment', 'embed'
+    'frontpage', 'page', 'paged', 'search', 'single', 'singular', 'attachment', 'embed',
+    'woocommerce', 'wc_product_template'
 ])->map(function ($type) {
     add_filter("{$type}_template_hierarchy", __NAMESPACE__.'\\filter_templates');
 });
 
 /**
  * Render page using Blade
+ * Priority 999 ensures this runs AFTER WooCommerce's template_loader (which runs at 10)
  */
 add_filter('template_include', function ($template) {
     collect(['get_header', 'wp_head'])->each(function ($tag) {
@@ -107,11 +109,40 @@ function my_acf_op_init() {
     }
 }
 
+/**
+ * WooCommerce template location for Sage/Blade templates
+ * This tells WooCommerce to look for templates in resources/views/woocommerce/
+ */
+add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    $blade_template = str_replace('.php', '.blade.php', $template_name);
+    
+    // Check for Blade template in Sage's resources/views directory
+    $possible_locations = [
+        get_stylesheet_directory() . "/resources/views/woocommerce/{$blade_template}",
+        get_stylesheet_directory() . "/resources/views/{$blade_template}",
+    ];
+    
+    foreach ($possible_locations as $file) {
+        if (file_exists($file)) {
+            return $file;
+        }
+    }
+    
+    return $template;
+}, 10, 3);
+
+/**
+ * Let WooCommerce know we have theme support and will handle templates
+ * Don't return empty array - that causes fallback to default WP theme
+ */
+// REMOVED - This was causing the issue!
+
+
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 
-
 remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
+remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );    // Strip out the default linking so we can control the quickview
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );     // Strip out the default linking so we can control the quickview
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );           // No prices in thumbnail view plz
@@ -300,10 +331,3 @@ add_action( 'woocommerce_check_cart_items', function () {
     }
 } );
 
-// Remove wpautop from the product short description on the shop page
-function remove_wpautop_from_shop_short_description() {
-    if ( is_shop() || is_product_category() || is_product_tag() ) {
-        remove_filter( 'woocommerce_short_description', 'wpautop' );
-    }
-}
-add_action( 'init', 'remove_wpautop_from_shop_short_description' );   
