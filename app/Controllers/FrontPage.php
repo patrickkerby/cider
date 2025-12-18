@@ -8,6 +8,13 @@ class FrontPage extends Controller
 {
     protected $acf = true;
 
+    public function acf()
+    {
+        add_filter('sober/controller/acf/array', function () {
+            return true;
+        });
+    }
+
     public function colourScheme()
     {
         $repeater = get_field( 'background_images' );

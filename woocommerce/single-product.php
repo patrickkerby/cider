@@ -10,17 +10,15 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+    exit; // Exit if accessed directly
 }
 
 // Load the Blade template through Sage's template system
-$blade_template = locate_template( 'resources/views/woocommerce/single-product.blade.php' );
+$blade_template = get_stylesheet_directory() . '/resources/views/woocommerce/single-product.blade.php';
 
-if ( $blade_template ) {
-    // Let Sage's template_include filter handle the rendering
-    include( get_template_directory() . '/index.php' );
+if (file_exists($blade_template) && function_exists('\App\template')) {
+    echo \App\template('woocommerce.single-product');
 } else {
-    // Fallback to WooCommerce default
-    wc_get_template( 'single-product.php' );
+    // Fallback to default WooCommerce template if Blade template doesn't exist
+    wc_get_template_part('content', 'single-product');
 }
-
