@@ -29,7 +29,7 @@
         {{-- Display WooCommerce products using shortcode --}}
         <section class="shop row justify-content-center">
           <div class="col-12">
-            {!! do_shortcode('[products limit="12" columns="3" orderby="date" order="desc"]') !!}
+            {!! do_shortcode('[products limit="24" columns="3" orderby="date" order="desc"]') !!}
           </div>
         </section>
         
