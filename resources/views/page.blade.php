@@ -19,7 +19,7 @@
       @endif
       
       <div class="content-wrap">
-        <section class="shop row justify-content-center">
+        <section class="row justify-content-center">
           <div class="col-12">
             <h2>Online ordering + delivery available in the Edmonton area!</h2>
             @include('partials.content-page')
