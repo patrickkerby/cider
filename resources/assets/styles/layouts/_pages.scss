@@ -631,10 +631,18 @@ section {
 }
 
 .wpgmza-standalone-component.wpgmza-auto-left {
-  width: 36% !important;
+  width: 40% !important;
   max-width: 100%;
   height: calc(100vh - 13rem);
   overflow: scroll;
+}
+
+.gm-style-iw-chr {
+  display: none !important;
+}
+
+.wpgmza_map .gm-style .gm-style-iw-c .gm-style-iw-d {
+  padding-top: 1rem !important;
 }
 
 .stockists section.content {
