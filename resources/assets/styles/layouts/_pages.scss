@@ -614,7 +614,7 @@ section {
 // Stockist Map
 .wpgmza_map .wpgmza-inner-stack .wpgmza-category-grouped-section-items .wpgmza-category-grouped-item,
 .wpgmza-standalone-component .wpgmza-category-grouped-section-items .wpgmza-category-grouped-item {
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.75rem !important;
   margin-bottom: 0.5rem;
   border-bottom: solid 1px #cecece;
 }
@@ -622,6 +622,12 @@ section {
 .wpgmza-standalone-component .wpgmza-category-grouped-section {
   display: flex;
   flex-direction: column;
+}
+
+.wpgmza-title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.025rem;
 }
 
 .wpgmza-standalone-component.wpgmza-auto-left {
