@@ -611,4 +611,33 @@ section {
   }
 }
 
+// Stockist Map
+.wpgmza_map .wpgmza-inner-stack .wpgmza-category-grouped-section-items .wpgmza-category-grouped-item,
+.wpgmza-standalone-component .wpgmza-category-grouped-section-items .wpgmza-category-grouped-item {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: solid 1px #cecece;
+}
+
+.wpgmza-standalone-component .wpgmza-category-grouped-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.wpgmza-standalone-component.wpgmza-auto-left {
+  width: 36%;
+  max-width: 100%;
+  height: calc(100vh - 13rem);
+  overflow: scroll;
+}
+
+.stockists section.content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.wpgmza_map {
+  height: calc(100vh - 13rem);
+}
 /* stylelint-enable no-descending-specificity */
