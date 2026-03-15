@@ -625,8 +625,8 @@ section {
 }
 
 .wpgmza-standalone-component.wpgmza-auto-left {
-  width: 36%;
-  max-width: 100% !important;
+  width: 36% !important;
+  max-width: 100%;
   height: calc(100vh - 13rem);
   overflow: scroll;
 }
