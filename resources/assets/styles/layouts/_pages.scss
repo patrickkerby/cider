@@ -646,12 +646,116 @@ section {
 }
 
 .stockists section.content {
-  padding: 2rem;
+  padding: 0;
+  gap: 1.5rem;
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
 }
 
 .wpgmza_map {
   height: calc(100vh - 13rem) !important;
 }
+
+// Stockist - wpfacet
+.stockists .map-container {
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: row;
+}
+
+.stockists .map {
+  width: 65%;
+}
+
+.stockists .filter-bar {
+  width: 35%;
+  height: calc(100vh - 3rem);
+  padding: 1.5rem 0 1.5rem 1.5rem;
+  overflow-y: scroll;
+}
+
+.stockists .fwpl-layout.el-dbm6k2 {
+  grid-gap: 0 !important;
+}
+
+.stockists .fwpl-result {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: solid 1px #cecece;
+}
+
+.stockists .fwpl-item a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: -0.05rem;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.stockists .facetwp-map {
+  width: 100% !important;
+  height: 100vh !important;
+}
+
+.el-uk2tkn {
+  font-weight: 600;
+  letter-spacing: -0.055rem;
+  margin-bottom: 0.25rem;
+}
+
+.fwpl-term {
+  background-color: $pbc-green;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.05rem;
+  border-radius: 1rem;
+  padding: 0.25rem 0.75rem;
+  margin-right: 0.5rem;
+}
+
+.facetwp-facet-brand {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stockists .facetwp-checkbox {
+  background: #f5f5f5 !important;
+  padding: 0.5rem 1rem 0.5rem 2.25rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600 !important;
+  letter-spacing: -0.05rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    width: 0.8rem;
+    height: 0.8rem;
+    background: #fff;
+    border: solid 2px #fff;
+    border-radius: 1rem;
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &.checked {
+    background: darken($color: #f5f5f5, $amount: 2%) !important;
+
+    &::after {
+      content: "";
+      width: 0.4rem;
+      height: 0.4rem;
+      background: $pbc-green;
+      border-radius: 1rem;
+      position: absolute;
+      left: 0.96rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
 /* stylelint-enable no-descending-specificity */

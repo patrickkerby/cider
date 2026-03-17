@@ -197,6 +197,11 @@ div.pp_woocommerce_quick_view,
       }
     }
   }
+
+  &.stockist-container {
+    width: 96vw !important;
+    max-width: 96vw !important;
+  }
 }
 
 .quick-view-detail-button {
@@ -589,6 +594,12 @@ div.pp_woocommerce .pp_close {
   border-radius: 2rem;
   text-indent: -99999px;
 
+  .stockist-modal & {
+    right: 0;
+    max-width: 97.5vw;
+    width: 97.5vw !important;
+  }
+
   &::before {
     background: url(../../images/Arrow.svg) no-repeat center center;
     width: 50px;
@@ -632,8 +643,9 @@ div.pp_woocommerce .pp_close {
   display: none;
 }
 
-.quickview-open .close-product {
-  display: block;
+.quickview-open .close-product,
+.quickview-open .close {
+  display: block !important;
 }
 
 .woocommerce #respond input#submit.alt,

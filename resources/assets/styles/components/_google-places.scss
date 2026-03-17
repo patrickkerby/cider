@@ -1,0 +1,130 @@
+// Google Places enhanced info window styles
+/* stylelint-disable no-descending-specificity */
+.enhanced-info-window {
+  max-width: 300px;
+  padding: 10px;
+
+  .place-name {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 5px;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+
+    strong {
+      font-weight: 600;
+      color: #555;
+    }
+  }
+
+  .place-address {
+    color: #666;
+  }
+
+  .place-website a,
+  .place-directions a {
+    display: inline-block;
+    background: #06c;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 13px;
+    margin-top: 5px;
+
+    &:hover {
+      background: #0052a3;
+    }
+  }
+
+  .place-phone a {
+    color: #06c;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .place-rating {
+    color: #f39c12;
+
+    .stars {
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+  }
+
+  .place-hours {
+    span[style*="green"] {
+      font-weight: bold;
+    }
+
+    span[style*="red"] {
+      font-weight: bold;
+    }
+  }
+
+  .place-today-hours {
+    font-style: italic;
+    color: #777;
+    font-size: 13px;
+    margin-top: 0;
+  }
+
+  .all-hours {
+    margin-top: 8px;
+
+    summary {
+      cursor: pointer;
+      font-size: 13px;
+      color: #06c;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+
+      li {
+        font-size: 12px;
+        color: #666;
+        margin: 3px 0;
+        list-style: none;
+      }
+    }
+  }
+}
+
+// Loading state for info windows
+.info-window-loading {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ddd;
+    border-top: 2px solid #666;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 5px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

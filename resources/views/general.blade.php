@@ -18,13 +18,15 @@
 @section('content')
   @while(have_posts()) @php the_post() @endphp
     {{-- @include('partials.page-header') --}}
+    @unless($minimal_header)
     <div id="hero">
-      <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a>
+      {{-- <a href="/"><img class="logo" src="@asset('images/logo-thick.svg')" /></a> --}}
       <h2>
           {{ $title }}
       </h2>
       <img class="full-bg" src="{{ $image }}" />
     </div>
+    @endunless
     <section class="content @if($content_width) narrow @endif">
       @include('partials.content-page')
     </section>

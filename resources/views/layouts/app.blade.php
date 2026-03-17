@@ -20,12 +20,16 @@
     </nav>
 
     {{-- Desktop Navigation --}}
-    <nav class="nav-desktop" role="navigation">
+    @if($minimal_header)
+      @php
+          $minimal_header_class = "minimal_header"
+      @endphp
+    @endif
+    <nav class="nav-desktop {{ $minimal_header_class ?? '' }}" role="navigation">
       @if(is_front_page() || is_page('cocktail-book') )
         <a href="/"><img class="farmcidery" src="@asset('images/farmandcidery.svg')" /></a>
-
       @else
-        <a href="/"><img class="farmcidery" src="@asset('images/logo-square-small.svg')" /></a>
+        <a class="home" href="/"><img class="farmcidery" src="@asset('images/logo-square-small.svg')" /></a>
       @endif
       @if (has_nav_menu('primary_navigation'))
         {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav-top']) !!}
@@ -36,24 +40,34 @@
     {{-- @include('partials.header') --}}
     <div class="wrap container" role="document">
       @yield('content')
-
-      <div id="stockists" class="modalDialog">
+      <div id="stockists" class="stockists modalDialog">
+            {{-- <a href="#" class="close" onclick="return false;">close</a> --}}
         <div class="stockist-container">
-          <a href="#close" title="Close" class="close">Close</a>
-          <h2>Stockists</h2>
-          <p>We're slowly but surely getting our cider into the best bottle shops around! If you'd like your local to carry us, let them know and ask them to get in touch!</p>
+          {{-- <a href="#close" title="Close" class="close">Close</a> --}}
+          {{-- <p>We're slowly but surely getting our cider into the best bottle shops around! If you'd like your local to carry us, let them know and ask them to get in touch!</p>
           <div class="stockist-content">
             <p>{!! isset($acf_options->stockists) ? $acf_options->stockists : '' !!}</p>
+          </div> --}}
+          <div class="map-container">
+            <div class="filter-bar">
+              <h2>Stockists</h2>
+              <p>We're slowly but surely getting our cider into the best bottle shops around! If you'd like your local to carry us, let them know and ask them to get in touch!</p>
+              {!! facetwp_display( 'facet', 'brand' ) !!}
+              {!! facetwp_display( 'template', 'stockists' ) !!}
+            </div>
+            <div class="map">
+              {!! facetwp_display( 'facet', 'map' ) !!}
+            </div>
           </div>
         </div>
       </div>
 
     </div>
-
+    
     @php do_action('get_footer') @endphp
     @include('partials.footer')
     @php wp_footer() @endphp
-    <a href="#" class="close-product" onclick="return false;">close</a>
+    <a href="#close" title="Close" class="close-product">Close</a>
 
   </body>
 </html>

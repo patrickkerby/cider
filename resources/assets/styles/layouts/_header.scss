@@ -82,6 +82,35 @@
       }
     }
   }
+
+  .minimal_header {
+    background: $pbc-darkgreen;
+    margin: 0;
+    position: relative;
+
+    .home img {
+      height: 3rem;
+      margin: 0.5rem 0;
+    }
+
+    .menu-main-navigation-container {
+      display: flex;
+    }
+
+    ul {
+      li {
+        border: none;
+      }
+
+      a {
+        padding: 1rem 2rem;
+      }
+    }
+
+    a.cart {
+      padding: 1rem;
+    }
+  }
 }
 
 .nav-desktop {

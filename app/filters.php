@@ -330,3 +330,38 @@ add_action( 'woocommerce_check_cart_items', function () {
     }
 } );
 
+add_filter( 'acf/fields/google_map/api', function($api) {
+    $api['key'] = 'AIzaSyCwP9J_FJOX7Rt3al7cg-Ux71Cy6ZhDLgg';
+    // Add Places API library for enhanced info windows
+    $api['libraries'] = 'places';
+    
+    return $api;
+} );
+
+// Also ensure FacetWP map includes Places API
+add_filter( 'facetwp_map_api_url', function( $api_url ) {
+    // Add Places library to the API URL if not already present
+    if ( strpos( $api_url, 'libraries=' ) === false ) {
+        $api_url .= '&libraries=places';
+    } elseif ( strpos( $api_url, 'places' ) === false ) {
+        $api_url = str_replace( 'libraries=', 'libraries=places,', $api_url );
+    }
+    return $api_url;
+});
+
+// Additional hook to ensure Places API loads with FacetWP
+add_filter( 'facetwp_map_settings', function( $settings ) {
+    // Ensure Places library is included in map settings
+    if ( !isset( $settings['libraries'] ) ) {
+        $settings['libraries'] = 'places';
+    } else {
+        // Add places if not already included
+        $libraries = explode( ',', $settings['libraries'] );
+        if ( !in_array( 'places', $libraries ) ) {
+            $libraries[] = 'places';
+            $settings['libraries'] = implode( ',', $libraries );
+        }
+    }
+    return $settings;
+});
+
