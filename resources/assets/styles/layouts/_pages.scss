@@ -666,6 +666,14 @@ section {
   flex-direction: row;
 }
 
+.stockists {
+  overflow: hidden;
+}
+
+.stockists .wrap {
+  padding-top: 4.25rem;
+}
+
 .stockists .map {
   width: 65%;
 
@@ -839,6 +847,30 @@ section {
     letter-spacing: 0.01rem;
     word-spacing: normal;
   }
+}
+
+.facetwp-facet-map {
+  margin: 0 !important;
+  position: relative;
+}
+
+button.facetwp-map-filtering {
+  position: absolute;
+  top: 2rem;
+  z-index: 9999999;
+  left: 2rem;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px -5px #3333337a;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #666;
+}
+
+.stockists footer,
+.colophon {
+  display: none;
 }
 
 /* stylelint-enable no-descending-specificity */

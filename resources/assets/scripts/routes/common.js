@@ -80,6 +80,26 @@ export default {
         // Robust loader for Google Places (supports both legacy namespace and importLibrary)
         var placesLoadInProgress = false;
         var placesLoadAttempts = 0;
+        
+        // Simple throttling for Places API calls (only for click events)
+        var placesThrottle = {
+          lastPlacesCall: 0,
+          minClickInterval: 500, // Minimum 500ms between marker clicks to prevent double-clicks
+          
+          // Check if we should allow a Places API call
+          shouldAllowPlacesCall: function() {
+            var now = Date.now();
+            var timeSinceLastCall = now - this.lastPlacesCall;
+            
+            // Enforce minimum interval between calls to prevent double-clicks
+            if (timeSinceLastCall < this.minClickInterval) {
+              return false;
+            }
+            
+            this.lastPlacesCall = now;
+            return true;
+          },
+        };
         function ensureGooglePlacesLoaded(callback) {
           var maxAttempts = 12;
           
@@ -404,25 +424,8 @@ export default {
         }
         
         function updateInfoWindowContent(marker, place, map) {
-          // Get existing content from FacetWP to preserve it
-          var infoWindow = (window.FWP_MAP && window.FWP_MAP.infoWindow) ? window.FWP_MAP.infoWindow : marker.infoWindow;
-          var existingContent = '';
-          
-          if (infoWindow) {
-            var currentContent = infoWindow.getContent();
-            if (typeof currentContent === 'string' && !currentContent.includes('enhanced-info-window')) {
-              existingContent = currentContent;
-            }
-          }
-          
-          // Create enhanced info window content
+          // Create completely new enhanced info window content (no original content to avoid duplicates)
           var content = '<div class="enhanced-info-window">';
-          
-          // Include original content first (if it exists and doesn't look like our enhanced content)
-          if (existingContent && !existingContent.includes('Loading business details')) {
-            content += '<div class="original-content">' + existingContent + '</div>';
-            content += '<hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">';
-          }
           
           // Business name (only if different from original)
           content += '<h3 class="place-name">' + place.name + '</h3>';
@@ -458,9 +461,53 @@ export default {
           
           // Hours
           if (place.opening_hours) {
-            var isOpen = place.opening_hours.isOpen();
-            var openStatus = isOpen ? '<span style="color: green;">Open</span>' : '<span style="color: red;">Closed</span>';
-            content += '<p class="place-hours"><strong>Currently:</strong> ' + openStatus + '</p>';
+            // Get current status - try multiple methods for timezone accuracy
+            var isOpen = false;
+            var statusText = 'Unknown';
+            
+            try {
+              // First try the standard method
+              if (typeof place.opening_hours.isOpen === 'function') {
+                isOpen = place.opening_hours.isOpen();
+              }
+              
+              // If we have periods, try to calculate manually for Alberta timezone
+              if (place.opening_hours.periods && place.opening_hours.periods.length > 0) {
+                // Create a date object in Alberta timezone (Mountain Time)
+                var now = new Date();
+                var albertaTime = new Date(now.toLocaleString('en-US', {timeZone: 'America/Edmonton'}));
+                var currentDay = albertaTime.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                var currentTime = albertaTime.getHours() * 100 + albertaTime.getMinutes(); // HHMM format
+                
+                // Find today's periods
+                var todayPeriods = place.opening_hours.periods.filter(function(period) {
+                  return period.open && period.open.day === currentDay;
+                });
+                
+                // Check if currently within any open period
+                isOpen = todayPeriods.some(function(period) {
+                  var openTime = period.open.time ? parseInt(period.open.time, 10) : 0;
+                  var closeTime = period.close && period.close.time ? parseInt(period.close.time, 10) : 2359;
+                  
+                  // Handle overnight periods (close time is next day)
+                  if (period.close && period.close.day !== period.open.day) {
+                    return currentTime >= openTime || currentTime <= closeTime;
+                  } else {
+                    return currentTime >= openTime && currentTime <= closeTime;
+                  }
+                });
+              }
+            } catch (e) {
+              console.log('Error checking opening hours:', e);
+              // Fallback to showing just the hours without status
+              statusText = 'Status Unknown';
+            }
+            
+            if (statusText !== 'Status Unknown') {
+              statusText = isOpen ? '<span style="color: green;">Open</span>' : '<span style="color: red;">Closed</span>';
+            }
+            
+            content += '<p class="place-hours"><strong>Currently:</strong> ' + statusText + '</p>';
             
             // Show today's hours
             if (place.opening_hours.weekday_text) {
@@ -493,30 +540,8 @@ export default {
           finalInfoWindow.open(map, marker);
         }
         
-        // Hook into FacetWP's marker click events (trying multiple event names)
-        $(document).on('facetwp_map/marker/click facetwp-map-marker-click', function(event, marker) {
-          // console.log('FacetWP marker clicked via event: ' + event.type, marker);
-          
-          if (marker && marker._pbcPlacesBound && marker._pbcBusinessName && marker._pbcLocation) {
-            var businessName = marker._pbcBusinessName;
-            var location = marker._pbcLocation;
-            var placesService = marker._pbcPlacesService;
-            
-            // console.log('Enhancing info window with Places data for: ' + businessName);
-            
-            // Allow FacetWP to show its info window first, then enhance it
-            setTimeout(function() {
-              enhanceInfoWindowWithPlaces(marker, businessName, location, placesService, marker._pbcMap || window.FWP_MAP.map);
-            }, 50);
-          } else {
-            // console.log('Marker not enhanced with Places data or missing data:', {
-            //   hasMarker: !!marker,
-            //   bound: marker && marker._pbcPlacesBound,
-            //   hasName: marker && !!marker._pbcBusinessName,
-            //   hasLocation: marker && !!marker._pbcLocation,
-            // });
-          }
-        });
+        // Remove automatic FacetWP event listeners - we ONLY want direct marker clicks
+        // The FacetWP events might be firing during viewport changes causing performance issues
         
         // Also try direct click listeners as fallback
         function addDirectClickListeners() {
@@ -533,7 +558,14 @@ export default {
                 // console.log('Adding click listener to marker: ' + marker._pbcBusinessName);
                 
                 var clickHandler = function() {
-                  // console.log('Direct marker click detected for: ' + marker._pbcBusinessName);
+                  console.log('🔵 MARKER CLICKED - Loading Places data for: ' + marker._pbcBusinessName);
+                  
+                  // Simple throttling to prevent double-clicks
+                  if (!placesThrottle.shouldAllowPlacesCall()) {
+                    console.log('⚠️ Places API call throttled for:', marker._pbcBusinessName);
+                    return;
+                  }
+                  
                   setTimeout(function() {
                     enhanceInfoWindowWithPlaces(
                       marker, 
@@ -591,27 +623,39 @@ export default {
           }
         }
         
-        // Initialize after FacetWP map has loaded markers
-        $(document).on('facetwp-maps-loaded', function() {
-          setTimeout(function() {
-            initGooglePlacesForFacetWP();
-            addDirectClickListeners();
-          }, 200);
-        });
+        // Only initialize once when map initially loads - NOT on viewport changes
+        var placesInitialized = false;
         
-        // Also try after generic FacetWP refresh (map may render shortly after)
-        $(document).on('facetwp-loaded', function() {
-          setTimeout(function() {
-            initGooglePlacesForFacetWP();
-            addDirectClickListeners();
-          }, 600);
+        function initializePlacesOnce() {
+          if (placesInitialized || (window.FWP_MAP && window.FWP_MAP._pbcPlacesReady)) {
+            // console.log('🛑 Places already initialized, skipping');
+            return;
+          }
+          
+          console.log('🚀 Initializing Places integration (one-time only)');
+          initGooglePlacesForFacetWP();
+          addDirectClickListeners();
+          placesInitialized = true;
+          
+          // Mark on FWP_MAP to prevent re-initialization
+          if (window.FWP_MAP) {
+            window.FWP_MAP._pbcPlacesReady = true;
+          }
+        }
+        
+        // Initialize after FacetWP map has loaded markers (initial load only)
+        $(document).on('facetwp-maps-loaded', function() {
+          setTimeout(initializePlacesOnce, 200);
         });
         
         // Fallback for edge cases where map is already present
-        setTimeout(function() {
-          initGooglePlacesForFacetWP();
-          addDirectClickListeners();
-        }, 1500);
+        setTimeout(initializePlacesOnce, 1500);
+        
+        // Note: Map filtering has been disabled for better UX
+        // The map will just display all markers without viewport-based filtering
+        
+        // Map filtering has been disabled - just display all markers
+        // This provides the best user experience for map interaction
         
         // Expose test function to global scope for debugging
         window.testPlacesIntegration = function(markerIndex) {
