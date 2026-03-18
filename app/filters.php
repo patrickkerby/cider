@@ -331,7 +331,7 @@ add_action( 'woocommerce_check_cart_items', function () {
 } );
 
 add_filter( 'acf/fields/google_map/api', function($api) {
-    $api['key'] = 'AIzaSyCwP9J_FJOX7Rt3al7cg-Ux71Cy6ZhDLgg';
+    $api['key'] = env('GOOGLEAPI');
     // Add Places API library for enhanced info windows
     $api['libraries'] = 'places';
     
@@ -365,3 +365,50 @@ add_filter( 'facetwp_map_settings', function( $settings ) {
     return $settings;
 });
 
+add_filter( 'facetwp_map_init_args', function ( $args ) {
+ 
+  $args['init']['zoomControl']       = true; // +- zoom control
+  $args['init']['mapTypeControl']    = false; // roadmap / satellite toggle
+  $args['init']['streetViewControl'] = false; // street view / yellow man icon
+  $args['init']['fullscreenControl'] = true; // full screen icon
+  $args['init']['clickableIcons']    = false; // disable clicking on POIs (street names, neighborhoods, etc.)
+  
+  /** this overwrites all 4 lines above and will disable ALL of the default ui icons instead of the individual icons above */
+  // $args['init']['disableDefaultUI']  = true; // disable the default ui
+  
+  return $args;
+  
+} );
+
+add_filter( 'facetwp_map_init_args', function ( $args ) {
+
+  if ( wp_is_mobile() ) {
+    $args['init']['gestureHandling'] = 'cooperative'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
+  }
+  else {
+    $args['init']['gestureHandling'] = 'greedy'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
+  }
+
+  // $args['init']['gestureHandling'] = 'auto'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
+
+  return $args;
+} );
+
+add_action('facetwp_scripts', function () {
+  ?>
+  <script>
+    (function($) {
+      FWP.hooks.addAction('facetwp/reset', function() {
+        $.each(FWP.facet_type, function(type, name) {
+          if ('map' === type) {
+            var $button = $('.facetwp-map-filtering');
+            $button.text(FWP_JSON['map']['filterText']);
+            FWP_MAP.is_filtering = false;
+            $button.toggleClass('enabled');
+          }
+        });
+      });
+    })(fUtil);
+  </script>
+  <?php
+}, 100);

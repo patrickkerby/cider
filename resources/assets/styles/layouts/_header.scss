@@ -91,6 +91,7 @@
     .home img {
       height: 3rem;
       margin: 0.5rem 0;
+      min-width: 3rem;
     }
 
     .menu-main-navigation-container {
@@ -104,6 +105,10 @@
 
       a {
         padding: 1rem 2rem;
+
+        @media screen and (max-width: 1024px) {
+          flex-direction: column;
+        }
       }
     }
 

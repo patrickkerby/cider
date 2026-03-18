@@ -647,9 +647,12 @@ section {
 
 .stockists section.content {
   padding: 0;
-  gap: 1.5rem;
+  gap: 0;
   display: flex;
-  // flex-direction: row-reverse;
+
+  @media screen and (max-width: 960px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .wpgmza_map {
@@ -659,19 +662,41 @@ section {
 // Stockist - wpfacet
 .stockists .map-container {
   display: flex;
-  gap: 1.5rem;
+  gap: 0;
   flex-direction: row;
 }
 
 .stockists .map {
   width: 65%;
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    padding: 2rem;
+  }
 }
 
 .stockists .filter-bar {
   width: 35%;
   height: calc(100vh - 3rem);
-  padding: 1.5rem 0 1.5rem 1.5rem;
+  padding: 1.5rem 1rem 1.5rem 1.5rem;
   overflow-y: scroll;
+
+  h2 {
+    text-align: left;
+  }
+
+  @media screen and (max-width: 1080px) {
+    padding: 1rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 80%;
+    margin: -10rem auto 0 auto;
+    position: relative;
+    z-index: 10000;
+    background: #fff;
+    height: auto;
+  }
 }
 
 .stockists .fwpl-layout.el-dbm6k2 {
@@ -679,16 +704,35 @@ section {
 }
 
 .stockists .fwpl-result {
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
-  border-bottom: solid 1px #cecece;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: dotted 2px #e8e4cb;
+}
+
+.stockists .el-rcm4mm {
+  width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  a {
+    white-space: nowrap;
+    display: inline;
+  }
+
+  @media screen and (max-width: 1080px) {
+    width: 17rem;
+  }
+}
+
+.stockists .el-q8zfv5 {
+  display: flex;
+  margin-top: 0.5rem;
 }
 
 .stockists .fwpl-item a {
   text-decoration: none;
   font-size: 0.9rem;
   letter-spacing: -0.05rem;
-  display: flex;
   margin-bottom: 0.5rem;
 }
 
@@ -697,26 +741,47 @@ section {
   height: 100vh !important;
 }
 
+@media screen and (max-width: 950px) {
+  .stockists #facetwp-map {
+    height: 60vh !important;
+  }
+}
+
 .el-uk2tkn {
-  font-weight: 600;
-  letter-spacing: -0.055rem;
+  font-weight: 400;
+  // letter-spacing: -0.055rem;
+  font-family: $wanderlust;
+  font-size: 1.2rem;
   margin-bottom: 0.25rem;
+  color: #a79319;
 }
 
 .fwpl-term {
-  background-color: $pbc-green;
-  color: #fff;
+  background-color: #f5f2db;
+  color: #777754;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: -0.05rem;
   border-radius: 1rem;
   padding: 0.25rem 0.75rem;
   margin-right: 0.5rem;
+
+  &.fwpl-term-true-north-cider {
+    background-color: darken($color: #f5f2db, $amount: 5%);
+  }
 }
 
 .facetwp-facet-brand {
   display: flex;
   gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 9px 10px -10px rgba(0, 0, 0, 0.08);
+  padding: 0 0 2rem 0;
+
+  @media screen and (max-width: 1450px) {
+    flex-direction: column;
+  }
 }
 
 .stockists .facetwp-checkbox {
@@ -733,7 +798,7 @@ section {
     width: 0.8rem;
     height: 0.8rem;
     background: #fff;
-    border: solid 2px #fff;
+    border: solid 2px #ccc;
     border-radius: 1rem;
     position: absolute;
     left: 0.75rem;
@@ -756,6 +821,28 @@ section {
       transform: translateY(-50%);
     }
   }
+}
+
+.stockists .enhanced-info-window {
+  * {
+    font: 400 13px Roboto, Arial, sans-serif !important;
+  }
+
+  h3 {
+    font-family: $wanderlust !important;
+    font-size: 1.2rem !important;
+    color: $pbc-green !important;
+    margin: 1rem 0;
+  }
+
+  p {
+    letter-spacing: 0.01rem;
+    word-spacing: normal;
+  }
+}
+
+.facetwp-map-filtering {
+  display: none;
 }
 
 /* stylelint-enable no-descending-specificity */

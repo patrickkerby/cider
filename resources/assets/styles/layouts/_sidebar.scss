@@ -81,6 +81,11 @@ nav.nav-mobile nav {
   top: 32px;
 }
 
+.stockists.logged-in nav,
+.stockists.logged-in .hamb {
+  top: 0;
+}
+
 .hamb-line {
   background: #fff;
   display: block;
