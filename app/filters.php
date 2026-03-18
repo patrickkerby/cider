@@ -383,7 +383,7 @@ add_filter( 'facetwp_map_init_args', function ( $args ) {
 add_filter( 'facetwp_map_init_args', function ( $args ) {
 
   if ( wp_is_mobile() ) {
-    $args['init']['gestureHandling'] = 'cooperative'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
+    $args['init']['gestureHandling'] = 'greedy'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
   }
   else {
     $args['init']['gestureHandling'] = 'greedy'; // Default: 'auto', other options: 'cooperative', 'greedy', 'none'a
