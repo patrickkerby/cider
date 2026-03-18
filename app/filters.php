@@ -395,20 +395,23 @@ add_filter( 'facetwp_map_init_args', function ( $args ) {
 } );
 
 add_action('facetwp_scripts', function () {
-  ?>
+?>
   <script>
     (function($) {
-      FWP.hooks.addAction('facetwp/reset', function() {
-        $.each(FWP.facet_type, function(type, name) {
-          if ('map' === type) {
-            var $button = $('.facetwp-map-filtering');
-            $button.text(FWP_JSON['map']['filterText']);
-            FWP_MAP.is_filtering = false;
-            $button.toggleClass('enabled');
-          }
-        });
+      document.addEventListener('facetwp-loaded', function() {
+        if ('undefined' === typeof FWP_MAP) {
+          return;
+        }
+        var filterButton = $(".facetwp-map-filtering");
+        if (!filterButton.hasClass('enabled') && 'undefined' == typeof FWP_MAP.enableFiltering) {
+          filterButton.text(FWP_JSON['map']['resetText']);
+          FWP_MAP.is_filtering = true;
+          filterButton.addClass('enabled');
+          FWP_MAP.enableFiltering = true;
+        }
       });
     })(fUtil);
   </script>
-  <?php
+<?php
 }, 100);
+
