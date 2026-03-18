@@ -668,10 +668,18 @@ section {
 
 .stockists {
   overflow: hidden;
+
+  @media screen and (max-width: 960px) {
+    overflow-y: scroll;
+  }
 }
 
 .stockists .wrap {
   padding-top: 4.25rem;
+
+  @media screen and (max-width: 581px) {
+    padding-top: 0;
+  }
 }
 
 .stockists .map {
@@ -704,6 +712,10 @@ section {
     z-index: 10000;
     background: #fff;
     height: auto;
+  }
+
+  @media screen and (max-width: 540px) {
+    width: 88%;
   }
 }
 
