@@ -5,6 +5,64 @@ export default {
   finalize() {
     // JavaScript to be fired on all pages, after page specific JS is fired
     $(document).ready(function(){
+      function getProductDataFromElement($el) {
+        var $product = $el.closest('.product');
+        var itemId = (
+          $el.data('product_id') ||
+          $el.attr('data-product_id') ||
+          $el.attr('data-product-id') ||
+          $product.find('[data-product_id]').first().attr('data-product_id') ||
+          $product.find('[data-product-id]').first().attr('data-product-id')
+        );
+        var itemName = (
+          $el.attr('title') ||
+          $product.find('.woocommerce-loop-product__title').first().text().trim() ||
+          $product.find('h2').first().text().trim() ||
+          $product.find('h3').first().text().trim() ||
+          $product.find('h4').first().text().trim()
+        );
+
+        if (!itemId) {
+          var href = $el.attr('href') || '';
+          var hrefMatch = href.match(/[?&](?:add-to-cart|product_id)=([0-9]+)/);
+          if (hrefMatch && hrefMatch[1]) {
+            itemId = hrefMatch[1];
+          }
+        }
+
+        return {
+          itemId: itemId ? String(itemId) : '',
+          itemName: itemName || '',
+        };
+      }
+
+      function trackQuickViewItem($el) {
+        var productData = getProductDataFromElement($el);
+        if (!productData.itemId && !productData.itemName) {
+          return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        var itemPayload = {};
+        if (productData.itemId) {
+          itemPayload.item_id = productData.itemId;
+        }
+        if (productData.itemName) {
+          itemPayload.item_name = productData.itemName;
+        }
+
+        window.dataLayer.push({
+          event: 'view_item',
+          ecommerce: {
+            items: [itemPayload],
+          },
+        });
+      }
+
+      $(document).on('click', '.product a.button:not(.quick-view-detail-button)', function() {
+        trackQuickViewItem($(this));
+      });
+
       $('.fade').slick({
         dots: false,
         infinite: true,

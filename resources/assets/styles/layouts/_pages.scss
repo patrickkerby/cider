@@ -878,6 +878,11 @@ button.facetwp-map-filtering {
   font-size: 0.9rem;
   font-weight: 800;
   color: #666;
+
+  @media screen and (max-width: 960px) {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
 }
 
 .stockists footer,
