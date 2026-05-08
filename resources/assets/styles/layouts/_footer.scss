@@ -171,7 +171,8 @@ footer {
     margin-top: 2rem;
   }
 
-  .field {
+  .field,
+  .mc4wp-form-fields input {
     background: #302f2d;
     padding: 1rem 1.5rem;
     margin-right: 2%;
@@ -186,7 +187,8 @@ footer {
     margin-right: 0;
   }
 
-  .submit {
+  .submit,
+  input[type="submit"] {
     text-indent: -999999px;
     width: 8%;
     margin: 0;
@@ -230,7 +232,8 @@ footer {
   background: none;
 }
 
-#mce-responses {
+#mce-responses,
+.mc4wp-response {
   position: absolute;
   left: 0;
   bottom: 3rem;
