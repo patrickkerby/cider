@@ -73,6 +73,27 @@ export default {
         }, 150);
       });
 
+      (function initMobileHeaderScroll() {
+        var scrollThreshold = 32;
+
+        function syncMobileHeaderScroll() {
+          var isMobile = window.matchMedia('(max-width: 580px)').matches;
+          var menuOpen = document.getElementById('side-menu') && document.getElementById('side-menu').checked;
+
+          if (!isMobile) {
+            document.body.classList.remove('mobile-header-scrolled', 'mobile-menu-open');
+            return;
+          }
+
+          document.body.classList.toggle('mobile-header-scrolled', window.scrollY > scrollThreshold);
+          document.body.classList.toggle('mobile-menu-open', !!menuOpen);
+        }
+
+        $(window).on('scroll resize', syncMobileHeaderScroll);
+        $('#side-menu').on('change', syncMobileHeaderScroll);
+        syncMobileHeaderScroll();
+      })();
+
       $('.fade').slick({
         dots: false,
         infinite: true,

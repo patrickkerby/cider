@@ -4,8 +4,36 @@
   --color-scheme: #{$color-scheme-default};
 }
 
+$mobile-icon-text-shadow: 0 1px 2px rgba($pbc-charcoal, 0.15), 0 0 8px rgba($pbc-charcoal, 0.15);
+$mobile-icon-drop-shadow: drop-shadow(0 1px 2px rgba($pbc-charcoal, 0.15)) drop-shadow(0 0 8px rgba($pbc-charcoal, 0.15));
+
 .side-menu {
   display: none;
+}
+
+/* Subtle top fade after scroll — contrast over light or busy imagery */
+.nav-mobile::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5.5rem;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba($pbc-charcoal, 0.28) 0%,
+      rgba($pbc-charcoal, 0.12) 45%,
+      transparent 100%
+    );
+}
+
+body.mobile-header-scrolled:not(.mobile-menu-open) .nav-mobile::before {
+  opacity: 1;
 }
 
 /* Menu toggle (closed: top-right; open: X close) */
@@ -122,16 +150,10 @@
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.25s ease, visibility 0.25s ease;
+  background-color: $color-scheme-default;
 
   .home & {
     background-color: var(--color-scheme, $color-scheme-default);
-  }
-
-  .page-template:not(.home) &,
-  .tribe-events-page-template &,
-  .woocommerce &,
-  .woocommerce-page & {
-    background-color: $color-scheme-default;
   }
 }
 
@@ -196,11 +218,13 @@
     height: 4.4rem;
     padding: 0 1rem;
     text-decoration: none;
+    background: transparent;
 
     img {
       width: 20px;
       height: auto;
       display: block;
+      filter: $mobile-icon-drop-shadow;
     }
 
     .cart-icon__count {
@@ -211,6 +235,7 @@
       line-height: 1;
       min-width: 1.25rem;
       text-align: center;
+      text-shadow: $mobile-icon-text-shadow;
     }
   }
 
