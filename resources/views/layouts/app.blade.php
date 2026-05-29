@@ -6,20 +6,8 @@
     @php do_action('get_header') @endphp
     
     {{-- Mobile Navigation --}}
-    <nav class="nav-mobile">
-      @if (!function_exists('is_cart') || !is_cart())
-        @include('partials.cart-icon', ['cart_icon_modifier' => 'cart-icon--mobile'])
-      @endif
-      <input class="side-menu" type="checkbox" id="side-menu"/>
-      <label class="hamb" for="side-menu">
-        <span class="hamb-line"></span>
-        <span class="nav-title">Menu</span>
-      </label>
-      <nav class="side-nav col-md" role="navigation">
-        @if (has_nav_menu('primary_navigation'))
-          {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav']) !!}
-        @endif
-      </nav>
+    <nav class="nav-mobile" aria-label="{{ __('Site', 'sage') }}">
+      @include('partials.mobile-menu')
     </nav>
 
     {{-- Desktop Navigation --}}
