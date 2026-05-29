@@ -807,13 +807,10 @@ export default {
           const $input = $(this);
           const $quantityContainer = $input.closest('.quantity');
           
-          console.log('Found quantity input:', $input.length, 'Existing buttons:', $quantityContainer.find('.quantity-button').length);
-          
           // Check if buttons already exist
           if ($quantityContainer.find('.quantity-button').length === 0) {
             // Add the quantity buttons directly after the input
             $('<div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div>').insertAfter($input);
-            console.log('Added quantity buttons to input');
           }
         });
       }

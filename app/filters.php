@@ -212,9 +212,9 @@ add_action('woocommerce_after_add_to_cart_button', function () {
     }
 } );
 
-add_action( 'woocommerce_cart_totals_before_order_total', function () {
-    echo '<div class="shipping-notice">Canada-wide shipping is only available for the Cocktail Recipe Book. <br><br>All cider products are only available for local Edmonton-region delivery.</div>';
-} );
+add_action( 'woocommerce_before_cart_totals', function () {
+    echo '<div class="shipping-notice">' . esc_html__( 'Canada-wide shipping is only available for the Cocktail Recipe Book. Cider is for local Edmonton-region delivery only — use the shipping calculator below to confirm your address.', 'sage' ) . '</div>';
+}, 15 );
 
 /**
  * Display notice on cart page if cider is in cart
@@ -393,14 +393,6 @@ add_filter( 'facetwp_map_init_args', function ( $args ) {
 
   return $args;
 } );
-
-/**
- * Keep header cart count in sync after AJAX add/remove (matches a.cart-icon in layout).
- */
-add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
-    $fragments['a.cart-icon'] = pbc_cart_icon_html();
-    return $fragments;
-});
 
 /**
  * Keep header cart count in sync after AJAX add/remove (matches a.cart-icon in layout).
