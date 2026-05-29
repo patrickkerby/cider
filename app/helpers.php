@@ -136,3 +136,22 @@ function display_sidebar()
     isset($display) || $display = apply_filters('sage/display_sidebar', false);
     return $display;
 }
+
+/**
+ * Header/mobile cart link with live item count (used by Blade + AJAX fragments).
+ */
+function pbc_cart_icon_html()
+{
+    if (!function_exists('wc_get_cart_url')) {
+        return '';
+    }
+
+    $count = (function_exists('WC') && WC()->cart)
+        ? absint(WC()->cart->get_cart_contents_count())
+        : 0;
+
+    return '<a class="cart cart-icon" href="' . esc_url(wc_get_cart_url()) . '">'
+        . '<img src="' . esc_url(asset_path('images/cart.svg')) . '" alt="' . esc_attr__('Cart', 'sage') . '" />'
+        . '<span class="cart-icon__count">' . $count . '</span>'
+        . '</a>';
+}

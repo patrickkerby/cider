@@ -7,6 +7,9 @@
     
     {{-- Mobile Navigation --}}
     <nav class="nav-mobile">
+      @if (!function_exists('is_cart') || !is_cart())
+        @include('partials.cart-icon', ['cart_icon_modifier' => 'cart-icon--mobile'])
+      @endif
       <input class="side-menu" type="checkbox" id="side-menu"/>
       <label class="hamb" for="side-menu" @if(is_front_page())style="background-color: var(--color-scheme);"@endif">
         <span class="hamb-line"></span>
@@ -34,7 +37,7 @@
       @if (has_nav_menu('primary_navigation'))
         {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav-top']) !!}
       @endif
-      <a class="cart" href="/cart"><img src="@asset('images/cart.svg')" /></a>
+      @include('partials.cart-icon')
     </nav>
 
     {{-- @include('partials.header') --}}

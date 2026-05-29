@@ -393,3 +393,19 @@ add_filter( 'facetwp_map_init_args', function ( $args ) {
 
   return $args;
 } );
+
+/**
+ * Keep header cart count in sync after AJAX add/remove (matches a.cart-icon in layout).
+ */
+add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
+    $fragments['a.cart-icon'] = pbc_cart_icon_html();
+    return $fragments;
+});
+
+/**
+ * Keep header cart count in sync after AJAX add/remove (matches a.cart-icon in layout).
+ */
+add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
+    $fragments['a.cart-icon'] = pbc_cart_icon_html();
+    return $fragments;
+});

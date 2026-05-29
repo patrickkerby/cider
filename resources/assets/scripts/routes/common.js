@@ -63,6 +63,16 @@ export default {
         trackQuickViewItem($(this));
       });
 
+      $(document.body).on('wc_cart_emptied', function() {
+        $('a.cart-icon .cart-icon__count').text('0');
+        if (typeof wc_cart_fragments_params === 'undefined') {
+          return;
+        }
+        setTimeout(function() {
+          $(document.body).trigger('wc_fragment_refresh');
+        }, 150);
+      });
+
       $('.fade').slick({
         dots: false,
         infinite: true,
