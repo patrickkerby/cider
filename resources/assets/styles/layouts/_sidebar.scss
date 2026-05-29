@@ -1,5 +1,9 @@
 /* stylelint-disable no-descending-specificity */
 
+:root {
+  --color-scheme: #{$color-scheme-default};
+}
+
 nav.nav-mobile nav {
   width: 92px;
   position: fixed;
@@ -70,9 +74,15 @@ nav.nav-mobile nav {
   justify-content: center;
   align-items: center;
 
+  .home & {
+    background-color: var(--color-scheme, $color-scheme-default);
+  }
+
   .page-template:not(.home) &,
-  .tribe-events-page-template & {
-    background-color: $pbc-green;
+  .tribe-events-page-template &,
+  .woocommerce &,
+  .woocommerce-page & {
+    background-color: $color-scheme-default;
   }
 }
 
@@ -138,12 +148,14 @@ nav.nav-mobile nav {
   box-shadow: -1rem -2rem 2rem rgba(0, 0, 0, 0.3);
 
   .home & {
-    background-color: var(--color-scheme) !important;
+    background-color: var(--color-scheme, $color-scheme-default) !important;
   }
 
   .page-template:not(.home) &,
-  .tribe-events-page-template & {
-    background-color: $pbc-green !important;
+  .tribe-events-page-template &,
+  .woocommerce &,
+  .woocommerce-page & {
+    background-color: $color-scheme-default !important;
   }
 
   ul {

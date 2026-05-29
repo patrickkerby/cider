@@ -11,7 +11,7 @@
         @include('partials.cart-icon', ['cart_icon_modifier' => 'cart-icon--mobile'])
       @endif
       <input class="side-menu" type="checkbox" id="side-menu"/>
-      <label class="hamb" for="side-menu" @if(is_front_page())style="background-color: var(--color-scheme);"@endif">
+      <label class="hamb" for="side-menu">
         <span class="hamb-line"></span>
         <span class="nav-title">Menu</span>
       </label>

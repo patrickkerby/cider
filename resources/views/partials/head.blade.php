@@ -5,9 +5,16 @@
 
   @php wp_head() @endphp
   
+  @php
+    $color_scheme_default = '#a89934';
+    $color_scheme_value = $color_scheme_default;
+    if (isset($colour_scheme['colour']) && $colour_scheme['colour'] !== '') {
+      $color_scheme_value = $colour_scheme['colour'];
+    }
+  @endphp
   <style>
-    :root { 
-      --color-scheme: @php echo isset($colour_scheme['colour']) ? $colour_scheme['colour'] : 'rgba(255, 255, 255, 1)'; @endphp;
+    :root {
+      --color-scheme: {{ $color_scheme_value }};
     }
   </style>
 
