@@ -62,6 +62,13 @@
     }
   }
 
+  &.pbc-loop-quick-view-only img.attachment-woocommerce_thumbnail {
+    @media (max-width: 768px) {
+      z-index: 0;
+      cursor: pointer;
+    }
+  }
+
   &::before,
   &::after {
     content: "";

@@ -148,14 +148,52 @@ remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_l
 // remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );           // We need to add our own button in for the quick view
 
 // Setup for Product Modal Quickview
-// Out-of-stock loop buttons omit add_to_cart_button, so they can miss the plugin selector on production.
+// WooCommerce only adds add_to_cart_button when purchasable + in stock. Production Quick View
+// hooks that class, so Chai-style buttons (same href/data-product_id) skip the modal.
 add_filter('quick_view_selector', function ($selector) {
-    if (strpos($selector, 'outofstock') !== false) {
+    if (strpos($selector, ':not(.add_to_cart_button)') !== false) {
         return $selector;
     }
 
-    return $selector . ', li.product.outofstock a.button';
+    return $selector . ', .product a.button:not(.add_to_cart_button):not(.quick-view-detail-button)';
 });
+
+add_filter('woocommerce_post_class', function ($classes, $product) {
+    if ($product instanceof \WC_Product && ! ($product->is_purchasable() && $product->is_in_stock())) {
+        $classes[] = 'pbc-loop-quick-view-only';
+    }
+
+    return $classes;
+}, 10, 2);
+
+add_filter('woocommerce_loop_add_to_cart_args', function ($args, $product) {
+    if ($product->is_purchasable() && $product->is_in_stock()) {
+        return $args;
+    }
+
+    if (strpos($args['class'], 'add_to_cart_button') === false) {
+        $args['class'] .= ' add_to_cart_button';
+    }
+
+    $args['class'] .= ' pbc-loop-quick-view-trigger';
+
+    return $args;
+}, 20, 2);
+
+// Fallback when Quick View JS loses the race on iOS (href would otherwise navigate away).
+add_filter('woocommerce_loop_add_to_cart_link', function ($link, $product) {
+    if ($product->is_purchasable() && $product->is_in_stock()) {
+        return $link;
+    }
+
+    $link = preg_replace('/\shref=(["\'])[^"\']*\1/', ' href="#"', $link, 1);
+
+    if (strpos($link, 'role=') === false) {
+        $link = preg_replace('/<a\s/', '<a role="button" ', $link, 1);
+    }
+
+    return $link;
+}, 20, 2);
 // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );              // Get rid of sku and categories on product modal
 /**
  * Remove related products output

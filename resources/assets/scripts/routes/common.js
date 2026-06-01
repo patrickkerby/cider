@@ -63,21 +63,57 @@ export default {
         trackQuickViewItem($(this));
       });
 
-      (function initOutOfStockQuickView() {
+      (function initLoopQuickViewWithoutAddToCart() {
         var quickViewOptions = window.quickview_options;
+        var suppressClickUntil = 0;
 
         if (!quickViewOptions || typeof $.fn.prettyPhoto === 'undefined') {
           return;
         }
 
-        document.addEventListener('click', function (e) {
-          var target = e.target;
+        function getLoopQuickViewButton(target) {
           if (!target || !target.closest) {
-            return;
+            return null;
           }
 
-          var button = target.closest('ul.products li.product.outofstock a.button');
-          if (!button || button.classList.contains('quick-view-detail-button')) {
+          var product = target.closest('ul.products li.product');
+          if (!product) {
+            return null;
+          }
+
+          var loopButtonSelector = 'a.button.pbc-loop-quick-view-trigger, a.button:not(.add_to_cart_button):not(.quick-view-detail-button)';
+          var directButton = target.closest('a.button');
+
+          if (directButton && product.contains(directButton)) {
+            if (
+              directButton.classList.contains('quick-view-detail-button') ||
+              directButton.classList.contains('add_to_cart_button')
+            ) {
+              return null;
+            }
+
+            return directButton;
+          }
+
+          if (target.closest('img.attachment-woocommerce_thumbnail, .woocommerce-loop-product__title, h2, h3, p')) {
+            return product.querySelector(loopButtonSelector);
+          }
+
+          return null;
+        }
+
+        function openQuickView(productId) {
+          $.prettyPhoto.open(
+            decodeURIComponent(
+              quickViewOptions.link.replace('product_id_placeholder', productId)
+            )
+          );
+          $('body').addClass('quickview-open');
+        }
+
+        function handleLoopQuickView(e) {
+          var button = getLoopQuickViewButton(e.target);
+          if (!button) {
             return;
           }
 
@@ -86,16 +122,28 @@ export default {
             return;
           }
 
+          if (e.type === 'click' && Date.now() < suppressClickUntil) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+
           e.preventDefault();
           e.stopPropagation();
 
-          $.prettyPhoto.open(
-            decodeURIComponent(
-              quickViewOptions.link.replace('product_id_placeholder', productId)
-            )
-          );
-          $('body').addClass('quickview-open');
-        }, true);
+          if (e.type === 'touchend') {
+            suppressClickUntil = Date.now() + 600;
+            openQuickView(productId);
+            return;
+          }
+
+          if (e.type === 'click') {
+            openQuickView(productId);
+          }
+        }
+
+        document.addEventListener('touchend', handleLoopQuickView, { capture: true, passive: false });
+        document.addEventListener('click', handleLoopQuickView, { capture: true, passive: false });
       })();
 
       $(document.body).on('wc_cart_emptied', function() {
