@@ -148,6 +148,14 @@ remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_l
 // remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );           // We need to add our own button in for the quick view
 
 // Setup for Product Modal Quickview
+// Out-of-stock loop buttons omit add_to_cart_button, so they can miss the plugin selector on production.
+add_filter('quick_view_selector', function ($selector) {
+    if (strpos($selector, 'outofstock') !== false) {
+        return $selector;
+    }
+
+    return $selector . ', li.product.outofstock a.button';
+});
 // remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );              // Get rid of sku and categories on product modal
 /**
  * Remove related products output

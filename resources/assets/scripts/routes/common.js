@@ -63,6 +63,41 @@ export default {
         trackQuickViewItem($(this));
       });
 
+      (function initOutOfStockQuickView() {
+        var quickViewOptions = window.quickview_options;
+
+        if (!quickViewOptions || typeof $.fn.prettyPhoto === 'undefined') {
+          return;
+        }
+
+        document.addEventListener('click', function (e) {
+          var target = e.target;
+          if (!target || !target.closest) {
+            return;
+          }
+
+          var button = target.closest('ul.products li.product.outofstock a.button');
+          if (!button || button.classList.contains('quick-view-detail-button')) {
+            return;
+          }
+
+          var productId = button.getAttribute('data-product_id');
+          if (!productId) {
+            return;
+          }
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          $.prettyPhoto.open(
+            decodeURIComponent(
+              quickViewOptions.link.replace('product_id_placeholder', productId)
+            )
+          );
+          $('body').addClass('quickview-open');
+        }, true);
+      })();
+
       $(document.body).on('wc_cart_emptied', function() {
         $('a.cart-icon .cart-icon__count').text('0');
         if (typeof wc_cart_fragments_params === 'undefined') {
