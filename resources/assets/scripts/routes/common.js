@@ -63,6 +63,68 @@ export default {
         trackQuickViewItem($(this));
       });
 
+      (function initQuickViewModalState() {
+        function setQuickViewOpen(isOpen) {
+          $('body').toggleClass('quickview-open', isOpen);
+        }
+
+        function closeQuickView() {
+          if (typeof $.prettyPhoto !== 'undefined' && $('.pp_pic_holder').length) {
+            $.prettyPhoto.close();
+            return;
+          }
+
+          setQuickViewOpen(false);
+        }
+
+        $(document).on('click', '.close-product, a.pp_close', function(e) {
+          e.preventDefault();
+          closeQuickView();
+          return false;
+        });
+
+        $(document).on('click', '.pp_overlay', function() {
+          if ($('body').hasClass('quickview-open')) {
+            closeQuickView();
+          }
+        });
+
+        $(document).on('keyup', function(e) {
+          if (e.which === 27 && $('body').hasClass('quickview-open')) {
+            closeQuickView();
+          }
+        });
+
+        if (typeof $.prettyPhoto === 'undefined') {
+          return;
+        }
+
+        var originalClose = $.prettyPhoto.close;
+        $.prettyPhoto.close = function() {
+          var result = originalClose.apply(this, arguments);
+          setQuickViewOpen(false);
+          return result;
+        };
+
+        var originalOpen = $.prettyPhoto.open;
+        $.prettyPhoto.open = function() {
+          setQuickViewOpen(true);
+          var result = originalOpen.apply(this, arguments);
+
+          setTimeout(function() {
+            initQuantityButtons();
+          }, 100);
+          setTimeout(function() {
+            initQuantityButtons();
+          }, 300);
+          setTimeout(function() {
+            initQuantityButtons();
+          }, 600);
+
+          return result;
+        };
+      })();
+
       (function initLoopQuickViewWithoutAddToCart() {
         var quickViewOptions = window.quickview_options;
         var suppressClickUntil = 0;
@@ -108,7 +170,6 @@ export default {
               quickViewOptions.link.replace('product_id_placeholder', productId)
             )
           );
-          $('body').addClass('quickview-open');
         }
 
         function handleLoopQuickView(e) {
@@ -196,52 +257,10 @@ export default {
         autoplay: true,
       });
 
-        $(document).on('click', 'li .product_type_simple', function() {
-          $('body').addClass('quickview-open');
-        });
-        $(document).on('click', '.openModal', function() {
-          $('body').addClass('quickview-open');
-        });
-        // remove class from body when close button is clicked  
-        $(document).on('click', '.close-product', function(e) {
-          if (!$(e.target).is('.quickview'))
-            $('.quickview-open').removeClass('quickview-open');
-        });
-        $(document).on('click', '.close', function(e) {
-          if (!$(e.target).is('.quickview'))
-            $('.quickview-open').removeClass('quickview-open');
-        });
-        // remove class from body when you click on the overlay
-        $(document).on('click', '.pp_overlay', function(e) {
-          if (!$(e.target).is('.quickview-open'))
-            $('.quickview-open').removeClass('quickview-open');
-        });        
-        // remove class from body when you hit escape
-        $(document).bind('keyup', function(e){ 
-          if(e.which == 27){
-            if (!$(e.target).is('.quickview-open'))
-            $('.quickview-open').removeClass('quickview-open');
-           }
-        });
-        // close the modal when you click on our new button  
-        $('.close-product').on('click',function() { $.prettyPhoto.close(); });
-  
         $('.modal').each(function () {
           const modalId = `#${$(this).attr('id')}`;
           if (window.location.href.indexOf(modalId) !== -1) {
               $(modalId).modal('show');
-          }
-        });
-  
-        // remove class from body when close button is clicked  
-        $(document).on('click', '.close-product', function(e) {
-          if (!$(e.target).is('.quickview')) {
-            $('.quickview-open').removeClass('quickview-open'); 
-          }
-        });
-        $(document).on('click', '.close', function(e) {
-          if (!$(e.target).is('.quickview')) {
-            $('.quickview-open').removeClass('quickview-open'); 
           }
         });
 
@@ -943,40 +962,6 @@ export default {
       $(document.body).on('updated_cart_totals updated_checkout updated_wc_div', function() {
         initQuantityButtons();
       });
-
-      // Initialize after quickview modal opens
-      $(document).on('click', '.inside-thumb', function() {
-        $('body').addClass('quickview-open');
-        // Add multiple checks to ensure the modal content is loaded
-        setTimeout(function() {
-          initQuantityButtons();
-        }, 200);
-        
-        // Also try after a longer delay in case content takes time to load
-        setTimeout(function() {
-          initQuantityButtons();
-        }, 500);
-      });
-
-      // Listen for prettyPhoto events if available
-      if (typeof $.prettyPhoto !== 'undefined') {
-        $.prettyPhoto.open = (function(original) {
-          return function() {
-            var result = original.apply(this, arguments);
-            // Multiple timeouts to catch different loading scenarios
-            setTimeout(function() {
-              initQuantityButtons();
-            }, 100);
-            setTimeout(function() {
-              initQuantityButtons();
-            }, 300);
-            setTimeout(function() {
-              initQuantityButtons();
-            }, 600);
-            return result;
-          };
-        })($.prettyPhoto.open);
-      }
 
       // Also listen for any AJAX complete events that might indicate modal content loaded
       $(document).ajaxComplete(function() {

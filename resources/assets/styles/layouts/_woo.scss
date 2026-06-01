@@ -577,15 +577,10 @@ form.cart .qib-container + button[type="submit"]:not(#qib_id):not(#qib_id) {
   // }
 }
 
-div.pp_woocommerce .pp_close {
-  @media (max-width: 575px) {
-    right: 1rem;
-    top: 1rem;
-    width: 44px;
-    height: 44px;
-    line-height: 45px;
-    text-shadow: none;
-  }
+// Use theme .close-product only; prettyPhoto's default X is redundant and bypasses our JS cleanup.
+.pp_woocommerce_quick_view .pp_close,
+div.pp_woocommerce_quick_view .pp_close {
+  display: none !important;
 }
 
 .close-product,
