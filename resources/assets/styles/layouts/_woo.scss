@@ -54,7 +54,7 @@
     margin-top: -3.5rem;
     margin-bottom: 1rem;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 
     @media (max-width: 768px) {
       max-height: 400px;
@@ -69,21 +69,21 @@
     }
   }
 
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 3px;
-    width: 35%;
-    background-color: $pbc-darkgreen;
-  }
+  // &::before,
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   left: 0;
+  //   top: 0;
+  //   height: 3px;
+  //   width: 35%;
+  //   background-color: $pbc-darkgreen;
+  // }
 
-  &::after {
-    left: unset;
-    right: 0;
-  }
+  // &::after {
+  //   left: unset;
+  //   right: 0;
+  // }
 }
 
 @media (max-width: 768px) {
