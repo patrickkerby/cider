@@ -55,9 +55,9 @@ do_action( 'wc_quick_view_before_single_product' );
 
 			<p class="order_notes">
 				<strong>Flat Sale Delivery!</strong><br>
-				Delivery to <strong>Calgary</strong> will be June 12 &amp; 13:  9am - 1pm <br>
-				Delivery to <strong>Camrose and Red Deer</strong> will be June 14: 10am - 6pm<br>
-				Delivery to <strong>Edmonton</strong> will be Jun 18 &amp; 19: 10am - 1pm<br><br>
+				<strong>Calgary:</strong> June 12 &amp; 13,  9am - 1pm <br>
+				<strong>Camrose &amp; Red Deer</strong>: June 14, 10am - 6pm<br>
+				<strong>Edmonton:</strong> June 18 &amp; 19, 10am - 1pm<br><br>
 
 				<strong>Regular Delivery</strong><br>
 				Order online and get cider delivered to your door!<br><br>
