@@ -29,164 +29,33 @@ function pbc_product_brand_taxonomy(): ?string
     return apply_filters('pbc_product_brand_taxonomy', $taxonomy);
 }
 
-/**
- * @return array<int|string> Term slugs, names, or IDs (fallback if auto-resolve finds nothing).
- */
-function pbc_true_north_brand_identifiers(): array
+/** ACF brand term slug — True North Cider. */
+function pbc_true_north_brand_slug(): string
 {
-    return apply_filters('pbc_true_north_brand_identifiers', [
-        'true-north-cider',
-        'True North Cider',
-    ]);
+    return (string) apply_filters('pbc_true_north_brand_slug', 'true-north-cider');
 }
 
-/**
- * @return array<int|string> Term slugs, names, or IDs (fallback if auto-resolve finds nothing).
- */
-function pbc_prairie_bears_brand_identifiers(): array
+/** ACF brand term slug — Prairie Bears Cider. */
+function pbc_prairie_bears_brand_slug(): string
 {
-    return apply_filters('pbc_prairie_bears_brand_identifiers', [
-        'prairie-bears-cider',
-        'prairie-bears',
-        'Prairie Bears Cider',
-    ]);
+    return (string) apply_filters('pbc_prairie_bears_brand_slug', 'prairie-bears-cider');
 }
 
-/**
- * Resolve brand term IDs from the ACF `brand` taxonomy by name/slug patterns.
- *
- * @param  array<int, string>  $slug_contains  Substrings to match in term slug.
- * @param  array<int, string>  $name_contains  Substrings to match in term name (case-insensitive).
- * @return array<int>
- */
-function pbc_resolve_brand_term_ids(array $slug_contains, array $name_contains): array
+function pbc_product_has_brand_slug(int $product_id, string $term_slug): bool
 {
     $taxonomy = pbc_product_brand_taxonomy();
 
-    if (! $taxonomy) {
-        return [];
-    }
-
-    $terms = get_terms([
-        'taxonomy'   => $taxonomy,
-        'hide_empty' => false,
-    ]);
-
-    if (is_wp_error($terms) || empty($terms)) {
-        return [];
-    }
-
-    $ids = [];
-
-    foreach ($terms as $term) {
-        $slug = strtolower($term->slug);
-        $name = strtolower($term->name);
-
-        foreach ($slug_contains as $needle) {
-            $needle = strtolower($needle);
-
-            if ($needle !== '' && str_contains($slug, $needle)) {
-                $ids[] = (int) $term->term_id;
-                continue 2;
-            }
-        }
-
-        foreach ($name_contains as $needle) {
-            $needle = strtolower($needle);
-
-            if ($needle !== '' && str_contains($name, $needle)) {
-                $ids[] = (int) $term->term_id;
-                break;
-            }
-        }
-    }
-
-    return array_values(array_unique($ids));
-}
-
-function pbc_product_has_brand_term(int $product_id, array $identifiers): bool
-{
-    $taxonomy = pbc_product_brand_taxonomy();
-
-    if (! $taxonomy) {
+    if (! $taxonomy || $term_slug === '') {
         return false;
     }
 
-    foreach ($identifiers as $identifier) {
-        if (is_numeric($identifier)) {
-            if (has_term((int) $identifier, $taxonomy, $product_id)) {
-                return true;
-            }
-
-            continue;
-        }
-
-        $identifier = (string) $identifier;
-        $slug       = sanitize_title($identifier);
-
-        if ($slug !== '' && has_term($slug, $taxonomy, $product_id)) {
-            return true;
-        }
-
-        $term = get_term_by('name', $identifier, $taxonomy);
-
-        if ($term && ! is_wp_error($term) && has_term((int) $term->term_id, $taxonomy, $product_id)) {
-            return true;
-        }
-    }
-
-    $product_terms = wp_get_post_terms($product_id, $taxonomy, ['fields' => 'ids']);
-
-    if (is_wp_error($product_terms) || empty($product_terms)) {
-        return false;
-    }
-
-    foreach ($identifiers as $identifier) {
-        if (! is_numeric($identifier)) {
-            continue;
-        }
-
-        if (in_array((int) $identifier, $product_terms, true)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function pbc_product_has_resolved_brand(int $product_id, string $brand_key): bool
-{
-    $map = [
-        'tnc' => [
-            'slug_contains' => apply_filters('pbc_true_north_brand_slug_contains', ['true-north']),
-            'name_contains' => apply_filters('pbc_true_north_brand_name_contains', ['true north']),
-            'identifiers'   => pbc_true_north_brand_identifiers(),
-        ],
-        'pbc' => [
-            'slug_contains' => apply_filters('pbc_prairie_bears_brand_slug_contains', ['prairie-bears']),
-            'name_contains' => apply_filters('pbc_prairie_bears_brand_name_contains', ['prairie bears']),
-            'identifiers'   => pbc_prairie_bears_brand_identifiers(),
-        ],
-    ];
-
-    if (! isset($map[$brand_key])) {
-        return false;
-    }
-
-    $config = $map[$brand_key];
-    $ids    = pbc_resolve_brand_term_ids($config['slug_contains'], $config['name_contains']);
-
-    if (! empty($ids)) {
-        return pbc_product_has_brand_term($product_id, $ids);
-    }
-
-    return pbc_product_has_brand_term($product_id, $config['identifiers']);
+    return has_term($term_slug, $taxonomy, $product_id);
 }
 
 function pbc_product_is_true_north_cider(int $product_id): bool
 {
     if (pbc_product_brand_taxonomy()) {
-        return pbc_product_has_resolved_brand($product_id, 'tnc');
+        return pbc_product_has_brand_slug($product_id, pbc_true_north_brand_slug());
     }
 
     $slug = (string) apply_filters('pbc_true_north_cider_category_slug', 'true-north-cider');
@@ -201,7 +70,7 @@ function pbc_product_is_prairie_bears_cider(int $product_id): bool
     }
 
     if (pbc_product_brand_taxonomy()) {
-        return pbc_product_has_resolved_brand($product_id, 'pbc');
+        return pbc_product_has_brand_slug($product_id, pbc_prairie_bears_brand_slug());
     }
 
     if (pbc_product_is_true_north_cider($product_id)) {
