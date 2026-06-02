@@ -114,6 +114,12 @@ add_filter('woocommerce_shortcode_products_query', function ($query_args, $attri
 
 function pbc_render_home_product_filters(): void
 {
+    if (! empty($GLOBALS['pbc_home_product_filters_rendered'])) {
+        return;
+    }
+
+    $GLOBALS['pbc_home_product_filters_rendered'] = true;
+
     ?>
     <nav class="pbc-product-filters" aria-label="<?php esc_attr_e('Filter products', 'sage'); ?>">
         <div class="pbc-product-filters__brands" role="group" aria-label="<?php esc_attr_e('Brand', 'sage'); ?>">
@@ -142,8 +148,16 @@ function pbc_render_home_product_filters(): void
     <?php
 }
 
-add_action('woocommerce_before_shop_loop', function () {
+/**
+ * WC [products] shortcode only fires woocommerce_before_shop_loop when paginate="true".
+ * Filters are rendered in the Blade partial; this hook is a fallback for the shortcode path.
+ */
+add_action('woocommerce_shortcode_before_products_loop', function () {
     if (! pbc_is_home_product_grid()) {
+        return;
+    }
+
+    if (! empty($GLOBALS['pbc_home_product_filters_rendered'])) {
         return;
     }
 

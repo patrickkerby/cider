@@ -28,12 +28,10 @@
           </div>
         </section>
 
-        {{-- Product grid (book excluded; filters via home-product-grid.php) --}}
+        {{-- Product grid + filters (see partials/home-product-grid.blade.php) --}}
         <section class="shop row justify-content-center pbc-home-shop">
-          <div class="col-12 pbc-home-product-grid">
-            @php $GLOBALS['pbc_rendering_home_product_grid'] = true; @endphp
-            {!! do_shortcode('[products limit="-1" columns="3" category="cider" orderby="menu_order" order="ASC"]') !!}
-            @php unset($GLOBALS['pbc_rendering_home_product_grid']); @endphp
+          <div class="col-12">
+            @include('partials.home-product-grid')
           </div>
         </section>
 

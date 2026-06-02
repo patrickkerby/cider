@@ -29,17 +29,13 @@
           </div>
         </section>
 
-        {{-- Display WooCommerce products --}}
-        @if(function_exists('woocommerce_product_loop_start') && have_posts())
-          {!! woocommerce_product_loop_start() !!}
-          @while(have_posts())
-            @php
-              the_post();
-              wc_get_template_part('content', 'product');
-            @endphp
-          @endwhile
-          {!! woocommerce_product_loop_end() !!}
-        @endif
+        <section class="shop row justify-content-center pbc-home-shop">
+          <div class="col-12">
+            @include('partials.home-product-grid')
+          </div>
+        </section>
+
+        @include('partials.home-book-cta')
         
         <section class="contact row">
           <div class="col-half col1">
