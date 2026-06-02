@@ -1308,7 +1308,8 @@ input[type=number] {
 
 // Home book CTA — layout aligned with cocktail-book .woocommerce-product-block flex.
 .pbc-home-book-cta {
-  margin: 3rem 0 4rem;
+  margin: 0 0 4rem;
+  padding-top: 2rem;
 
   &__inner {
     border: solid 3px $pbc-darkgreen;
