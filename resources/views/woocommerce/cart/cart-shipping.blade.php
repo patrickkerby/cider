@@ -9,47 +9,78 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use function App\pbc_get_regional_shipping_destination_message;
+use function App\pbc_get_regional_shipping_cart_hint;
+use function App\pbc_get_regional_shipping_route_label;
 use function App\pbc_regional_routes_apply_to_cart;
 
 $formatted_destination    = isset( $formatted_destination ) ? $formatted_destination : WC()->countries->get_formatted_address( $package['destination'], ', ' );
 $has_calculated_shipping  = ! empty( $has_calculated_shipping );
 $show_shipping_calculator = ! empty( $show_shipping_calculator );
 $calculator_text          = '';
-$regional_destination     = pbc_regional_routes_apply_to_cart() ? pbc_get_regional_shipping_destination_message() : '';
+$regional_shipping        = pbc_regional_routes_apply_to_cart();
+$regional_route_label     = $regional_shipping ? pbc_get_regional_shipping_route_label() : '';
+$regional_shipping_hint   = $regional_shipping ? pbc_get_regional_shipping_cart_hint() : '';
 ?>
-<tr class="woocommerce-shipping-totals shipping<?php echo $regional_destination ? ' pbc-regional-shipping-totals' : ''; ?>">
+<tr class="woocommerce-shipping-totals shipping<?php echo $regional_shipping ? ' pbc-regional-shipping-totals' : ''; ?>">
 	<th><?php echo wp_kses_post( $package_name ); ?></th>
 	<td data-title="<?php echo esc_attr( $package_name ); ?>">
 		<?php if ( ! empty( $available_methods ) && is_array( $available_methods ) ) : ?>
-			<ul id="shipping_method" class="woocommerce-shipping-methods">
-				<?php foreach ( $available_methods as $method ) : ?>
-					<li>
+			<?php if ( $regional_shipping ) : ?>
+				<ul id="shipping_method" class="woocommerce-shipping-methods pbc-regional-shipping-methods--sr-only" aria-hidden="true">
+					<?php foreach ( $available_methods as $method ) : ?>
+						<li>
+							<?php
+							if ( 1 < count( $available_methods ) ) {
+								printf( '<input type="radio" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" %4$s />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ) );
+							} else {
+								printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ) );
+							}
+							printf( '<label for="shipping_method_%1$s_%2$s">%3$s</label>', $index, esc_attr( sanitize_title( $method->id ) ), wc_cart_totals_shipping_method_label( $method ) );
+							?>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				<div class="pbc-regional-shipping-summary">
+					<div class="pbc-regional-shipping-summary__line">
+						<span class="pbc-regional-shipping-summary__badge"><?php esc_html_e( 'Free delivery', 'sage' ); ?></span>
+						<?php if ( $regional_route_label ) : ?>
+							<span class="pbc-regional-shipping-summary__route"><?php echo esc_html( $regional_route_label ); ?></span>
+						<?php else : ?>
+							<span class="pbc-regional-shipping-summary__route pbc-regional-shipping-summary__route--pending"><?php esc_html_e( 'Route chosen at checkout', 'sage' ); ?></span>
+						<?php endif; ?>
+					</div>
+					<?php if ( $regional_shipping_hint ) : ?>
+						<p class="pbc-regional-shipping-summary__hint"><?php echo esc_html( $regional_shipping_hint ); ?></p>
+					<?php endif; ?>
+				</div>
+			<?php else : ?>
+				<ul id="shipping_method" class="woocommerce-shipping-methods">
+					<?php foreach ( $available_methods as $method ) : ?>
+						<li>
+							<?php
+							if ( 1 < count( $available_methods ) ) {
+								printf( '<input type="radio" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" %4$s />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ) );
+							} else {
+								printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ) );
+							}
+							printf( '<label for="shipping_method_%1$s_%2$s">%3$s</label>', $index, esc_attr( sanitize_title( $method->id ) ), wc_cart_totals_shipping_method_label( $method ) );
+							do_action( 'woocommerce_after_shipping_rate', $method, $index );
+							?>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				<?php if ( is_cart() ) : ?>
+					<p class="woocommerce-shipping-destination">
 						<?php
-						if ( 1 < count( $available_methods ) ) {
-							printf( '<input type="radio" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" %4$s />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ) );
+						if ( $formatted_destination ) {
+							printf( esc_html__( 'Shipping to %s.', 'woocommerce' ) . ' ', '<strong>' . esc_html( $formatted_destination ) . '</strong>' );
+							$calculator_text = esc_html__( 'Change address', 'woocommerce' );
 						} else {
-							printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ) );
+							echo wp_kses_post( apply_filters( 'woocommerce_shipping_estimate_html', __( 'Shipping options will be updated during checkout.', 'woocommerce' ) ) );
 						}
-						printf( '<label for="shipping_method_%1$s_%2$s">%3$s</label>', $index, esc_attr( sanitize_title( $method->id ) ), wc_cart_totals_shipping_method_label( $method ) );
-						do_action( 'woocommerce_after_shipping_rate', $method, $index );
 						?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-			<?php if ( is_cart() ) : ?>
-				<p class="woocommerce-shipping-destination<?php echo $regional_destination ? ' pbc-regional-shipping-destination' : ''; ?>">
-					<?php
-					if ( $regional_destination ) {
-						echo wp_kses_post( $regional_destination );
-					} elseif ( $formatted_destination ) {
-						printf( esc_html__( 'Shipping to %s.', 'woocommerce' ) . ' ', '<strong>' . esc_html( $formatted_destination ) . '</strong>' );
-						$calculator_text = esc_html__( 'Change address', 'woocommerce' );
-					} else {
-						echo wp_kses_post( apply_filters( 'woocommerce_shipping_estimate_html', __( 'Shipping options will be updated during checkout.', 'woocommerce' ) ) );
-					}
-					?>
-				</p>
+					</p>
+				<?php endif; ?>
 			<?php endif; ?>
 			<?php
 		elseif ( ! $has_calculated_shipping || ! $formatted_destination ) :

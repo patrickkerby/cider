@@ -978,6 +978,54 @@ div.pp_woocommerce_quick_view .pp_close {
   display: none;
 }
 
+.woocommerce-checkout-review-order-table {
+  tr.pbc-regional-shipping-totals td {
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .pbc-regional-shipping-summary {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-left: auto;
+    max-width: 14.5rem;
+    text-align: right;
+    width: 100%;
+  }
+
+  .pbc-regional-shipping-summary__badge {
+    background: rgba($highlight, 0.14);
+    border-radius: 4px;
+    color: $pbc-charcoal;
+    font-family: $font-family-sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    padding: 0.3rem 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .pbc-regional-shipping-summary__route {
+    color: $pbc-charcoal;
+    font-family: $font-family-sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .pbc-regional-shipping-summary__hint {
+    color: rgba($pbc-charcoal, 0.65);
+    font-family: $font-family-sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
 .woocommerce-notices-wrapper {
   // position: fixed;
   z-index: 999999;

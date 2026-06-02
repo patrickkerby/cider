@@ -159,11 +159,9 @@ function pbc_get_delivery_route_checkout_field() {
 }
 
 /**
- * Cart shipping destination line when regional routes replace zone/calculator shipping.
- *
- * @return string Empty when default WooCommerce destination should be used.
+ * Selected regional route label for cart/checkout shipping display.
  */
-function pbc_get_regional_shipping_destination_message() {
+function pbc_get_regional_shipping_route_label() {
     if ( ! pbc_regional_routes_apply_to_cart() ) {
         return '';
     }
@@ -171,18 +169,22 @@ function pbc_get_regional_shipping_destination_message() {
     $route = pbc_get_selected_delivery_route_slug();
     $data  = $route ? pbc_get_regional_route_by_slug( $route ) : null;
 
-    if ( $data ) {
-        return sprintf(
-            /* translators: %s: delivery route label */
-            __( 'Regional delivery route: <strong>%s</strong>. Enter your full street address at checkout.', 'sage' ),
-            esc_html( $data['label'] )
-        );
+    return $data ? $data['label'] : '';
+}
+
+/**
+ * Secondary line under regional shipping (no route name — shown separately).
+ */
+function pbc_get_regional_shipping_cart_hint() {
+    if ( ! pbc_regional_routes_apply_to_cart() ) {
+        return '';
     }
 
-    return __(
-        'Choose your delivery route at checkout. Your delivery stop is based on that route—not a previous address you looked up in the cart.',
-        'sage'
-    );
+    if ( pbc_get_regional_shipping_route_label() !== '' ) {
+        return __( 'Add your full street address at checkout.', 'sage' );
+    }
+
+    return __( 'Choose your delivery route at checkout.', 'sage' );
 }
 
 function pbc_render_checkout_delivery_route_section() {

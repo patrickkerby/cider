@@ -509,20 +509,6 @@ $cart-card-pad: 1rem;
     font-weight: 600;
   }
 
-  .pbc-regional-shipping-destination {
-    color: rgba($pbc-charcoal, 0.85);
-    font-size: 0.875rem;
-    line-height: 1.45;
-    margin-top: 0.5rem;
-    max-width: 22rem;
-    text-align: right;
-
-    strong {
-      color: $pbc-charcoal;
-      font-weight: 700;
-    }
-  }
-
   .cart_totals table.shop_table,
   .cart_totals table.shop_table_responsive {
     background: transparent !important;
@@ -595,6 +581,7 @@ $cart-card-pad: 1rem;
       font-size: 0.875rem;
       line-height: 1.45;
       text-align: right;
+      vertical-align: top;
 
       ul#shipping_method {
         list-style: none;
@@ -607,21 +594,97 @@ $cart-card-pad: 1rem;
         }
 
         label {
+          font-family: $font-family-sans-serif;
           font-weight: 500;
         }
       }
 
       .woocommerce-shipping-destination {
-        color: rgba($pbc-charcoal, 0.85);
+        color: rgba($pbc-charcoal, 0.75);
         display: block;
+        font-family: $font-family-sans-serif;
         font-size: 0.8125rem;
-        margin: 0 0 0.25rem;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0.35rem 0 0;
       }
 
       .woocommerce-shipping-calculator {
         font-size: 0.8125rem;
         margin-top: 0.35rem;
         text-align: right;
+      }
+    }
+
+    tr.pbc-regional-shipping-totals td {
+      padding-bottom: 0.85rem !important;
+      padding-top: 0.85rem !important;
+    }
+
+    .pbc-regional-shipping-methods--sr-only {
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    .pbc-regional-shipping-summary {
+      align-items: flex-end;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      margin-left: auto;
+      max-width: 14.5rem;
+      text-align: right;
+      width: 100%;
+
+      &__line {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        width: 100%;
+      }
+
+      &__badge {
+        background: rgba($highlight, 0.14);
+        border-radius: 4px;
+        color: $pbc-charcoal;
+        font-family: $font-family-sans-serif;
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        padding: 0.3rem 0.55rem;
+        text-transform: uppercase;
+      }
+
+      &__route {
+        color: $pbc-charcoal;
+        font-family: $font-family-sans-serif;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        line-height: 1.35;
+
+        &--pending {
+          color: rgba($pbc-charcoal, 0.65);
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+      }
+
+      &__hint {
+        color: rgba($pbc-charcoal, 0.65);
+        font-family: $font-family-sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
       }
     }
 
