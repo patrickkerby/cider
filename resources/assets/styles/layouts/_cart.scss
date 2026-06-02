@@ -23,23 +23,127 @@ $cart-card-pad: 1rem;
     }
   }
 
-  .woocommerce-notices-wrapper {
-    margin: 0 auto 1rem;
+  .cart-alerts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0 auto 1.5rem;
     max-width: 40rem;
+    width: 100%;
+  }
+
+  .cart-alerts .woocommerce-notices-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+    max-width: none;
     min-width: 0;
     position: static;
     width: 100%;
     z-index: auto;
+  }
 
-    .woocommerce-info,
-    .woocommerce-message,
-    .woocommerce-error {
-      border-radius: 6px;
-      font-size: 0.9375rem;
-      line-height: 1.45;
-      margin: 0 0 0.75rem;
-      padding: 0.875rem 1rem;
+  .cart-alerts .woocommerce-info,
+  .cart-alerts .woocommerce-message,
+  .cart-alerts .woocommerce-error,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-info,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-message,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-error {
+    background: #fff;
+    border: 1px solid rgba($pbc-charcoal, 0.08);
+    border-radius: 8px;
+    border-top: none;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    color: rgba($pbc-charcoal, 0.92);
+    font-family: $pitch-regular;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    list-style: none;
+    margin: 0;
+    padding: 1rem 1.25rem 1rem 3.5rem;
+    position: relative;
+    width: 100%;
+
+    &::before {
+      align-items: center;
+      display: flex;
+      font-family: $font-family-sans-serif;
+      font-size: 1.125rem;
+      height: 1.5rem;
+      justify-content: center;
+      left: 1.125rem;
+      line-height: 1;
+      margin: 0;
+      position: absolute;
+      top: 1rem;
+      width: 1.5rem;
     }
+
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      + li {
+        border-top: 1px solid rgba($pbc-charcoal, 0.1);
+        margin-top: 0.625rem;
+        padding-top: 0.625rem;
+      }
+    }
+
+    .button {
+      float: none;
+      margin-top: 0.75rem;
+    }
+  }
+
+  .cart-alerts .woocommerce-error,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-error {
+    background: #fdf6f6;
+    border-left: 4px solid #b81c23;
+
+    &::before {
+      color: #b81c23;
+      content: "\e016";
+    }
+  }
+
+  .cart-alerts .woocommerce-info,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-info {
+    background: #f6fafd;
+    border-left: 4px solid #1e85be;
+
+    &::before {
+      color: #1e85be;
+      content: "\e028";
+    }
+  }
+
+  .cart-alerts .woocommerce-message,
+  .cart-alerts .woocommerce-notices-wrapper .woocommerce-message {
+    background: #f9fbf4;
+    border-left: 4px solid #8fae1b;
+
+    &::before {
+      color: #8fae1b;
+      content: "\e015";
+    }
+  }
+
+  .cart-alerts .shipping-notice {
+    background: $cream;
+    border: 1px solid rgba($pbc-charcoal, 0.08);
+    border-left: 4px solid $highlight;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    color: rgba($pbc-charcoal, 0.92);
+    font-family: $pitch-regular;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 1rem 1.25rem;
   }
 
   .row {
@@ -387,20 +491,8 @@ $cart-card-pad: 1rem;
     text-transform: uppercase;
   }
 
-  .shipping-notice {
-    background: $cream;
-    border-left: 4px solid $highlight;
-    border-radius: 4px;
-    color: rgba($pbc-charcoal, 0.9);
-    display: block;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    margin: 0 0 1rem;
-    padding: 0.875rem 1rem;
-  }
-
   .cart_totals .shipping-notice {
-    margin: 1rem $cart-card-pad 0;
+    display: none;
   }
 
   .cart_totals {
@@ -636,16 +728,9 @@ $cart-card-pad: 1rem;
       }
     }
 
-    .cart_totals > h2,
-    .cart_totals .shipping-notice {
+    .cart_totals > h2 {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
-    }
-
-    .cart_totals .shipping-notice {
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
-      width: calc(100% - 3rem);
     }
 
     .cart_totals table.shop_table,

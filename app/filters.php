@@ -258,32 +258,47 @@ add_action('woocommerce_after_add_to_cart_button', function () {
     }
 } );
 
-add_action( 'woocommerce_before_cart_totals', function () {
-    echo '<div class="shipping-notice">' . esc_html__( 'Canada-wide shipping is only available for the Cocktail Recipe Book. Cider is for local Edmonton-region delivery only — use the shipping calculator below to confirm your address.', 'sage' ) . '</div>';
+/**
+ * Group cart notices and shipping guidance above the cart table.
+ */
+add_action( 'woocommerce_before_cart', function () {
+    echo '<div class="cart-alerts" role="region" aria-label="' . esc_attr__( 'Cart notices', 'sage' ) . '">';
+}, 9 );
+
+add_action( 'woocommerce_before_cart', function () {
+    echo '<div class="shipping-notice" role="status">' . esc_html__( 'Canada-wide shipping is only available for the Cocktail Recipe Book. Cider is for local Edmonton-region delivery only — use the shipping calculator below to confirm your address.', 'sage' ) . '</div>';
+}, 12 );
+
+add_action( 'woocommerce_before_cart', function () {
+    echo '</div>';
 }, 15 );
 
 /**
- * Display notice on cart page if cider is in cart
+ * Display notice on cart page if cider is in cart (queued before notices render).
  */
 add_action( 'woocommerce_before_cart', function () {
-    // Check if cart contains cider
     $has_cider = false;
+
     foreach ( WC()->cart->get_cart() as $cart_item ) {
         if ( has_term( 'cider', 'product_cat', $cart_item['product_id'] ) ) {
             $has_cider = true;
             break;
         }
     }
-    
-    if ( $has_cider ) {
-        $postcode = WC()->customer->get_shipping_postcode();
-        
-        // If no shipping postcode provided yet, show info notice
-        if ( empty( $postcode ) ) {
-            wc_print_notice( __( 'Please calculate shipping below to verify that cider delivery is available to your location. Cider is only available for delivery within the Edmonton Region.' ), 'notice' );
-        }
+
+    if ( ! $has_cider ) {
+        return;
     }
-} );
+
+    $postcode = WC()->customer->get_shipping_postcode();
+
+    if ( empty( $postcode ) ) {
+        wc_add_notice(
+            __( 'Please set your shipping address below to verify that cider delivery is available to your location. Cider is only available for delivery within the Edmonton Region.', 'sage' ),
+            'notice'
+        );
+    }
+}, 8 );
 
 /**
  * Switch to free local delivery in Edmonton Region when cart total is $50+

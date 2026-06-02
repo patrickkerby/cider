@@ -875,6 +875,10 @@ div.pp_woocommerce_quick_view .pp_close {
   min-width: 70%;
 }
 
+.woocommerce-cart .woocommerce-notices-wrapper {
+  min-width: 0;
+}
+
 .woocommerce-order-received {
   .content {
     padding-top: 4rem;
