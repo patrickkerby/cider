@@ -127,6 +127,73 @@ function pbc_checkout_route_field_required() {
     return pbc_regional_routes_apply_to_cart() && count( pbc_get_regional_routes() ) > 0;
 }
 
+/**
+ * Checkout field config for the delivery route (rendered in a dedicated callout).
+ *
+ * @return array<string, mixed>
+ */
+function pbc_get_delivery_route_checkout_field() {
+    $options = [ '' => __( 'Select your delivery route', 'sage' ) ];
+
+    foreach ( pbc_get_regional_routes() as $route ) {
+        $options[ $route['slug'] ] = $route['label'];
+    }
+
+    $field = [
+        'type'        => 'select',
+        'label'       => __( 'Delivery route', 'sage' ),
+        'required'    => true,
+        'class'       => [ 'form-row-wide', 'pbc-checkout-route-field' ],
+        'input_class' => [ 'pbc-checkout-route__select' ],
+        'options'     => $options,
+        'priority'    => 1,
+    ];
+
+    $selected = pbc_get_selected_delivery_route_slug();
+
+    if ( $selected && isset( $options[ $selected ] ) ) {
+        $field['default'] = $selected;
+    }
+
+    return $field;
+}
+
+function pbc_render_checkout_delivery_route_section() {
+    if ( ! pbc_checkout_route_field_required() || ! function_exists( 'WC' ) || ! WC()->checkout() ) {
+        return;
+    }
+
+    $checkout = WC()->checkout();
+    $field    = pbc_get_delivery_route_checkout_field();
+    $intro    = function_exists( 'get_field' ) ? get_field( 'regional_event_checkout_message', 'option' ) : '';
+
+    if ( ! is_string( $intro ) || trim( $intro ) === '' ) {
+        $intro = __(
+            'Choose when and where we deliver your cider on this regional run. Shipping is free. We still need your full address below for order records.',
+            'sage'
+        );
+    }
+
+    $GLOBALS['pbc_rendering_delivery_route'] = true;
+    ?>
+    <section class="pbc-checkout-route" aria-labelledby="pbc-checkout-route-title">
+        <p class="pbc-checkout-route__eyebrow"><?php esc_html_e( 'Regional delivery', 'sage' ); ?></p>
+        <h3 id="pbc-checkout-route-title" class="pbc-checkout-route__title">
+            <?php esc_html_e( 'Choose your delivery route', 'sage' ); ?>
+        </h3>
+        <p class="pbc-checkout-route__intro"><?php echo esc_html( trim( $intro ) ); ?></p>
+        <?php
+        woocommerce_form_field(
+            'pbc_delivery_route',
+            $field,
+            $checkout->get_value( 'pbc_delivery_route' )
+        );
+        ?>
+    </section>
+    <?php
+    $GLOBALS['pbc_rendering_delivery_route'] = false;
+}
+
 function pbc_get_selected_delivery_route_slug() {
     if ( function_exists( 'WC' ) && WC()->session ) {
         $session_slug = WC()->session->get( 'pbc_delivery_route_slug' );
@@ -417,7 +484,7 @@ add_action(
             );
         }
 
-        echo '<div class="shipping-notice shipping-notice--info" role="status">' . esc_html( $message ) . '</div>';
+        echo '<div class="shipping-notice shipping-notice--info pbc-can-discount-notice" role="status" data-pbc-can-count="' . esc_attr( (string) $current ) . '" data-pbc-can-minimum="' . esc_attr( (string) $minimum ) . '">' . esc_html( $message ) . '</div>';
     },
     13
 );
@@ -471,30 +538,27 @@ add_filter(
             return $fields;
         }
 
-        $options = [ '' => __( 'Select a delivery route', 'sage' ) ];
-
-        foreach ( pbc_get_regional_routes() as $route ) {
-            $options[ $route['slug'] ] = $route['label'];
-        }
-
-        $fields['order']['pbc_delivery_route'] = [
-            'type'     => 'select',
-            'label'    => __( 'Delivery route', 'sage' ),
-            'required' => true,
-            'class'    => [ 'form-row-wide', 'pbc-delivery-route-field' ],
-            'options'  => $options,
-            'priority' => 8,
-        ];
-
-        $selected = pbc_get_selected_delivery_route_slug();
-
-        if ( $selected && isset( $options[ $selected ] ) ) {
-            $fields['order']['pbc_delivery_route']['default'] = $selected;
-        }
+        // Registered for validation; rendered in pbc_render_checkout_delivery_route_section().
+        $fields['billing']['pbc_delivery_route'] = pbc_get_delivery_route_checkout_field();
 
         return $fields;
     }
 );
+
+add_filter(
+    'woocommerce_form_field',
+    function ( $field, $key, $args, $value ) {
+        if ( 'pbc_delivery_route' === $key && empty( $GLOBALS['pbc_rendering_delivery_route'] ) ) {
+            return '';
+        }
+
+        return $field;
+    },
+    10,
+    4
+);
+
+add_action( 'woocommerce_checkout_before_customer_details', 'App\pbc_render_checkout_delivery_route_section', 5 );
 
 add_action(
     'woocommerce_checkout_update_order_review',
@@ -660,27 +724,6 @@ add_filter(
 
         return $vars;
     }
-);
-
-add_action(
-    'woocommerce_before_checkout_form',
-    function () {
-        if ( ! pbc_regional_routes_apply_to_cart() ) {
-            return;
-        }
-
-        $message = function_exists( 'get_field' ) ? get_field( 'regional_event_checkout_message', 'option' ) : '';
-
-        if ( ! is_string( $message ) || trim( $message ) === '' ) {
-            $message = __(
-                'Select your delivery route below. Shipping is free for this regional run. We still need your full shipping address for order records.',
-                'sage'
-            );
-        }
-
-        wc_print_notice( trim( $message ), 'notice' );
-    },
-    5
 );
 
 $render_route_order_filter = function () {

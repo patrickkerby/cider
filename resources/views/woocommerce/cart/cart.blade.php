@@ -9,7 +9,6 @@
 
 @php
   defined('ABSPATH') || exit;
-  do_action('woocommerce_before_cart');
 @endphp
 
 <div class="row justify-content-center">
@@ -17,6 +16,8 @@
     <h4 class="cart-items-heading">{{ __('Your Items:', 'sage') }}</h4>
 
     <form class="woocommerce-cart-form" action="{{ esc_url(wc_get_cart_url()) }}" method="post">
+      {{-- Alerts inside the form so WooCommerce AJAX cart updates refresh them (can count, shipping notices). --}}
+      @php do_action('woocommerce_before_cart'); @endphp
       @php do_action('woocommerce_before_cart_table'); @endphp
 
       <table class="shop_table cart woocommerce-cart-form__contents" cellspacing="0">
