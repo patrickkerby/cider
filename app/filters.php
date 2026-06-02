@@ -321,13 +321,17 @@ add_action( 'woocommerce_before_cart', function () {
         return;
     }
 
-    if ( pbc_cart_contains_cider() ) {
-        $message = __(
-            'The Cocktail Recipe Book ships Canada-wide. Cider in this order is for Edmonton-region delivery only — confirm your address in the calculator below.',
-            'sage'
-        );
-    } else {
-        $message = __( 'The Cocktail Recipe Book ships Canada-wide.', 'sage' );
+    $message = apply_filters( 'pbc_cart_shipping_notice_message', null );
+
+    if ( null === $message ) {
+        if ( pbc_cart_contains_cider() ) {
+            $message = __(
+                'The Cocktail Recipe Book ships Canada-wide. Cider in this order is for Edmonton-region delivery only — confirm your address in the calculator below.',
+                'sage'
+            );
+        } else {
+            $message = __( 'The Cocktail Recipe Book ships Canada-wide.', 'sage' );
+        }
     }
 
     echo '<div class="shipping-notice" role="status">' . esc_html( $message ) . '</div>';
@@ -342,6 +346,10 @@ add_action( 'woocommerce_before_cart', function () {
  */
 add_action( 'woocommerce_before_cart', function () {
     if ( ! pbc_cart_contains_cider() ) {
+        return;
+    }
+
+    if ( ! apply_filters( 'pbc_show_cider_shipping_address_notice', true ) ) {
         return;
     }
 
@@ -404,7 +412,7 @@ add_action( 'woocommerce_check_cart_items', function () {
     $state    = WC()->customer->get_shipping_state();
     $country  = WC()->customer->get_shipping_country();
 
-    if ( ! empty( $postcode ) || ! empty( $city ) ) {
+    if ( apply_filters( 'pbc_require_edmonton_zone_for_cider', true ) && ( ! empty( $postcode ) || ! empty( $city ) ) ) {
         $package = array(
             'destination' => array(
                 'country'  => $country,
