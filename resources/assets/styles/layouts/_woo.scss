@@ -1222,57 +1222,116 @@ input[type=number] {
 }
 
 .pbc-product-filters {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  justify-content: center;
   margin: 0 0 2.5rem;
 
-  &__brands {
+  &__panel {
+    border: solid 3px $pbc-darkgreen;
+    margin: 0 auto;
+    max-width: 52rem;
+    padding: 1.25rem 1.5rem 1.35rem;
+  }
+
+  &__title {
+    color: $pbc-darkgreen-copy;
+    font-family: $font-family-serif;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    text-align: center;
+  }
+
+  &__row {
+    align-items: flex-start;
     display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+
+    &:not(:last-child) {
+      border-bottom: solid 1px rgba($pbc-darkgreen, 0.2);
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.85rem;
+    }
+
+    @media (min-width: 640px) {
+      align-items: center;
+      flex-direction: row;
+      gap: 1rem;
+    }
+  }
+
+  &__label {
+    color: $pbc-darkgreen;
+    flex: 0 0 auto;
+    font-family: $pitch-regular;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    min-width: 4.5rem;
+    text-transform: uppercase;
+
+    @media (min-width: 640px) {
+      text-align: right;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    flex: 1 1 auto;
     flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
+    width: 100%;
+
+    @media (min-width: 640px) {
+      justify-content: flex-start;
+    }
   }
 
   &__btn {
+    appearance: none;
     background: #fff;
     border: solid 2px $pbc-darkgreen;
+    border-radius: 0;
     color: $pbc-darkgreen-copy;
     cursor: pointer;
+    display: inline-block;
     font-family: $pitch-regular;
     font-size: 0.875rem;
     font-style: italic;
     line-height: 1.2;
-    padding: 0.45rem 0.85rem;
-
-    &.is-active,
-    &:hover {
-      background: $pbc-darkgreen;
-      color: #fff;
-    }
-  }
-
-  &__toggle {
-    align-items: center;
-    color: $pbc-darkgreen-copy;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: $pitch-regular;
-    font-size: 0.875rem;
-    gap: 0.4rem;
     margin: 0;
+    padding: 0.5rem 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
 
-    input {
-      accent-color: $pbc-darkgreen;
+    &:hover {
+      background: rgba($pbc-darkgreen, 0.08);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgba($pbc-darkgreen, 0.35);
+      outline: none;
+    }
+
+    &.is-active {
+      background: $pbc-darkgreen;
+      box-shadow: inset 0 0 0 1px $pbc-darkgreen;
+      color: #fff;
+      font-weight: 600;
+
+      &:hover {
+        background: darken($pbc-darkgreen, 4%);
+      }
     }
   }
 
   &__empty {
     color: $pbc-darkgreen-copy;
     font-family: $pitch-regular;
-    margin: -1rem 0 2rem;
+    margin: 1rem 0 0;
     text-align: center;
     width: 100%;
   }

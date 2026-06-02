@@ -122,25 +122,36 @@ function pbc_render_home_product_filters(): void
 
     ?>
     <nav class="pbc-product-filters" aria-label="<?php esc_attr_e('Filter products', 'sage'); ?>">
-        <div class="pbc-product-filters__brands" role="group" aria-label="<?php esc_attr_e('Brand', 'sage'); ?>">
-            <button type="button" class="pbc-product-filters__btn is-active" data-filter-brand="all">
-                <?php esc_html_e('All', 'sage'); ?>
-            </button>
-            <button type="button" class="pbc-product-filters__btn" data-filter-brand="pbc">
-                <?php esc_html_e('Prairie Bears', 'sage'); ?>
-            </button>
-            <button type="button" class="pbc-product-filters__btn" data-filter-brand="tnc">
-                <?php esc_html_e('TNC', 'sage'); ?>
-            </button>
+        <div class="pbc-product-filters__panel">
+            <p class="pbc-product-filters__title"><?php esc_html_e('Filter products', 'sage'); ?></p>
+
+            <div class="pbc-product-filters__row">
+                <span class="pbc-product-filters__label" id="pbc-filter-brand-label"><?php esc_html_e('Brand', 'sage'); ?></span>
+                <div class="pbc-product-filters__controls" role="group" aria-labelledby="pbc-filter-brand-label">
+                    <button type="button" class="pbc-product-filters__btn is-active" data-filter-brand="all" aria-pressed="true">
+                        <?php esc_html_e('All', 'sage'); ?>
+                    </button>
+                    <button type="button" class="pbc-product-filters__btn" data-filter-brand="pbc" aria-pressed="false">
+                        <?php esc_html_e('Prairie Bears', 'sage'); ?>
+                    </button>
+                    <button type="button" class="pbc-product-filters__btn" data-filter-brand="tnc" aria-pressed="false">
+                        <?php esc_html_e('TNC', 'sage'); ?>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pbc-product-filters__row">
+                <span class="pbc-product-filters__label" id="pbc-filter-options-label"><?php esc_html_e('Options', 'sage'); ?></span>
+                <div class="pbc-product-filters__controls" role="group" aria-labelledby="pbc-filter-options-label">
+                    <button type="button" class="pbc-product-filters__btn" data-filter-flat-only aria-pressed="false">
+                        <?php esc_html_e('Flat sales only', 'sage'); ?>
+                    </button>
+                    <button type="button" class="pbc-product-filters__btn is-active" data-filter-show-oos aria-pressed="true">
+                        <?php esc_html_e('Show out of stock', 'sage'); ?>
+                    </button>
+                </div>
+            </div>
         </div>
-        <label class="pbc-product-filters__toggle">
-            <input type="checkbox" data-filter-flat-only value="1" />
-            <span><?php esc_html_e('Flat sales only', 'sage'); ?></span>
-        </label>
-        <label class="pbc-product-filters__toggle">
-            <input type="checkbox" data-filter-show-oos value="1" checked />
-            <span><?php esc_html_e('Show out of stock', 'sage'); ?></span>
-        </label>
     </nav>
     <p class="pbc-product-filters__empty" hidden>
         <?php esc_html_e('No products match these filters. Try changing your selection.', 'sage'); ?>

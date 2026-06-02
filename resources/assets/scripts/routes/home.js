@@ -14,8 +14,8 @@ export default {
 
     function applyHomeProductFilters() {
       const brand = $filters.find('[data-filter-brand].is-active').data('filter-brand');
-      const flatOnly = $filters.find('[data-filter-flat-only]').is(':checked');
-      const showOos = $filters.find('[data-filter-show-oos]').is(':checked');
+      const flatOnly = $filters.find('[data-filter-flat-only].is-active').length > 0;
+      const showOos = $filters.find('[data-filter-show-oos].is-active').length > 0;
       let visible = 0;
 
       $grid.find('li.product').each(function eachProduct() {
@@ -50,12 +50,18 @@ export default {
 
     $filters.on('click', '[data-filter-brand]', function onBrandClick(e) {
       e.preventDefault();
-      $filters.find('[data-filter-brand]').removeClass('is-active');
-      $(this).addClass('is-active');
+      $filters.find('[data-filter-brand]').removeClass('is-active').attr('aria-pressed', 'false');
+      $(this).addClass('is-active').attr('aria-pressed', 'true');
       applyHomeProductFilters();
     });
 
-    $filters.on('change', '[data-filter-flat-only], [data-filter-show-oos]', applyHomeProductFilters);
+    $filters.on('click', '[data-filter-flat-only], [data-filter-show-oos]', function onOptionClick(e) {
+      e.preventDefault();
+      const $btn = $(this);
+      const isActive = $btn.toggleClass('is-active').hasClass('is-active');
+      $btn.attr('aria-pressed', isActive ? 'true' : 'false');
+      applyHomeProductFilters();
+    });
 
     applyHomeProductFilters();
   },
