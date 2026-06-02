@@ -176,8 +176,8 @@ function pbc_render_home_product_filters(): void
         <div class="pbc-product-filters__bar">
             <select class="pbc-product-filters__select" data-filter-brand-select aria-label="<?php esc_attr_e('Brand', 'sage'); ?>">
                 <option value="all"><?php esc_html_e('All', 'sage'); ?></option>
-                <option value="pbc"><?php esc_html_e('Prairie Bears', 'sage'); ?></option>
-                <option value="tnc"><?php esc_html_e('TNC', 'sage'); ?></option>
+                <option value="pbc"><?php esc_html_e('Prairie Bears Cider', 'sage'); ?></option>
+                <option value="tnc"><?php esc_html_e('True North Cider', 'sage'); ?></option>
             </select>
             <button type="button" class="pbc-product-filters__btn" data-filter-flat-only aria-pressed="false">
                 <?php esc_html_e('Flat sales only', 'sage'); ?>
