@@ -1052,6 +1052,13 @@ div.pp_woocommerce_quick_view .pp_close {
 }
 
 // Site-wide store notice (WooCommerce). Requires wp_body_open in layout; fixed to viewport.
+// WC ships display:none; some stacks add display:none !important — override when demo store is on.
+// Respect dismiss: woocommerce.js .hide() sets inline display:none (match both spellings).
+body.woocommerce-demo-store .woocommerce-store-notice:not([style*="display: none"]):not([style*="display:none"]),
+body.woocommerce-demo-store p.demo_store:not([style*="display: none"]):not([style*="display:none"]) {
+  display: block !important;
+}
+
 .woocommerce-store-notice,
 p.demo_store {
   background: #768a50;
@@ -1063,13 +1070,17 @@ p.demo_store {
   font-family: $font-family-sans-serif;
   font-size: 0.9375rem;
   font-weight: 500;
+  height: auto;
   left: 0;
   line-height: 1.45;
   margin: 0;
+  max-height: none;
   padding: 0.85rem 1.25rem;
   position: fixed;
   right: 0;
   text-align: center;
+  // WC core sets top:0; with bottom:0 that stretches the bar to full viewport height.
+  top: auto;
   width: 100%;
   z-index: 999999;
 
