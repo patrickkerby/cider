@@ -13,7 +13,7 @@ export default {
     const $empty = $('.pbc-product-filters__empty');
 
     function applyHomeProductFilters() {
-      const brand = $filters.find('[data-filter-brand].is-active').data('filter-brand');
+      const brand = $filters.find('[data-filter-brand-select]').val() || 'all';
       const flatOnly = $filters.find('[data-filter-flat-only].is-active').length > 0;
       const showOos = $filters.find('[data-filter-show-oos].is-active').length > 0;
       let visible = 0;
@@ -48,12 +48,7 @@ export default {
       $empty.prop('hidden', visible > 0);
     }
 
-    $filters.on('click', '[data-filter-brand]', function onBrandClick(e) {
-      e.preventDefault();
-      $filters.find('[data-filter-brand]').removeClass('is-active').attr('aria-pressed', 'false');
-      $(this).addClass('is-active').attr('aria-pressed', 'true');
-      applyHomeProductFilters();
-    });
+    $filters.on('change', '[data-filter-brand-select]', applyHomeProductFilters);
 
     $filters.on('click', '[data-filter-flat-only], [data-filter-show-oos]', function onOptionClick(e) {
       e.preventDefault();

@@ -81,10 +81,15 @@ function pbc_product_is_prairie_bears_cider(int $product_id): bool
 }
 
 /**
- * True when the product has a flat / 24-pack variation (flat sale option).
+ * Eligible for the home "Flat sales only" filter and bulk can promo:
+ * tagged `cans` (same rule as cart discount) and offers a flat / 24-pack.
  */
 function pbc_product_has_flat_sale_option(int $product_id): bool
 {
+    if (! pbc_product_has_can_tag($product_id)) {
+        return false;
+    }
+
     $product = wc_get_product($product_id);
 
     if (! $product instanceof \WC_Product) {
@@ -168,35 +173,18 @@ function pbc_render_home_product_filters(): void
 
     ?>
     <nav class="pbc-product-filters" aria-label="<?php esc_attr_e('Filter products', 'sage'); ?>">
-        <div class="pbc-product-filters__panel">
-            <p class="pbc-product-filters__title"><?php esc_html_e('Filter products', 'sage'); ?></p>
-
-            <div class="pbc-product-filters__row">
-                <span class="pbc-product-filters__label" id="pbc-filter-brand-label"><?php esc_html_e('Brand', 'sage'); ?></span>
-                <div class="pbc-product-filters__controls" role="group" aria-labelledby="pbc-filter-brand-label">
-                    <button type="button" class="pbc-product-filters__btn is-active" data-filter-brand="all" aria-pressed="true">
-                        <?php esc_html_e('All', 'sage'); ?>
-                    </button>
-                    <button type="button" class="pbc-product-filters__btn" data-filter-brand="pbc" aria-pressed="false">
-                        <?php esc_html_e('Prairie Bears', 'sage'); ?>
-                    </button>
-                    <button type="button" class="pbc-product-filters__btn" data-filter-brand="tnc" aria-pressed="false">
-                        <?php esc_html_e('TNC', 'sage'); ?>
-                    </button>
-                </div>
-            </div>
-
-            <div class="pbc-product-filters__row">
-                <span class="pbc-product-filters__label" id="pbc-filter-options-label"><?php esc_html_e('Options', 'sage'); ?></span>
-                <div class="pbc-product-filters__controls" role="group" aria-labelledby="pbc-filter-options-label">
-                    <button type="button" class="pbc-product-filters__btn" data-filter-flat-only aria-pressed="false">
-                        <?php esc_html_e('Flat sales only', 'sage'); ?>
-                    </button>
-                    <button type="button" class="pbc-product-filters__btn is-active" data-filter-show-oos aria-pressed="true">
-                        <?php esc_html_e('Show out of stock', 'sage'); ?>
-                    </button>
-                </div>
-            </div>
+        <div class="pbc-product-filters__bar">
+            <select class="pbc-product-filters__select" data-filter-brand-select aria-label="<?php esc_attr_e('Brand', 'sage'); ?>">
+                <option value="all"><?php esc_html_e('All', 'sage'); ?></option>
+                <option value="pbc"><?php esc_html_e('Prairie Bears', 'sage'); ?></option>
+                <option value="tnc"><?php esc_html_e('TNC', 'sage'); ?></option>
+            </select>
+            <button type="button" class="pbc-product-filters__btn" data-filter-flat-only aria-pressed="false">
+                <?php esc_html_e('Flat sales only', 'sage'); ?>
+            </button>
+            <button type="button" class="pbc-product-filters__btn is-active" data-filter-show-oos aria-pressed="true">
+                <?php esc_html_e('Show out of stock', 'sage'); ?>
+            </button>
         </div>
     </nav>
     <p class="pbc-product-filters__empty" hidden>
