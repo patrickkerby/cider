@@ -17,9 +17,28 @@
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
+  position: relative;
   width: 100% !important;
   margin-right: 0;
   margin-left: 0;
+
+  .pbc-loop-stock-badge {
+    background: $pbc-darkgreen;
+    color: #fff;
+    font-family: $pitch-regular;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+    left: 50%;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding: 0.35rem 0.65rem;
+    position: absolute;
+    text-transform: uppercase;
+    top: 0.75rem;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
 
   .woocommerce-loop-product__title,
   a.button {
@@ -66,6 +85,17 @@
     @media (max-width: 768px) {
       z-index: 0;
       cursor: pointer;
+    }
+  }
+
+  &.pbc-out-of-stock {
+    img.attachment-woocommerce_thumbnail {
+      opacity: 0.55;
+    }
+
+    a.button {
+      cursor: default;
+      opacity: 0.85;
     }
   }
 

@@ -147,6 +147,44 @@ remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_pr
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );           // No prices in thumbnail view plz
 // remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );           // We need to add our own button in for the quick view
 
+/**
+ * Loop stock: for variable products, any out-of-stock variation means the whole product is out of stock.
+ */
+function pbc_product_loop_is_out_of_stock(\WC_Product $product): bool
+{
+    if ($product->is_type('variable')) {
+        foreach ($product->get_children() as $variation_id) {
+            $variation = wc_get_product($variation_id);
+
+            if ($variation && ! $variation->is_in_stock()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return ! $product->is_in_stock();
+}
+
+function pbc_product_loop_is_available(\WC_Product $product): bool
+{
+    return $product->is_purchasable() && ! pbc_product_loop_is_out_of_stock($product);
+}
+
+function pbc_loop_out_of_stock_badge(): void
+{
+    global $product;
+
+    if (! $product instanceof \WC_Product || ! pbc_product_loop_is_out_of_stock($product)) {
+        return;
+    }
+
+    echo '<span class="pbc-loop-stock-badge">' . esc_html__('Out of Stock', 'sage') . '</span>';
+}
+
+add_action('woocommerce_before_shop_loop_item_title', __NAMESPACE__ . '\\pbc_loop_out_of_stock_badge', 9);
+
 // Setup for Product Modal Quickview
 // WooCommerce only adds add_to_cart_button when purchasable + in stock. Production Quick View
 // hooks that class, so Chai-style buttons (same href/data-product_id) skip the modal.
@@ -159,15 +197,19 @@ add_filter('quick_view_selector', function ($selector) {
 });
 
 add_filter('woocommerce_post_class', function ($classes, $product) {
-    if ($product instanceof \WC_Product && ! ($product->is_purchasable() && $product->is_in_stock())) {
+    if ($product instanceof \WC_Product && ! pbc_product_loop_is_available($product)) {
         $classes[] = 'pbc-loop-quick-view-only';
+
+        if (pbc_product_loop_is_out_of_stock($product)) {
+            $classes[] = 'pbc-out-of-stock';
+        }
     }
 
     return $classes;
 }, 10, 2);
 
 add_filter('woocommerce_loop_add_to_cart_args', function ($args, $product) {
-    if ($product->is_purchasable() && $product->is_in_stock()) {
+    if (pbc_product_loop_is_available($product)) {
         return $args;
     }
 
@@ -182,7 +224,7 @@ add_filter('woocommerce_loop_add_to_cart_args', function ($args, $product) {
 
 // Fallback when Quick View JS loses the race on iOS (href would otherwise navigate away).
 add_filter('woocommerce_loop_add_to_cart_link', function ($link, $product) {
-    if ($product->is_purchasable() && $product->is_in_stock()) {
+    if (pbc_product_loop_is_available($product)) {
         return $link;
     }
 
@@ -200,9 +242,16 @@ add_filter('woocommerce_loop_add_to_cart_link', function ($link, $product) {
  */
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 
-add_filter( 'woocommerce_product_add_to_cart_text', 'App\woocommerce_add_to_cart_button_text_archives' );  
-function woocommerce_add_to_cart_button_text_archives() {
-    return __( 'View Product', 'woocommerce' );
+add_filter('woocommerce_product_add_to_cart_text', 'App\woocommerce_add_to_cart_button_text_archives');
+function woocommerce_add_to_cart_button_text_archives()
+{
+    global $product;
+
+    if ($product instanceof \WC_Product && pbc_product_loop_is_out_of_stock($product)) {
+        return __('Out of Stock', 'sage');
+    }
+
+    return __('View Product', 'woocommerce');
 }
 
 add_action( 'woocommerce_after_shop_loop_item_title', 'App\pbc_shop_product_short_description', 35, 2 );
