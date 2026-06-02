@@ -575,6 +575,10 @@ section {
   h2 {
     max-width: 90%;
     margin: 0 auto 4rem auto;
+
+    .home & {
+      margin-bottom: 0;
+    }
   }
 }
 
