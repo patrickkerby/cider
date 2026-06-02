@@ -509,6 +509,20 @@ $cart-card-pad: 1rem;
     font-weight: 600;
   }
 
+  .pbc-regional-shipping-destination {
+    color: rgba($pbc-charcoal, 0.85);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    margin-top: 0.5rem;
+    max-width: 22rem;
+    text-align: right;
+
+    strong {
+      color: $pbc-charcoal;
+      font-weight: 700;
+    }
+  }
+
   .cart_totals table.shop_table,
   .cart_totals table.shop_table_responsive {
     background: transparent !important;

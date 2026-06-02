@@ -158,6 +158,33 @@ function pbc_get_delivery_route_checkout_field() {
     return $field;
 }
 
+/**
+ * Cart shipping destination line when regional routes replace zone/calculator shipping.
+ *
+ * @return string Empty when default WooCommerce destination should be used.
+ */
+function pbc_get_regional_shipping_destination_message() {
+    if ( ! pbc_regional_routes_apply_to_cart() ) {
+        return '';
+    }
+
+    $route = pbc_get_selected_delivery_route_slug();
+    $data  = $route ? pbc_get_regional_route_by_slug( $route ) : null;
+
+    if ( $data ) {
+        return sprintf(
+            /* translators: %s: delivery route label */
+            __( 'Regional delivery route: <strong>%s</strong>. Enter your full street address at checkout.', 'sage' ),
+            esc_html( $data['label'] )
+        );
+    }
+
+    return __(
+        'Choose your delivery route at checkout. Your delivery stop is based on that route—not a previous address you looked up in the cart.',
+        'sage'
+    );
+}
+
 function pbc_render_checkout_delivery_route_section() {
     if ( ! pbc_checkout_route_field_required() || ! function_exists( 'WC' ) || ! WC()->checkout() ) {
         return;
