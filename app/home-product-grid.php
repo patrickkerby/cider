@@ -11,20 +11,93 @@ function pbc_is_home_product_grid(): bool
     return ! empty($GLOBALS['pbc_rendering_home_product_grid']);
 }
 
-function pbc_true_north_cider_category_slug(): string
+/**
+ * WooCommerce core Brands taxonomy (admin label: "Brands").
+ */
+function pbc_product_brand_taxonomy(): string
 {
-    return (string) apply_filters('pbc_true_north_cider_category_slug', 'true-north-cider');
+    if (taxonomy_exists('product_brand')) {
+        return 'product_brand';
+    }
+
+    return 'product_cat';
+}
+
+/**
+ * @return array<int|string> Term slugs, names, or IDs.
+ */
+function pbc_true_north_brand_identifiers(): array
+{
+    return apply_filters('pbc_true_north_brand_identifiers', [
+        'true-north-cider',
+        'True North Cider',
+    ]);
+}
+
+/**
+ * @return array<int|string> Term slugs, names, or IDs.
+ */
+function pbc_prairie_bears_brand_identifiers(): array
+{
+    return apply_filters('pbc_prairie_bears_brand_identifiers', [
+        'prairie-bears-cider',
+        'Prairie Bears Cider',
+    ]);
+}
+
+function pbc_product_has_brand_term(int $product_id, array $identifiers): bool
+{
+    $taxonomy = pbc_product_brand_taxonomy();
+
+    if ($taxonomy !== 'product_brand') {
+        return false;
+    }
+
+    foreach ($identifiers as $identifier) {
+        if (is_numeric($identifier)) {
+            if (has_term((int) $identifier, $taxonomy, $product_id)) {
+                return true;
+            }
+
+            continue;
+        }
+
+        $identifier = (string) $identifier;
+        $slug       = sanitize_title($identifier);
+
+        if ($slug !== '' && has_term($slug, $taxonomy, $product_id)) {
+            return true;
+        }
+
+        $term = get_term_by('name', $identifier, $taxonomy);
+
+        if ($term && ! is_wp_error($term) && has_term((int) $term->term_id, $taxonomy, $product_id)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function pbc_product_is_true_north_cider(int $product_id): bool
 {
-    return has_term(pbc_true_north_cider_category_slug(), 'product_cat', $product_id);
+    if (pbc_product_brand_taxonomy() === 'product_brand') {
+        return pbc_product_has_brand_term($product_id, pbc_true_north_brand_identifiers());
+    }
+
+    $slug = (string) apply_filters('pbc_true_north_cider_category_slug', 'true-north-cider');
+
+    return has_term($slug, 'product_cat', $product_id);
 }
 
 function pbc_product_is_prairie_bears_cider(int $product_id): bool
 {
     if (pbc_is_cocktail_book_product($product_id)) {
         return false;
+    }
+
+    if (pbc_product_brand_taxonomy() === 'product_brand') {
+        return pbc_product_has_brand_term($product_id, pbc_prairie_bears_brand_identifiers());
     }
 
     if (pbc_product_is_true_north_cider($product_id)) {
