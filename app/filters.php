@@ -147,26 +147,6 @@ remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_pr
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );           // No prices in thumbnail view plz
 // remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );           // We need to add our own button in for the quick view
 
-/**
- * Loop stock: for variable products, any out-of-stock variation means the whole product is out of stock.
- */
-function pbc_product_loop_is_out_of_stock(\WC_Product $product): bool
-{
-    if ($product->is_type('variable')) {
-        foreach ($product->get_children() as $variation_id) {
-            $variation = wc_get_product($variation_id);
-
-            if ($variation && ! $variation->is_in_stock()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return ! $product->is_in_stock();
-}
-
 function pbc_product_loop_is_available(\WC_Product $product): bool
 {
     return $product->is_purchasable() && ! pbc_product_loop_is_out_of_stock($product);
