@@ -20,7 +20,7 @@
         @endif
       </a>
       <div class="pbc-home-book-cta__copy">
-        <p class="pbc-home-book-cta__eyebrow">{{ __('A whole other passion project', 'sage') }}</p>
+        {{-- <p class="pbc-home-book-cta__eyebrow">{{ __('A whole other passion project', 'sage') }}</p> --}}
         <h2 class="pbc-home-book-cta__title">{!! $book_title !!}</h2>
         @if($book_excerpt)
           <div class="pbc-home-book-cta__text">{!! wp_kses_post($book_excerpt) !!}</div>
