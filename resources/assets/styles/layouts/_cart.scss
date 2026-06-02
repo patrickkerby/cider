@@ -503,6 +503,12 @@ $cart-card-pad: 1rem;
     padding-bottom: 0.5rem;
   }
 
+  .cart_totals tr.cart-discount.pbc-can-bulk-discount td,
+  .woocommerce-checkout-review-order-table tr.cart-discount.pbc-can-bulk-discount td {
+    color: $highlight;
+    font-weight: 600;
+  }
+
   .cart_totals table.shop_table,
   .cart_totals table.shop_table_responsive {
     background: transparent !important;

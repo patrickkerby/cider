@@ -333,6 +333,137 @@ function pbc_get_can_bulk_discount_cart_lines() {
     return $lines;
 }
 
+/**
+ * Total savings from the bulk can discount (already reflected in line prices / subtotal).
+ */
+function pbc_cart_can_bulk_discount_savings( $cart = null ) {
+    if ( ! $cart instanceof \WC_Cart ) {
+        $cart = function_exists( 'WC' ) && WC()->cart ? WC()->cart : null;
+    }
+
+    if ( ! $cart ) {
+        return 0.0;
+    }
+
+    if ( isset( $cart->pbc_can_bulk_discount_savings ) ) {
+        return (float) $cart->pbc_can_bulk_discount_savings;
+    }
+
+    $savings = 0.0;
+
+    foreach ( $cart->get_cart() as $cart_item ) {
+        if ( empty( $cart_item['pbc_can_bulk_discount'] ) || empty( $cart_item['data'] ) ) {
+            continue;
+        }
+
+        $base    = (float) $cart_item['pbc_can_bulk_discount']['base'];
+        $current = (float) $cart_item['data']->get_price();
+        $qty     = isset( $cart_item['quantity'] ) ? (int) $cart_item['quantity'] : 0;
+
+        if ( $base > $current && $qty > 0 ) {
+            $savings += ( $base - $current ) * $qty;
+        }
+    }
+
+    return (float) apply_filters(
+        'pbc_cart_can_bulk_discount_savings',
+        round( $savings, wc_get_price_decimals() ),
+        $cart
+    );
+}
+
+function pbc_can_bulk_discount_totals_label() {
+    $label = sprintf(
+        /* translators: %s: discount percent */
+        __( 'Bulk can discount (%s%% off)', 'sage' ),
+        (int) pbc_can_bulk_discount_percent()
+    );
+
+    return apply_filters( 'pbc_can_bulk_discount_totals_label', $label );
+}
+
+function pbc_render_can_bulk_discount_totals_row() {
+    static $rendered = false;
+
+    if ( $rendered || ! pbc_cart_qualifies_for_can_bulk_discount() ) {
+        return;
+    }
+
+    $savings = pbc_cart_can_bulk_discount_savings();
+
+    if ( $savings <= 0 ) {
+        return;
+    }
+
+    $rendered = true;
+    $label    = pbc_can_bulk_discount_totals_label();
+    ?>
+    <tr class="cart-discount pbc-can-bulk-discount">
+        <th><?php echo esc_html( $label ); ?></th>
+        <td data-title="<?php echo esc_attr( $label ); ?>">
+            <?php echo wp_kses_post( wc_price( -1 * abs( $savings ) ) ); ?>
+        </td>
+    </tr>
+    <?php
+}
+
+/**
+ * Cart / checkout totals: after coupons, before shipping when possible.
+ */
+add_action( 'woocommerce_cart_totals_before_shipping', 'App\pbc_render_can_bulk_discount_totals_row', 10 );
+add_action(
+    'woocommerce_cart_totals_before_order_total',
+    function () {
+        if ( function_exists( 'WC' ) && WC()->cart && WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) {
+            return;
+        }
+
+        pbc_render_can_bulk_discount_totals_row();
+    },
+    9
+);
+/**
+ * Show subtotal before the bulk can discount so the totals table math matches the discount row.
+ */
+add_filter(
+    'woocommerce_cart_subtotal',
+    function ( $subtotal_display, $compound, $cart ) {
+        if ( ! $cart instanceof \WC_Cart || ! pbc_cart_qualifies_for_can_bulk_discount() ) {
+            return $subtotal_display;
+        }
+
+        if ( ! is_cart() && ! is_checkout() && ! wp_doing_ajax() ) {
+            return $subtotal_display;
+        }
+
+        $savings = pbc_cart_can_bulk_discount_savings( $cart );
+
+        if ( $savings <= 0 ) {
+            return $subtotal_display;
+        }
+
+        $discounted_subtotal = (float) $cart->get_subtotal();
+        $before_discount     = $discounted_subtotal + $savings;
+
+        return wc_price( $before_discount );
+    },
+    10,
+    3
+);
+
+add_action( 'woocommerce_review_order_before_shipping', 'App\pbc_render_can_bulk_discount_totals_row', 10 );
+add_action(
+    'woocommerce_review_order_before_order_total',
+    function () {
+        if ( function_exists( 'WC' ) && WC()->cart && WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) {
+            return;
+        }
+
+        pbc_render_can_bulk_discount_totals_row();
+    },
+    9
+);
+
 add_action(
     'woocommerce_before_calculate_totals',
     function ( $cart ) {
@@ -367,8 +498,21 @@ add_action(
                 ];
             }
         }
+
+        $cart->pbc_can_bulk_discount_savings = pbc_cart_can_bulk_discount_savings( $cart );
     },
     999999,
+    1
+);
+
+add_action(
+    'woocommerce_before_calculate_totals',
+    function ( $cart ) {
+        if ( $cart instanceof \WC_Cart ) {
+            unset( $cart->pbc_can_bulk_discount_savings );
+        }
+    },
+    999998,
     1
 );
 
@@ -415,4 +559,24 @@ add_action(
     },
     10,
     3
+);
+
+add_action(
+    'woocommerce_checkout_create_order',
+    function ( $order ) {
+        $savings = pbc_cart_can_bulk_discount_savings();
+
+        if ( $savings <= 0 ) {
+            return;
+        }
+
+        $order->update_meta_data(
+            '_pbc_can_bulk_discount_savings',
+            $savings
+        );
+        $order->update_meta_data(
+            '_pbc_can_bulk_discount_label',
+            pbc_can_bulk_discount_totals_label()
+        );
+    }
 );
