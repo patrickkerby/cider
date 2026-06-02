@@ -10,7 +10,16 @@ namespace App;
  */
 
 function pbc_can_product_tag() {
-    return apply_filters( 'pbc_can_product_tag', 'can' );
+    return apply_filters( 'pbc_can_product_tag', 'cans' );
+}
+
+/**
+ * @return string[]
+ */
+function pbc_can_product_tag_slugs() {
+    $tags = [ pbc_can_product_tag(), 'can' ];
+
+    return array_values( array_unique( apply_filters( 'pbc_can_product_tag_slugs', $tags ) ) );
 }
 
 function pbc_product_has_can_tag( $product_id ) {
@@ -20,13 +29,25 @@ function pbc_product_has_can_tag( $product_id ) {
         return false;
     }
 
-    if ( has_term( pbc_can_product_tag(), 'product_tag', $product_id ) ) {
-        return true;
+    foreach ( pbc_can_product_tag_slugs() as $tag_slug ) {
+        if ( has_term( $tag_slug, 'product_tag', $product_id ) ) {
+            return true;
+        }
     }
 
     $parent_id = wp_get_post_parent_id( $product_id );
 
-    return $parent_id && has_term( pbc_can_product_tag(), 'product_tag', $parent_id );
+    if ( ! $parent_id ) {
+        return false;
+    }
+
+    foreach ( pbc_can_product_tag_slugs() as $tag_slug ) {
+        if ( has_term( $tag_slug, 'product_tag', $parent_id ) ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
@@ -91,6 +112,28 @@ function pbc_parse_pack_size_to_cans( $value ) {
 }
 
 /**
+ * Parse pack size from a cart/catalog title like "Original Apple - 4 pack".
+ */
+function pbc_parse_pack_size_from_label( $label ) {
+    $label = trim( (string) $label );
+
+    if ( $label === '' ) {
+        return null;
+    }
+
+    $cans = pbc_parse_pack_size_to_cans( $label );
+    if ( $cans !== null ) {
+        return $cans;
+    }
+
+    if ( preg_match( '/\s[-–—]\s*(.+)$/u', $label, $matches ) ) {
+        return pbc_parse_pack_size_to_cans( trim( $matches[1] ) );
+    }
+
+    return null;
+}
+
+/**
  * @param \WC_Product $product Variation or simple product.
  */
 function pbc_get_cans_per_unit_for_product( $product ) {
@@ -114,7 +157,7 @@ function pbc_get_cans_per_unit_for_product( $product ) {
         }
     }
 
-    $cans = pbc_parse_pack_size_to_cans( $product->get_name() );
+    $cans = pbc_parse_pack_size_from_label( $product->get_name() );
     if ( $cans !== null ) {
         return (int) apply_filters( 'pbc_cans_per_unit', $cans, $product );
     }
@@ -163,6 +206,15 @@ function pbc_get_cart_line_can_quantity( $cart_item ) {
                 );
             }
         }
+    }
+
+    $cans = pbc_parse_pack_size_from_label( $cart_item['data']->get_name() );
+    if ( $cans !== null ) {
+        return (int) apply_filters(
+            'pbc_cart_line_can_quantity',
+            $line_qty * $cans,
+            $cart_item
+        );
     }
 
     $per_unit = pbc_get_cans_per_unit_for_product( $cart_item['data'] );
