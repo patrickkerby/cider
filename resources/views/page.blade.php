@@ -21,7 +21,9 @@
       <div class="content-wrap">
         <section class="row justify-content-center">
           <div class="col-12">
-            <h2>Online ordering + delivery available in the Edmonton area!</h2>
+            {{-- <h2>Online ordering + delivery available in the Edmonton area!</h2> --}}
+            <h2>Flat sale + Special Delivery to Edmonton, Camrose, Red Deer, &amp; Calgary!</h2>
+            <h3>Mix and match 24 cans and get 20% off! (non-alcoholic and PBC bottles not included)</h3>
             @include('partials.content-page')
           </div>
         </section>
