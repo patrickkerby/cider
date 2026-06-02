@@ -2,6 +2,7 @@
 <html {!! get_language_attributes() !!}>
   @include('partials.head')
   <body @php body_class() @endphp>
+    @php do_action('wp_body_open') @endphp
 
     @php do_action('get_header') @endphp
     
