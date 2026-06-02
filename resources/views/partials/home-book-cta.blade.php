@@ -17,8 +17,8 @@
         </a>
       @endif
       <div class="pbc-home-book-cta__copy">
-        <p class="pbc-home-book-cta__eyebrow">{{ __('Also from Prairie Bears', 'sage') }}</p>
-        <h2 class="pbc-home-book-cta__title">{{ $book_title }}</h2>
+        <p class="pbc-home-book-cta__eyebrow">{{ __('A whole other passion project', 'sage') }}</p>
+        <h2 class="pbc-home-book-cta__title">{!! $book_title !!}</h2>
         @if($book_excerpt)
           <p class="pbc-home-book-cta__text">{{ $book_excerpt }}</p>
         @else
