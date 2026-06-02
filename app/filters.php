@@ -246,16 +246,67 @@ add_filter( 'woocommerce_single_product_carousel_options', function( $options ) 
 	return $options;
 } );
 
+/**
+ * Cocktail Recipe Book — single product ID for cart/shipping rules.
+ */
+function pbc_cocktail_book_product_id() {
+    return 679;
+}
+
+function pbc_is_cocktail_book_product( $product_id ) {
+    $product_id = (int) $product_id;
+    $book_id    = pbc_cocktail_book_product_id();
+
+    if ( $product_id === $book_id ) {
+        return true;
+    }
+
+    $parent_id = wp_get_post_parent_id( $product_id );
+
+    return $parent_id && (int) $parent_id === $book_id;
+}
+
+function pbc_cart_contains_cider() {
+    if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+        return false;
+    }
+
+    foreach ( WC()->cart->get_cart() as $cart_item ) {
+        if ( has_term( 'cider', 'product_cat', $cart_item['product_id'] ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function pbc_cart_contains_cocktail_book() {
+    if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+        return false;
+    }
+
+    foreach ( WC()->cart->get_cart() as $cart_item ) {
+        if ( pbc_is_cocktail_book_product( $cart_item['product_id'] ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // Modal button for Cocktail Book Product
 add_action('woocommerce_after_add_to_cart_button', function () {
     global $product;
     $product_id = method_exists($product, 'get_id') ? $product->get_id() : $product->id;
-    if ($product_id == 598 || $product_id == 679) {
-        echo '<div class="modal-trigger-container">
-                <a class="modal-trigger" href="#excerpt-modal" data-modal="excerpt-modal">Read an excerpt</a>
-                <a target="_blank" class="insta" href="https://www.instagram.com/cider.cocktails/">cider.cocktails</a>
-            </div>';
+
+    if ( ! pbc_is_cocktail_book_product( $product_id ) ) {
+        return;
     }
+
+    echo '<div class="modal-trigger-container">
+            <a class="modal-trigger" href="#excerpt-modal" data-modal="excerpt-modal">Read an excerpt</a>
+            <a target="_blank" class="insta" href="https://www.instagram.com/cider.cocktails/">cider.cocktails</a>
+        </div>';
 } );
 
 /**
@@ -266,7 +317,20 @@ add_action( 'woocommerce_before_cart', function () {
 }, 9 );
 
 add_action( 'woocommerce_before_cart', function () {
-    echo '<div class="shipping-notice" role="status">' . esc_html__( 'Canada-wide shipping is only available for the Cocktail Recipe Book. Cider is for local Edmonton-region delivery only — use the shipping calculator below to confirm your address.', 'sage' ) . '</div>';
+    if ( ! pbc_cart_contains_cocktail_book() ) {
+        return;
+    }
+
+    if ( pbc_cart_contains_cider() ) {
+        $message = __(
+            'The Cocktail Recipe Book ships Canada-wide. Cider in this order is for Edmonton-region delivery only — confirm your address in the calculator below.',
+            'sage'
+        );
+    } else {
+        $message = __( 'The Cocktail Recipe Book ships Canada-wide.', 'sage' );
+    }
+
+    echo '<div class="shipping-notice" role="status">' . esc_html( $message ) . '</div>';
 }, 12 );
 
 add_action( 'woocommerce_before_cart', function () {
@@ -274,30 +338,21 @@ add_action( 'woocommerce_before_cart', function () {
 }, 15 );
 
 /**
- * Display notice on cart page if cider is in cart (queued before notices render).
+ * Prompt for shipping address when cider is in the cart (queued before notices render).
  */
 add_action( 'woocommerce_before_cart', function () {
-    $has_cider = false;
-
-    foreach ( WC()->cart->get_cart() as $cart_item ) {
-        if ( has_term( 'cider', 'product_cat', $cart_item['product_id'] ) ) {
-            $has_cider = true;
-            break;
-        }
-    }
-
-    if ( ! $has_cider ) {
+    if ( ! pbc_cart_contains_cider() ) {
         return;
     }
 
-    $postcode = WC()->customer->get_shipping_postcode();
-
-    if ( empty( $postcode ) ) {
-        wc_add_notice(
-            __( 'Please set your shipping address below to verify that cider delivery is available to your location. Cider is only available for delivery within the Edmonton Region.', 'sage' ),
-            'notice'
-        );
+    if ( ! empty( WC()->customer->get_shipping_postcode() ) ) {
+        return;
     }
+
+    wc_add_notice(
+        __( 'Add your shipping address below to confirm Edmonton-region cider delivery.', 'sage' ),
+        'notice'
+    );
 }, 8 );
 
 /**
@@ -338,56 +393,46 @@ function adjust_edmonton_shipping_by_cart_total($rates, $package) {
 }
 
 add_action( 'woocommerce_check_cart_items', function () {
-    // Set minimum cart total amount
     $minimum_amount = 50;
-    
-    // Check if cart contains any cider products
-    $has_cider = false;
-    foreach ( WC()->cart->get_cart() as $cart_item ) {
-        $product_id = $cart_item['product_id'];
-        // Check if product has the "cider" category
-        if ( has_term( 'cider', 'product_cat', $product_id ) ) {
-            $has_cider = true;
-            break;
+
+    if ( ! pbc_cart_contains_cider() ) {
+        return;
+    }
+
+    $postcode = WC()->customer->get_shipping_postcode();
+    $city     = WC()->customer->get_shipping_city();
+    $state    = WC()->customer->get_shipping_state();
+    $country  = WC()->customer->get_shipping_country();
+
+    if ( ! empty( $postcode ) || ! empty( $city ) ) {
+        $package = array(
+            'destination' => array(
+                'country'  => $country,
+                'state'    => $state,
+                'postcode' => $postcode,
+                'city'     => $city,
+            ),
+        );
+
+        $zone      = \WC_Shipping_Zones::get_zone_matching_package( $package );
+        $zone_name = $zone->get_zone_name();
+
+        if ( empty( $zone_name ) || stripos( $zone_name, 'Edmonton' ) === false ) {
+            wc_add_notice(
+                __( 'Cider products are only available for delivery within the Edmonton Region. Please remove cider from your cart or update your shipping address.', 'sage' ),
+                'error'
+            );
         }
     }
 
-    // If cart contains cider, check delivery location and minimum
-    if ( $has_cider ) {
-        // Get customer's shipping location
-        $postcode = WC()->customer->get_shipping_postcode();
-        $city = WC()->customer->get_shipping_city();
-        $state = WC()->customer->get_shipping_state();
-        $country = WC()->customer->get_shipping_country();
-        
-        // Check if shipping location is provided
-        if ( ! empty( $postcode ) || ! empty( $city ) ) {
-            // Get matching shipping zone for customer's location
-            $package = array(
-                'destination' => array(
-                    'country'   => $country,
-                    'state'     => $state,
-                    'postcode'  => $postcode,
-                    'city'      => $city,
-                )
-            );
-            
-            // Find the matching zone for this location
-            $zone = \WC_Shipping_Zones::get_zone_matching_package( $package );
-            $zone_name = $zone->get_zone_name();
-            
-            // Check if the matched zone is the Edmonton Region
-            // If zone name is empty, it means it matched the default zone (not Edmonton)
-            if ( empty( $zone_name ) || stripos( $zone_name, 'Edmonton' ) === false ) {
-                wc_add_notice( __( "Cider products are only available for delivery within the Edmonton Region. Please remove cider from your cart or update your shipping address." ), 'error' );
-            }
-        }
-        
-        // Check minimum cart total
-        $cart_subtotal = WC()->cart->subtotal;
-        if ( $cart_subtotal < $minimum_amount ) {
-            wc_add_notice( '' . sprintf( __( "A minimum total purchase amount of %s is required to checkout." ), wc_price( $minimum_amount ) ) . '', 'error' );
-        }
+    if ( WC()->cart->subtotal < $minimum_amount ) {
+        wc_add_notice(
+            sprintf(
+                __( 'A minimum total purchase amount of %s is required to checkout.', 'sage' ),
+                wc_price( $minimum_amount )
+            ),
+            'error'
+        );
     }
 } );
 
