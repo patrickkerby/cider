@@ -12,15 +12,21 @@ function pbc_is_home_product_grid(): bool
 }
 
 /**
- * WooCommerce core Brands taxonomy (admin label: "Brands").
+ * Product brand taxonomy: ACF "brand" (legacy) preferred over WooCommerce product_brand.
+ *
+ * @return string|null Taxonomy slug, or null when no brand taxonomy is registered.
  */
-function pbc_product_brand_taxonomy(): string
+function pbc_product_brand_taxonomy(): ?string
 {
-    if (taxonomy_exists('product_brand')) {
-        return 'product_brand';
+    $taxonomy = null;
+
+    if (taxonomy_exists('brand')) {
+        $taxonomy = 'brand';
+    } elseif (taxonomy_exists('product_brand')) {
+        $taxonomy = 'product_brand';
     }
 
-    return 'product_cat';
+    return apply_filters('pbc_product_brand_taxonomy', $taxonomy);
 }
 
 /**
@@ -49,7 +55,7 @@ function pbc_product_has_brand_term(int $product_id, array $identifiers): bool
 {
     $taxonomy = pbc_product_brand_taxonomy();
 
-    if ($taxonomy !== 'product_brand') {
+    if (! $taxonomy) {
         return false;
     }
 
@@ -81,7 +87,7 @@ function pbc_product_has_brand_term(int $product_id, array $identifiers): bool
 
 function pbc_product_is_true_north_cider(int $product_id): bool
 {
-    if (pbc_product_brand_taxonomy() === 'product_brand') {
+    if (pbc_product_brand_taxonomy()) {
         return pbc_product_has_brand_term($product_id, pbc_true_north_brand_identifiers());
     }
 
@@ -96,7 +102,7 @@ function pbc_product_is_prairie_bears_cider(int $product_id): bool
         return false;
     }
 
-    if (pbc_product_brand_taxonomy() === 'product_brand') {
+    if (pbc_product_brand_taxonomy()) {
         return pbc_product_has_brand_term($product_id, pbc_prairie_bears_brand_identifiers());
     }
 
