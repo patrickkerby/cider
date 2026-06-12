@@ -167,6 +167,21 @@ add_action('woocommerce_before_shop_loop_item_title', __NAMESPACE__ . '\\pbc_loo
 
 // Setup for Product Modal Quickview
 /**
+ * The Quick View plugin only checks that product ID is non-zero. Non-product IDs
+ * (event series, pages, deleted posts) fatal when the template calls methods on false.
+ */
+add_action('woocommerce_api_wc_quick_view', function () {
+    $product_id = absint($_GET['product'] ?? 0);
+    $product    = $product_id ? wc_get_product($product_id) : false;
+
+    if (! $product instanceof \WC_Product) {
+        status_header(404);
+        nocache_headers();
+        exit;
+    }
+}, 9);
+
+/**
  * ADP (Advanced Dynamic Pricing) can fatal or hang during get_price_html() in the
  * WC_Quick_View AJAX context for some variable products. Render catalog prices without
  * ADP hooks in the modal; cart/checkout pricing is unchanged.
