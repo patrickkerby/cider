@@ -131,11 +131,11 @@ function pbc_can_pool_applies_to_product(\WC_Product $product): bool
 {
     $parent_id = pbc_can_pool_parent_id($product);
 
-    if ($parent_id <= 0 || ! pbc_pack_pool_parent_is_eligible($parent_id)) {
+    if ($parent_id <= 0 || ! pbc_can_pool_is_enabled($parent_id)) {
         return false;
     }
 
-    return pbc_can_pool_is_enabled($parent_id);
+    return pbc_pack_pool_parent_is_eligible($parent_id);
 }
 
 function pbc_can_pool_is_enabled(int $parent_id): bool

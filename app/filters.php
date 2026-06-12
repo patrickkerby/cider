@@ -166,6 +166,32 @@ function pbc_loop_out_of_stock_badge(): void
 add_action('woocommerce_before_shop_loop_item_title', __NAMESPACE__ . '\\pbc_loop_out_of_stock_badge', 9);
 
 // Setup for Product Modal Quickview
+/**
+ * ADP (Advanced Dynamic Pricing) can fatal or hang during get_price_html() in the
+ * WC_Quick_View AJAX context for some variable products. Render catalog prices without
+ * ADP hooks in the modal; cart/checkout pricing is unchanged.
+ */
+function pbc_render_price_without_dynamic_pricing(callable $render): void
+{
+    if (class_exists('\ADP\BaseVersion\Includes\PriceDisplay\PriceDisplay')) {
+        \ADP\BaseVersion\Includes\PriceDisplay\PriceDisplay::processWithout($render);
+
+        return;
+    }
+
+    $render();
+}
+
+function pbc_quick_view_single_price(): void
+{
+    pbc_render_price_without_dynamic_pricing('woocommerce_template_single_price');
+}
+
+add_action('wc_quick_view_before_single_product', function () {
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
+    add_action('woocommerce_single_product_summary', __NAMESPACE__ . '\\pbc_quick_view_single_price', 10);
+});
+
 // WooCommerce only adds add_to_cart_button when purchasable + in stock. Production Quick View
 // hooks that class, so Chai-style buttons (same href/data-product_id) skip the modal.
 add_filter('quick_view_selector', function ($selector) {
