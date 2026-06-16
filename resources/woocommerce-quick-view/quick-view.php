@@ -55,9 +55,6 @@ do_action( 'wc_quick_view_before_single_product' );
 
 			<p class="order_notes">
 				<strong>Flat Sale Delivery!</strong><br>
-				
-				<strong>Calgary:</strong> June 12 &amp; 13,  9am - 1pm <br>
-				<strong>Camrose &amp; Red Deer</strong>: June 14, 10am - 6pm<br>
 				<strong>Edmonton:</strong> June 18 &amp; 19, 10am - 1pm<br><br>
 
 				<strong>Regular Edmonton Delivery</strong><br>
