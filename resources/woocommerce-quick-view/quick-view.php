@@ -54,10 +54,10 @@ do_action( 'wc_quick_view_before_single_product' );
 			?>
 
 			<p class="order_notes">
-				<strong>Flat Sale Delivery!</strong><br>
-				<strong>Edmonton:</strong> June 18 &amp; 19, 10am - 1pm<br><br>
+				<!-- <strong>Flat Sale Delivery!</strong><br> -->
+				<!-- <strong>Edmonton:</strong> June 18 &amp; 19, 10am - 1pm<br><br> -->
 
-				<strong>Regular Edmonton Delivery</strong><br>
+				<strong>Edmonton Area Delivery</strong><br>
 				Contact us to arrange a delivery in the Edmonton area. The purchaser must be home to accept the delivery and show proof of age.<br><br>
 				If you live outside the Edmonton area, just give us a shout and we'll see if we can arrange something that works.
 			</p>
