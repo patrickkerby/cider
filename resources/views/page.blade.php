@@ -19,7 +19,7 @@
       @endif
       
       <div class="content-wrap">
-        <section class="row justify-content-center">
+        <section class="row home-intro justify-content-center">
           <div class="col-12">
             <h2>Online ordering + delivery available in the Edmonton area!</h2>
             {{-- <h2>Flat sale + Special Delivery to Edmonton!</h2> --}}
