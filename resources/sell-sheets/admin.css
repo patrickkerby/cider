@@ -1,0 +1,99 @@
+.pbc-sell-sheets__intro {
+  max-width: 46rem;
+}
+
+.pbc-sell-sheets__tabs {
+  margin: 1rem 0 1.25rem;
+}
+
+.pbc-sell-sheets__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.pbc-sell-sheets__list {
+  margin: 0;
+  padding: 0;
+  max-width: 52rem;
+  border: 1px solid #dcdcde;
+  background: #fff;
+}
+
+.pbc-sell-sheets__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid #f0f0f1;
+  list-style: none;
+}
+
+.pbc-sell-sheets__item:last-child {
+  border-bottom: 0;
+}
+
+.pbc-sell-sheets__item.is-out_of_stock,
+.pbc-sell-sheets__item.is-coming_soon {
+  background: #f6f7f7;
+}
+
+.pbc-sell-sheets__handle {
+  cursor: move;
+  color: #8c8f94;
+}
+
+.pbc-sell-sheets__check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  cursor: pointer;
+}
+
+.pbc-sell-sheets__check img,
+.pbc-sell-sheets__placeholder {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #f6f7f7;
+  border-radius: 4px;
+}
+
+.pbc-sell-sheets__placeholder {
+  display: inline-block;
+}
+
+.pbc-sell-sheets__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pbc-sell-sheets__name {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.pbc-sell-sheets__status {
+  font-size: 12px;
+  color: #646970;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pbc-sell-sheets__warn {
+  font-size: 12px;
+  color: #b32d2e;
+}
+
+.pbc-sell-sheets__edit {
+  white-space: nowrap;
+}
+
+.pbc-sell-sheets__item.ui-sortable-helper {
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}

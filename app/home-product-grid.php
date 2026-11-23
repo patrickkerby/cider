@@ -141,7 +141,7 @@ function pbc_home_product_grid_post_classes(array $classes, \WC_Product $product
         $classes[] = 'pbc-brand-pbc';
     }
 
-    if (pbc_product_has_flat_sale_option($product_id)) {
+    if (pbc_home_flat_sale_filter_is_available() && pbc_product_has_flat_sale_option($product_id)) {
         $classes[] = 'pbc-has-flat-sale';
     }
 
@@ -163,6 +163,14 @@ add_filter('woocommerce_shortcode_products_query', function ($query_args, $attri
     return $query_args;
 }, 10, 3);
 
+/**
+ * Show the home "Flat sales only" filter only during an active regional / flat sale event.
+ */
+function pbc_home_flat_sale_filter_is_available(): bool
+{
+    return (bool) apply_filters('pbc_home_flat_sale_filter_is_available', pbc_regional_event_is_active());
+}
+
 function pbc_render_home_product_filters(): void
 {
     if (! empty($GLOBALS['pbc_home_product_filters_rendered'])) {
@@ -170,6 +178,8 @@ function pbc_render_home_product_filters(): void
     }
 
     $GLOBALS['pbc_home_product_filters_rendered'] = true;
+
+    $show_flat_sale_filter = pbc_home_flat_sale_filter_is_available();
 
     ?>
     <nav class="pbc-product-filters" aria-label="<?php esc_attr_e('Filter products', 'sage'); ?>">
@@ -179,9 +189,11 @@ function pbc_render_home_product_filters(): void
                 <option value="pbc"><?php esc_html_e('Prairie Bears Cider', 'sage'); ?></option>
                 <option value="tnc"><?php esc_html_e('True North Cider', 'sage'); ?></option>
             </select>
+            <?php if ($show_flat_sale_filter) : ?>
             <button type="button" class="pbc-product-filters__btn" data-filter-flat-only aria-pressed="false">
                 <?php esc_html_e('Flat sales only', 'sage'); ?>
             </button>
+            <?php endif; ?>
             <button type="button" class="pbc-product-filters__btn is-active" data-filter-show-oos aria-pressed="true">
                 <?php esc_html_e('Show out of stock', 'sage'); ?>
             </button>
