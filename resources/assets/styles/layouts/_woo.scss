@@ -79,6 +79,10 @@
       max-height: 400px;
       object-fit: contain;
     }
+
+    .product_cat-holiday & {
+      margin-top: 0;
+    }
   }
 
   &.pbc-loop-quick-view-only img.attachment-woocommerce_thumbnail {
