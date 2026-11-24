@@ -3135,7 +3135,7 @@ button.facetwp-map-filtering {
        object-fit: contain;
   }
 }
-.woocommerce ul.products li.product .product_cat-holiday img.attachment-woocommerce_thumbnail {
+.woocommerce ul.products li.product.product_cat-holiday img.attachment-woocommerce_thumbnail {
   margin-top: 0;
 }
 @media (max-width: 768px) {
