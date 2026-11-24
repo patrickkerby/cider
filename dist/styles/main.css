@@ -3114,6 +3114,14 @@ button.facetwp-map-filtering {
   text-align: center;
   font-size: 1rem;
 }
+.woocommerce ul.products li.product.product_cat-holiday {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+.woocommerce ul.products li.product.product_cat-holiday p {
+  margin-bottom: auto;
+}
 .woocommerce ul.products li.product a.button {
   background: none;
   border-width: 3px 0 0 0;
