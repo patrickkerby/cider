@@ -6,9 +6,11 @@ namespace App;
  * Regional delivery events (multi-city truck runs) — ACF options, checkout route, shipping.
  */
 
-const PBC_ORDER_ROUTE_SLUG_META  = '_pbc_delivery_route_slug';
-const PBC_ORDER_ROUTE_LABEL_META = '_pbc_delivery_route_label';
-const PBC_ORDER_EVENT_LABEL_META = '_pbc_regional_event_label';
+const PBC_ORDER_ROUTE_SLUG_META    = '_pbc_delivery_route_slug';
+const PBC_ORDER_ROUTE_LABEL_META   = '_pbc_delivery_route_label';
+const PBC_ORDER_EVENT_LABEL_META   = '_pbc_regional_event_label';
+const PBC_ORDER_PICKUP_DAY_META    = '_pbc_delivery_pickup_day';
+const PBC_ORDER_PICKUP_DAY_LABEL_META = '_pbc_delivery_pickup_day_label';
 
 function pbc_regional_event_is_active() {
     if ( ! function_exists( 'get_field' ) ) {
@@ -111,6 +113,116 @@ function pbc_get_regional_route_by_slug( $slug ) {
     }
 
     return null;
+}
+
+/**
+ * @return array<int, array{date: string, slug: string, label: string}>
+ */
+function pbc_get_regional_pickup_days() {
+    if ( ! function_exists( 'get_field' ) ) {
+        return [];
+    }
+
+    $rows = get_field( 'regional_pickup_days', 'option' );
+
+    if ( ! is_array( $rows ) ) {
+        return [];
+    }
+
+    $days = [];
+
+    foreach ( $rows as $row ) {
+        if ( empty( $row['active'] ) || empty( $row['pickup_date'] ) ) {
+            continue;
+        }
+
+        $date = (string) $row['pickup_date'];
+        $slug = sanitize_title( $date );
+
+        $label = isset( $row['customer_label'] ) ? trim( (string) $row['customer_label'] ) : '';
+
+        if ( $label === '' ) {
+            $ts = strtotime( $date . ' 12:00:00' );
+
+            $label = $ts ? date_i18n( get_option( 'date_format' ), $ts ) : $date;
+        }
+
+        $days[] = [
+            'date'  => $date,
+            'slug'  => $slug,
+            'label' => $label,
+        ];
+    }
+
+    usort(
+        $days,
+        function ( $a, $b ) {
+            return strcmp( $a['date'], $b['date'] );
+        }
+    );
+
+    return apply_filters( 'pbc_get_regional_pickup_days', $days );
+}
+
+function pbc_get_regional_pickup_day_by_slug( $slug ) {
+    $slug = sanitize_title( $slug );
+
+    foreach ( pbc_get_regional_pickup_days() as $day ) {
+        if ( $day['slug'] === $slug ) {
+            return $day;
+        }
+    }
+
+    return null;
+}
+
+function pbc_checkout_pickup_day_required() {
+    return pbc_regional_routes_apply_to_cart() && count( pbc_get_regional_pickup_days() ) > 0;
+}
+
+function pbc_get_selected_delivery_pickup_day_slug() {
+    if ( function_exists( 'WC' ) && WC()->session ) {
+        $session_slug = WC()->session->get( 'pbc_delivery_pickup_day_slug' );
+
+        if ( is_string( $session_slug ) && $session_slug !== '' ) {
+            return sanitize_title( $session_slug );
+        }
+    }
+
+    if ( isset( $_POST['pbc_delivery_pickup_day'] ) ) {
+        return sanitize_title( wp_unslash( $_POST['pbc_delivery_pickup_day'] ) );
+    }
+
+    return '';
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function pbc_get_delivery_pickup_day_checkout_field() {
+    $options = [ '' => __( 'Select your pickup day', 'sage' ) ];
+
+    foreach ( pbc_get_regional_pickup_days() as $day ) {
+        $options[ $day['slug'] ] = $day['label'];
+    }
+
+    $field = [
+        'type'        => 'select',
+        'label'       => __( 'Pickup day', 'sage' ),
+        'required'    => true,
+        'class'       => [ 'form-row-wide', 'pbc-checkout-pickup-day-field' ],
+        'input_class' => [ 'pbc-checkout-pickup-day__select' ],
+        'options'     => $options,
+        'priority'    => 2,
+    ];
+
+    $selected = pbc_get_selected_delivery_pickup_day_slug();
+
+    if ( $selected && isset( $options[ $selected ] ) ) {
+        $field['default'] = $selected;
+    }
+
+    return $field;
 }
 
 function pbc_regional_event_label() {
@@ -217,6 +329,15 @@ function pbc_render_checkout_delivery_route_section() {
             $field,
             $checkout->get_value( 'pbc_delivery_route' )
         );
+
+        if ( pbc_checkout_pickup_day_required() ) {
+            $pickup_field = pbc_get_delivery_pickup_day_checkout_field();
+            woocommerce_form_field(
+                'pbc_delivery_pickup_day',
+                $pickup_field,
+                $checkout->get_value( 'pbc_delivery_pickup_day' )
+            );
+        }
         ?>
     </section>
     <?php
@@ -282,6 +403,25 @@ add_action(
                         'type'           => 'date_picker',
                         'display_format' => 'Y-m-d',
                         'return_format'  => 'Y-m-d',
+                        'instructions'   => 'Ordering window — when customers can place orders (e.g. Dec 4–8).',
+                    ],
+                    [
+                        'key'            => 'field_pbc_regional_delivery_start',
+                        'label'          => 'Delivery window start',
+                        'name'           => 'regional_delivery_window_start',
+                        'type'           => 'date_picker',
+                        'display_format' => 'Y-m-d',
+                        'return_format'  => 'Y-m-d',
+                        'instructions'   => 'First delivery/pickup day (for copy and pickup-day list).',
+                    ],
+                    [
+                        'key'            => 'field_pbc_regional_delivery_end',
+                        'label'          => 'Delivery window end',
+                        'name'           => 'regional_delivery_window_end',
+                        'type'           => 'date_picker',
+                        'display_format' => 'Y-m-d',
+                        'return_format'  => 'Y-m-d',
+                        'instructions'   => 'Last delivery/pickup day (e.g. Dec 14).',
                     ],
                     [
                         'key'   => 'field_pbc_regional_event_admin_label',
@@ -300,13 +440,57 @@ add_action(
                         'instructions'  => 'When on and the cart has cider, checkout requires a route and regional shipping is free.',
                     ],
                     [
+                        'key'           => 'field_pbc_regional_promo_type',
+                        'label'         => 'Promo mode',
+                        'name'          => 'regional_promo_type',
+                        'type'          => 'select',
+                        'choices'       => [
+                            'none'       => 'No automatic cart discount',
+                            'bulk_cans'  => '24+ can bulk discount (legacy)',
+                            'flat_sale'  => 'Flat sale (flat + required product → % off cart)',
+                        ],
+                        'default_value' => '',
+                        'allow_null'    => 1,
+                        'instructions'  => 'Leave empty to use the legacy “Apply 24+ can bulk discount” toggle below.',
+                    ],
+                    [
                         'key'           => 'field_pbc_enable_can_bulk_discount',
-                        'label'         => 'Apply 24+ can bulk discount',
+                        'label'         => 'Apply 24+ can bulk discount (legacy)',
                         'name'          => 'enable_can_bulk_discount',
                         'type'          => 'true_false',
                         'default_value' => 0,
                         'ui'            => 1,
-                        'instructions'  => 'When the regional event is active, counts singles + 4-packs + flats as total cans and applies the discount below.',
+                        'instructions'  => 'Used when Promo mode is empty or “24+ can bulk discount”.',
+                    ],
+                    [
+                        'key'           => 'field_pbc_flat_sale_required_products',
+                        'label'         => 'Flat sale — required product(s)',
+                        'name'          => 'flat_sale_required_products',
+                        'type'          => 'post_object',
+                        'post_type'     => [ 'product' ],
+                        'multiple'      => 1,
+                        'return_format' => 'id',
+                        'ui'            => 1,
+                        'instructions'  => 'Parent variable product(s), e.g. TNC Christmas Cookie.',
+                    ],
+                    [
+                        'key'           => 'field_pbc_flat_sale_required_can_minimum',
+                        'label'         => 'Flat sale — minimum physical cans',
+                        'name'          => 'flat_sale_required_can_minimum',
+                        'type'          => 'number',
+                        'default_value' => 1,
+                        'min'           => 1,
+                    ],
+                    [
+                        'key'           => 'field_pbc_flat_sale_cart_discount_percent',
+                        'label'         => 'Flat sale — cart discount %',
+                        'name'          => 'flat_sale_cart_discount_percent',
+                        'type'          => 'number',
+                        'default_value' => 10,
+                        'min'           => 1,
+                        'max'           => 100,
+                        'append'        => '%',
+                        'instructions'  => 'Applies to entire cart subtotal when qualified.',
                     ],
                     [
                         'key'           => 'field_pbc_can_bulk_discount_minimum',
@@ -370,7 +554,7 @@ add_action(
                                 'label' => 'Slug',
                                 'name'  => 'route_slug',
                                 'type'  => 'text',
-                                'instructions' => 'Stable ID (e.g. calgary, edmonton-north).',
+                                'instructions' => 'Stable ID (e.g. calgary, edmonton).',
                             ],
                             [
                                 'key'   => 'field_pbc_route_customer_label',
@@ -387,6 +571,41 @@ add_action(
                             ],
                             [
                                 'key'           => 'field_pbc_route_active',
+                                'label'         => 'Active',
+                                'name'          => 'active',
+                                'type'          => 'true_false',
+                                'default_value' => 1,
+                                'ui'            => 1,
+                            ],
+                        ],
+                    ],
+                    [
+                        'key'          => 'field_pbc_regional_pickup_days',
+                        'label'        => 'Pickup / delivery days',
+                        'name'         => 'regional_pickup_days',
+                        'type'         => 'repeater',
+                        'layout'       => 'table',
+                        'button_label' => 'Add day',
+                        'instructions' => 'Customer must choose one at checkout. Add each date in the delivery window (e.g. Dec 10–14).',
+                        'sub_fields'   => [
+                            [
+                                'key'            => 'field_pbc_pickup_day_date',
+                                'label'          => 'Date',
+                                'name'           => 'pickup_date',
+                                'type'           => 'date_picker',
+                                'display_format' => 'M j, Y',
+                                'return_format'  => 'Y-m-d',
+                                'required'       => 1,
+                            ],
+                            [
+                                'key'   => 'field_pbc_pickup_day_label',
+                                'label' => 'Label (optional)',
+                                'name'  => 'customer_label',
+                                'type'  => 'text',
+                                'instructions' => 'Defaults to formatted date if blank.',
+                            ],
+                            [
+                                'key'           => 'field_pbc_pickup_day_active',
                                 'label'         => 'Active',
                                 'name'          => 'active',
                                 'type'          => 'true_false',
@@ -581,6 +800,10 @@ add_filter(
             return '';
         }
 
+        if ( 'pbc_delivery_pickup_day' === $key && empty( $GLOBALS['pbc_rendering_delivery_route'] ) ) {
+            return '';
+        }
+
         return $field;
     },
     10,
@@ -601,6 +824,10 @@ add_action(
         if ( ! empty( $data['pbc_delivery_route'] ) ) {
             WC()->session->set( 'pbc_delivery_route_slug', sanitize_title( $data['pbc_delivery_route'] ) );
         }
+
+        if ( ! empty( $data['pbc_delivery_pickup_day'] ) ) {
+            WC()->session->set( 'pbc_delivery_pickup_day_slug', sanitize_title( $data['pbc_delivery_pickup_day'] ) );
+        }
     }
 );
 
@@ -616,6 +843,15 @@ add_action(
 
         if ( ! $route ) {
             wc_add_notice( __( 'Please select a valid delivery route for this order.', 'sage' ), 'error' );
+        }
+
+        if ( pbc_checkout_pickup_day_required() ) {
+            $day_slug = isset( $_POST['pbc_delivery_pickup_day'] ) ? sanitize_title( wp_unslash( $_POST['pbc_delivery_pickup_day'] ) ) : '';
+            $day      = pbc_get_regional_pickup_day_by_slug( $day_slug );
+
+            if ( ! $day ) {
+                wc_add_notice( __( 'Please select a valid pickup day for this delivery run.', 'sage' ), 'error' );
+            }
         }
     }
 );
@@ -643,6 +879,16 @@ add_action(
             update_post_meta( $order_id, PBC_ORDER_EVENT_LABEL_META, $event_label );
         }
 
+        if ( isset( $_POST['pbc_delivery_pickup_day'] ) && $_POST['pbc_delivery_pickup_day'] !== '' ) {
+            $day_slug = sanitize_title( wp_unslash( $_POST['pbc_delivery_pickup_day'] ) );
+            $day      = pbc_get_regional_pickup_day_by_slug( $day_slug );
+
+            if ( $day ) {
+                update_post_meta( $order_id, PBC_ORDER_PICKUP_DAY_META, $day['date'] );
+                update_post_meta( $order_id, PBC_ORDER_PICKUP_DAY_LABEL_META, $day['label'] );
+            }
+        }
+
         if ( function_exists( 'WC' ) && WC()->session ) {
             WC()->session->set( 'pbc_delivery_route_slug', $route['slug'] );
         }
@@ -652,11 +898,13 @@ add_action(
 add_action(
     'woocommerce_admin_order_data_after_shipping_address',
     function ( $order ) {
-        $label = $order->get_meta( PBC_ORDER_ROUTE_LABEL_META );
-        $slug  = $order->get_meta( PBC_ORDER_ROUTE_SLUG_META );
-        $event = $order->get_meta( PBC_ORDER_EVENT_LABEL_META );
+        $label      = $order->get_meta( PBC_ORDER_ROUTE_LABEL_META );
+        $slug       = $order->get_meta( PBC_ORDER_ROUTE_SLUG_META );
+        $event      = $order->get_meta( PBC_ORDER_EVENT_LABEL_META );
+        $pickup     = $order->get_meta( PBC_ORDER_PICKUP_DAY_LABEL_META );
+        $pickup_raw = $order->get_meta( PBC_ORDER_PICKUP_DAY_META );
 
-        if ( ! $label && ! $slug && ! $event ) {
+        if ( ! $label && ! $slug && ! $event && ! $pickup && ! $pickup_raw ) {
             return;
         }
 
@@ -672,6 +920,12 @@ add_action(
             if ( $slug ) {
                 echo ' <code>(' . esc_html( $slug ) . ')</code>';
             }
+
+            echo '<br>';
+        }
+
+        if ( $pickup || $pickup_raw ) {
+            echo esc_html__( 'Pickup day:', 'sage' ) . ' ' . esc_html( $pickup !== '' ? $pickup : $pickup_raw );
         }
 
         echo '</p>';
