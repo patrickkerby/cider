@@ -5,7 +5,7 @@ namespace App;
 /**
  * Configurable flat-sale cart promo (regional event + ACF options).
  *
- * Example: flat in cart + N physical cans of required product(s) → % off entire cart.
+ * Example: 24+ physical cans in cart + at least N cans of featured product(s) → % off entire cart.
  * Replaces the legacy 24+ can line discount while this promo mode is active.
  */
 
@@ -27,7 +27,7 @@ function pbc_regional_promo_type(): string
         return get_field('enable_can_bulk_discount', 'option') ? 'bulk_cans' : '';
     }
 
-    if ($type === 'none') {
+    if ($type === 'none' || $type === '') {
         return '';
     }
 
@@ -71,6 +71,21 @@ function pbc_flat_sale_required_product_ids(): array
     $ids = array_values(array_unique($ids));
 
     return array_map('intval', apply_filters('pbc_flat_sale_required_product_ids', $ids));
+}
+
+function pbc_flat_sale_minimum_total_cans(): int
+{
+    $minimum = 24;
+
+    if (function_exists('get_field')) {
+        $option = get_field('flat_sale_minimum_total_cans', 'option');
+
+        if (is_numeric($option) && (int) $option > 0) {
+            $minimum = (int) $option;
+        }
+    }
+
+    return (int) apply_filters('pbc_flat_sale_minimum_total_cans', $minimum);
 }
 
 function pbc_flat_sale_required_can_minimum(): int
@@ -121,7 +136,7 @@ function pbc_cart_line_matches_product_id(array $cart_item, int $parent_product_
 }
 
 /**
- * Physical cans for configured required parent product(s) only.
+ * Physical cans of featured product(s) anywhere in the cart (any pack size).
  */
 function pbc_cart_physical_cans_for_required_products(): int
 {
@@ -147,34 +162,13 @@ function pbc_cart_physical_cans_for_required_products(): int
     return (int) apply_filters('pbc_cart_physical_cans_for_required_products', $total);
 }
 
-function pbc_cart_contains_flat_pack_line(): bool
-{
-    if (! function_exists('WC') || ! WC()->cart) {
-        return false;
-    }
-
-    foreach (WC()->cart->get_cart() as $cart_item) {
-        if (empty($cart_item['data']) || ! $cart_item['data'] instanceof \WC_Product) {
-            continue;
-        }
-
-        $per_unit = pbc_get_cans_per_unit_for_product($cart_item['data']);
-
-        if ($per_unit >= 24 && (int) ($cart_item['quantity'] ?? 0) > 0) {
-            return true;
-        }
-    }
-
-    return (bool) apply_filters('pbc_cart_contains_flat_pack_line', false);
-}
-
 function pbc_cart_qualifies_for_flat_sale_promo(): bool
 {
     if (! pbc_flat_sale_promo_is_active()) {
         return false;
     }
 
-    if (! pbc_cart_contains_flat_pack_line()) {
+    if (pbc_cart_total_can_quantity() < pbc_flat_sale_minimum_total_cans()) {
         return false;
     }
 
@@ -287,18 +281,24 @@ add_action(
                 rtrim(rtrim(number_format(pbc_flat_sale_cart_discount_percent(), 2, '.', ''), '0'), '.')
             );
         } else {
-            $need_cans = pbc_flat_sale_required_can_minimum();
-            $has_flat  = pbc_cart_contains_flat_pack_line();
-            $has_cans  = pbc_cart_physical_cans_for_required_products();
+            $need_total    = pbc_flat_sale_minimum_total_cans();
+            $need_featured = pbc_flat_sale_required_can_minimum();
+            $total_cans    = pbc_cart_total_can_quantity();
+            $featured_cans = pbc_cart_physical_cans_for_required_products();
 
-            if (! $has_flat) {
-                $message = __('Flat sale: add a flat (24-pack) to your cart to qualify.', 'sage');
-            } elseif ($has_cans < $need_cans) {
+            if ($total_cans < $need_total) {
                 $message = sprintf(
-                    /* translators: 1: current cans, 2: required cans */
-                    __('Flat sale: add at least %2$d can(s) of the featured cider (%1$d in cart).', 'sage'),
-                    $has_cans,
-                    $need_cans
+                    /* translators: 1: cans in cart, 2: cans required (a flat) */
+                    __('Flat sale: reach %2$d cans total (%1$d in cart) — mix singles, 4-packs, or flats.', 'sage'),
+                    $total_cans,
+                    $need_total
+                );
+            } elseif ($featured_cans < $need_featured) {
+                $message = sprintf(
+                    /* translators: 1: featured cans in cart, 2: minimum featured cans */
+                    __('Flat sale: include at least %2$d can(s) of the featured cider (%1$d in cart).', 'sage'),
+                    $featured_cans,
+                    $need_featured
                 );
             } else {
                 $message = '';
